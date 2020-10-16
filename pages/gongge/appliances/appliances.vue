@@ -54,8 +54,8 @@
 
 <script>
 	// import topSrarch from "../../component/topSearch/topSearch.vue"
-	import gogei from '../../../component/gongge/gogei.vue'
-	import lb from "../../../component/gongge/lb.vue"
+	// import gogei from '../../../component/gongge/gogei.vue'
+	// import lb from "../../../component/gongge/lb.vue"
 	
 	export default {
 		
@@ -79,8 +79,8 @@
 			
 		},
 		components:{
-			gogei,
-			lb
+			// gogei,
+			// lb
 		}
 	}
 </script>
