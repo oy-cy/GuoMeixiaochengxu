@@ -92,7 +92,12 @@
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#007AFF",
-		"backgroundColor": "#FFFFFF"
+		"backgroundColor": "#FFFFFF",
+		"usingComponents": {
+		  "van-search": "/wxcomponents/dist/search/index",
+		   "van-grid": "/wxcomponents/dist/grid/index",
+		   "van-grid-item": "/wxcomponents/dist/grid-item/index"
+		}
 	},
 	"tabBar": {
 	    "color": "#7A7E83",
@@ -132,6 +137,7 @@
 		]
 	},
 	"easycom": {
-		"^u-button": "uview-ui/components/u-button/u-button.vue"
+		"^u-button": "uview-ui/components/u-button/u-button.vue",
+		"^u-swiper": "uview-ui/components/u-swiper/u-swiper.vue"
 	}
 }
