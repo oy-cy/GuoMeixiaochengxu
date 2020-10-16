@@ -78,10 +78,11 @@
 		created() {
 			
 		},
-		// components:{
-		// 	gogei,
-		// 	lb
-		// }
+
+		components:{
+			// gogei,
+			// lb
+		}
 	}
 </script>
 
