@@ -128,5 +128,8 @@
 				}
 			
 		]
+	},
+	"easycom": {
+		"^u-button": "uview-ui/components/u-button/u-button.vue"
 	}
 }
