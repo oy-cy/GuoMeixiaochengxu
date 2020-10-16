@@ -78,10 +78,17 @@
 		created() {
 			
 		},
+<<<<<<< .mine
 		components:{
 			// gogei,
 			// lb
 		}
+=======
+		// components:{
+		// 	gogei,
+		// 	lb
+		// }
+>>>>>>> .theirs
 	}
 </script>
 
