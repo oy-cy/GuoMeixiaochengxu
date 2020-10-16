@@ -37,6 +37,54 @@
 				"navigationBarTitleText": "uni-ui基础项目"
 			}
 		}
+        ,{
+            "path" : "pages/search/search",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/classify/classify",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/site/site",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/gongge/appliances/appliances",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/gongge/phoneComputer/phoneComputer",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/gongge/supermarket/supermarket",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/gongge/furniture/furniture",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/gongge/cabinet/cabinet",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/goodsList/goodsList",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/goodsDetail/goodsDetail",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/order/order",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/comment/comment",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
