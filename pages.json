@@ -92,7 +92,9 @@
 		"navigationBarBackgroundColor": "#007AFF",
 		"backgroundColor": "#FFFFFF",
 		"usingComponents": {
-		  "van-search": "/wxcomponents/dist/search/index"
+		  "van-search": "/wxcomponents/dist/search/index",
+		   "van-grid": "/wxcomponents/dist/grid/index",
+		   "van-grid-item": "/wxcomponents/dist/grid-item/index"
 		}
 	},
 	"tabBar": {
