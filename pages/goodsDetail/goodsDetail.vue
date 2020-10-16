@@ -1,10 +1,8 @@
 <template>
-	<view>
-			<u-button type="primary">主要按钮</u-button>
-			<u-button type="success">成功按钮</u-button>
-			<u-button type="info">信息按钮</u-button>
-			<u-button type="warning">警告按钮</u-button>
-			<u-button type="error">危险按钮</u-button>
+	<view class="detail-container">
+		<view class="wrap">
+				<u-swiper  :list="lunbotu"></u-swiper>
+			</view>
 	</view>
 </template>
 
@@ -12,9 +10,18 @@
 	export default {
 		data() {
 			return {
-				
+				lunbotu:[
+					{img:"//gfs17.gomein.net.cn/T14jD5B_xT1RCvBVdK_400.jpg?v=20170727"},
+					{img:"//gfs12.gomein.net.cn/T1PfV5BQAv1RCvBVdK_400.jpg?v=20170727"},
+					{img:"//gfs13.gomein.net.cn/T1J1E5BvDv1RCvBVdK_400.jpg?v=20170727"},
+					{img:"//gfs13.gomein.net.cn/T1Wr_5BCWT1RCvBVdK_400.jpg?v=20170727"},
+					{img:"//gfs11.gomein.net.cn/T1.QL5Bsdv1RCvBVdK_400.jpg?v=20170727"},
+				],
 			};
-		}
+		},
+		methods:{
+			
+		},
 	}
 </script>
 
