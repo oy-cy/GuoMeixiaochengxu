@@ -1,0 +1,23 @@
+{
+  "name": "GuoMeixiaochengxu",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oy-cy/GuoMeixiaochengxu.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oy-cy/GuoMeixiaochengxu/issues"
+  },
+  "homepage": "https://github.com/oy-cy/GuoMeixiaochengxu#readme",
+  "dependencies": {
+    "uview-ui": "^1.7.6"
+  }
+}
