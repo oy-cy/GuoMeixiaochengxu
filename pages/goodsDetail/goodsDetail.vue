@@ -1,7 +1,7 @@
 <template>
 	<view class="detail-container">
 		<view class="wrap">
-				<u-swiper  :list="lunbotu"></u-swiper>
+				<u-swiper name="img" height="690" mode="number" indicator-pos="bottomRight" :list="lunbotu"></u-swiper>
 			</view>
 	</view>
 </template>
