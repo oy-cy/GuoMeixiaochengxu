@@ -90,7 +90,10 @@
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#007AFF",
-		"backgroundColor": "#FFFFFF"
+		"backgroundColor": "#FFFFFF",
+		"usingComponents": {
+		  "van-search": "/wxcomponents/dist/search/index"
+		}
 	},
 	"tabBar": {
 	    "color": "#7A7E83",
