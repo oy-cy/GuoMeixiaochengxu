@@ -1,7 +1,14 @@
 <template>
 	<view class="detail-container">
-		<view class="wrap">
-				<u-swiper name="img" height="690" mode="number" indicator-pos="bottomRight" :list="lunbotu"></u-swiper>
+		<view class="swiper">
+				<u-swiper 
+				class="u-swiper"
+				name="img"
+				height="690" 
+				mode="number" 
+				autoplay="false"
+				indicator-pos="bottomRight" 
+				:list="lunbotu"></u-swiper>
 			</view>
 	</view>
 </template>
@@ -26,5 +33,12 @@
 </script>
 
 <style lang="scss">
-
+	.detail-container{
+		.swiper{
+			width: 100%;
+			.u-swiper-indicator{
+				width: 92%;
+			}
+		}
+	}
 </style>
