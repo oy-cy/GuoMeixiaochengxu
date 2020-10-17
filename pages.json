@@ -96,7 +96,11 @@
 		"usingComponents": {
 		  "van-search": "/wxcomponents/dist/search/index",
 		   "van-grid": "/wxcomponents/dist/grid/index",
-		   "van-grid-item": "/wxcomponents/dist/grid-item/index"
+		   "van-grid-item": "/wxcomponents/dist/grid-item/index",
+		   "van-cell": "/wxcomponents/dist/cell/index",
+		   "van-cell-group": "/wxcomponents/dist/cell-group/index",
+		   "van-dialog": "/wxcomponents/dist/dialog/index",
+		   "van-popup": "/wxcomponents/dist/popup/index"
 		}
 	},
 	"tabBar": {
