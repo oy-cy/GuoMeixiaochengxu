@@ -17,30 +17,59 @@
 				换新推荐
 			</view>
 			
-			<scroll-view :scroll-x="true" class="strip">
-				<view class="box">
+			<scroll-view scroll-x class="strip" :enable-flex="true">
+				<!-- <view class="box"> -->
 					<view class="goodbox">
-						1
+						<view class="img">
+							
+						</view>
+						<view class="text">
+							mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...
+						</view>
 					</view>
 					<view class="goodbox">
-						1
+						<view class="img">
+							
+						</view>
+						<view class="text">
+							mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...
+						</view>
 					</view>
 					<view class="goodbox">
-						1
+						<view class="img">
+							
+						</view>
+						<view class="text">
+							mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...
+						</view>
 					</view>
 					<view class="goodbox">
-						1
+						<view class="img">
+							
+						</view>
+						<view class="text">
+							mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...
+						</view>
 					</view>
 					<view class="goodbox">
-						1
+						<view class="img">
+							
+						</view>
+						<view class="text">
+							mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...
+						</view>
 					</view>
 					<view class="goodbox">
-						1
+						<view class="img">
+							
+						</view>
+						<view class="text">
+							mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...
+						</view>
 					</view>
-					<view class="goodbox">
-						1
-					</view>
-				</view>
+					
+				<!-- </view> -->
+					
 			</scroll-view>
 		</view>
 		
@@ -103,17 +132,31 @@
 			background-color: #fff;
 			
 			.strip{
+				width: 100%;
+				overflow: hidden;
 				white-space: nowrap;
-					width: 10000rpx;
-				// height: 50rpx;
-				.box{
-					white-space: nowrap;
-					display: flex;
-					// flex-wrap: wrap;
+			
 					.goodbox{
-						width: 300rpx;
+						display: inline-block;
+						background: #0062CC;
+						margin-right: 10rpx;
+						width: 210rpx;
+						
+						.img{
+							width: 210rpx;
+							height: 210rpx;
+							border-radius: 30rpx;
+							overflow: hidden;
+						}
+						.text{
+							display: -webkit-box;
+							-webkit-box-orient: vertical;
+							-webkit-line-clamp: 2;
+							overflow: hidden;
+						}
+						
 					}
-				}
+					
 			}
 		}
 		
