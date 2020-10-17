@@ -39,25 +39,12 @@
 			<image src="https://gfs5.gomein.net.cn/wireless/T177J7B_CT1RCvBVdK_1125_300.png" mode=""></image>
 		</view>
 		<!-- 八空格 -->
-		<template>
-			<view class="tui-grids" :class="{'tui-border-top':unlined}">
-				<slot></slot>
-			</view>
-		</template>
+		
 	</view>
 </template>
 
 <script>
 	export default {
-		name:"tuiGrid",
-		components: {},
-		props:{
-			//是否去掉上线条
-			unlined: {
-				type: Boolean,
-				default: false
-			}
-		},
 		data() {
 			return {
 
