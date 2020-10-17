@@ -47,7 +47,9 @@
         }
         ,{
             "path" : "pages/site/site",
-            "style" : {}
+            "style" : {
+				"navigationBarTitleText": "选择收货地址"
+			}
         }
         ,{
             "path" : "pages/gongge/appliances/appliances",
@@ -87,6 +89,12 @@
             "path" : "pages/comment/comment",
             "style" : {}
         }
+        ,{
+            "path" : "pages/selectCity/selectCity",
+            "style" : {
+				"navigationBarTitleText": "选择城市"
+			}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
@@ -96,7 +104,11 @@
 		"usingComponents": {
 		  "van-search": "/wxcomponents/dist/search/index",
 		   "van-grid": "/wxcomponents/dist/grid/index",
-		   "van-grid-item": "/wxcomponents/dist/grid-item/index"
+		   "van-grid-item": "/wxcomponents/dist/grid-item/index",
+		   "van-button":"/wxcomponents/vant/dist/button/index",
+		   "van-index-bar": "/wxcomponents/vant/dist/index-bar/index",
+		   "van-index-anchor": "/wxcomponents/vant/dist/index-anchor/index",
+		   "van-sticky": "/wxcomponents/vant/dist/sticky/index"
 		}
 	},
 	"tabBar": {

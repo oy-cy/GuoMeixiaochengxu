@@ -10,11 +10,8 @@ export default {
 		console.log('App Hide');
 	}
 };
-</script>
-
+</script>
 <style>
-@import "uview-ui/index.scss"
-
 /* 解决头条小程序组件内引入字体不生效的问题 */
 /* #ifdef MP-TOUTIAO */
 @font-face {
