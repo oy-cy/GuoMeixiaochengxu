@@ -7,7 +7,6 @@
 		<!-- 宫格 -->
 		<gogei hang='4' :gogeidata='gogeidata'></gogei>
 		
-		
 		<!-- 抢购 -->
 		
 		<!-- 换新推荐 -->
