@@ -9,6 +9,9 @@
 		<gogei hang='4'></gogei>
 =======
 		<gogei hang='4' :gogeidata='gogeidata'></gogei>
+<<<<<<< HEAD
+>>>>>>> remotes/origin/dev
+=======
 >>>>>>> remotes/origin/dev
 		
 		<!-- 抢购 -->
