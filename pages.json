@@ -100,7 +100,10 @@
 		   "van-cell": "/wxcomponents/dist/cell/index",
 		   "van-cell-group": "/wxcomponents/dist/cell-group/index",
 		   "van-dialog": "/wxcomponents/dist/dialog/index",
-		   "van-popup": "/wxcomponents/dist/popup/index"
+		   "van-popup": "/wxcomponents/dist/popup/index",
+		   "van-icon": "/wxcomponents/dist/icon/index",
+		   "van-button": "/wxcomponents/dist/button/index",
+		   "van-stepper": "/wxcomponents/dist/stepper/index"
 		}
 	},
 	"tabBar": {
