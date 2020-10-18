@@ -6,7 +6,7 @@
 		
 		<!-- 宫格 -->
 		<view class="goge">
-			<gogei hang='4' :data='data'></gogei>
+			<!-- <gogei hang='4' :data='data'></gogei> -->
 		</view>
 		
 		<!-- 抢购 -->
