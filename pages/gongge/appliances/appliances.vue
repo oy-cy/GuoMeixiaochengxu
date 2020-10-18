@@ -5,7 +5,11 @@
 		<lb></lb>
 		
 		<!-- 宫格 -->
+<<<<<<< HEAD
 		<gogei hang='4'></gogei>
+=======
+		<gogei hang='4' :gogeidata='gogeidata'></gogei>
+>>>>>>> remotes/origin/dev
 		
 		<!-- 抢购 -->
 		<scrollList title="抢购" ></scrollList>
