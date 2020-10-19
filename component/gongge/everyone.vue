@@ -2,46 +2,56 @@
 	<view class="everyone">
 		<view class="top">
 			<view class="title">
-				<!-- <image src="../../static/images/gongge/everyone.jpg" style="width: 100%;height: 100%;"></image> -->
+				<image src="../../static/images/gongge/everyone.jpg" style="width: 100%;height: 100%;"></image>
 			</view>
 			<!--  -->
-			<u-tabs :list="tabsList" :is-scroll="true" active-color="#f20c59" :current="currentTitle" @change="change"></u-tabs>
+			<u-tabs :list="tabsList" :is-scroll="true" active-color="#f20c59" :current="currentTitle" bg-color="#F2F2F2" @change="change"></u-tabs>
 		</view>
 			
-			<view class="goodsList">
+			
 				
-				<view class="classifyGoods">
-					<view class="goods-item" v-for="(item,index) in goodlist" :key="index">
-						<view class="img-container">
-							<image class="img" src="../../static/images/shop/goods1.png"></image>
+		<view class="classifyGoods">
+			<view class="goods-item" v-for="(item,index) in goodlist" :key="index">
+				<view class="img-container">
+					<image class="img" src="../../static/images/shop/goods1.png"></image>
+				</view>
+				<view class="info">
+					<view class="text">
+						<text class="title_tag">国美超市</text>
+						<text class="title">洋河蓝色经典天之蓝52度白酒520ml*6 旗舰版口感绵柔浓香型</text>
+					</view>
+					<view class="goods-tag-list">易卡分期</view>
+					<view class="price">
+						<view class="content">
+							<text class="symbol">￥</text>
+							<text class="money">2587</text>
 						</view>
-						<view class="info">
-							<view class="text">
-								<text class="title_tag">国美超市</text>
-								<text class="title">洋河蓝色经典天之蓝52度白酒520ml*6 旗舰版口感绵柔浓香型</text>
-							</view>
-							<view class="goods-tag-list">易卡分期</view>
-							<view class="price">
-								<view class="content">
-									<text class="symbol">￥</text>
-									<text class="money">2587</text>
-								</view>
-								<view class="car-logo">
-									<image class="img" src="../../static/images/shop/car-tag.png" mode=""></image>
-								</view>
-							</view>
+						<view class="car-logo">
+							<image class="img" src="../../static/images/shop/car-tag.png" mode=""></image>
 						</view>
 					</view>
-					
 				</view>
 			</view>
+		</view>
+		
+		<u-loadmore :status="status" :icon-type="iconType" :load-text="loadText" @loadmore="loadmore"/>
 	</view>
 </template>
 
 <script>
 	export default {
+		props:["pageid"],
 		data(){
 			return{
+				status: 'loadmore',
+				iconType: 'circle',
+				loadText: {
+					loadmore: '加载更多(*^▽^*)',
+					loading: '喝杯茶等一下正在努力加载中ヾ(≧▽≦*)o',
+					nomore: '还没看够吗ψ(｀∇´)ψ'
+				},
+				page:1,
+				currentTitle:1,
 				tabsList: [
 					{
 						name: '全部',
@@ -78,6 +88,18 @@
 		},
 		created() {
 			
+		},
+		methods:{
+			change(obj){
+				this.currentTitle = obj.index
+				console.log(obj)
+			},
+			loadmore(obj){
+				// if(data == null){
+				// 	this.status = 'nomore'
+				// }
+				this.status = 'loading'
+			}
 		}
 	}
 </script>
@@ -87,13 +109,13 @@
 		.top{
 			position: sticky;
 			top: 0;
-			display: flex;
-			justify-content: center;
 			z-index: 100;
 			background-color: #F2F2F2;
+			margin-bottom: 20rpx;
 			.title{
-				width: 300rpx;
-				height: 100rpx;
+				margin: 0 auto;
+				width: 360rpx;
+				height: 60rpx;
 			}
 		}
 		
@@ -101,7 +123,6 @@
 				display: flex;
 				flex-wrap: wrap;
 				justify-content: space-between;
-				padding: 20rpx;
 				background-color: #EFEFEF;
 			
 				.goods-item {
@@ -188,5 +209,6 @@
 					}
 				}
 			}
+			
 	}
 </style>
