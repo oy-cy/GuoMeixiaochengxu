@@ -87,6 +87,14 @@
             "path" : "pages/comment/comment",
             "style" : {}
         }
+        ,{
+            "path" : "component/seckill/seckill",
+            "style" : {}
+        }
+        ,{
+            "path" : "component/guideList/guideList",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
@@ -96,7 +104,9 @@
 		"usingComponents": {
 		  "van-search": "/wxcomponents/dist/search/index",
 		   "van-grid": "/wxcomponents/dist/grid/index",
-		   "van-grid-item": "/wxcomponents/dist/grid-item/index"
+		   "van-grid-item": "/wxcomponents/dist/grid-item/index",
+		     "van-tab": "/wxcomponents/dist/tab/index",
+		     "van-tabs": "/wxcomponents/dist/tabs/index"
 		}
 	},
 	"tabBar": {
@@ -138,6 +148,9 @@
 	},
 	"easycom": {
 		"^u-button": "uview-ui/components/u-button/u-button.vue",
-		"^u-swiper": "uview-ui/components/u-swiper/u-swiper.vue"
+		"^u-swiper": "uview-ui/components/u-swiper/u-swiper.vue",
+		"^u-count-down": "uview-ui/components/u-count-down/u-count-down.vue",
+		"^u-tabs": "uview-ui/components/u-tabs/u-tabs.vue",
+		"^u-badge": "uview-ui/components/u-badge/u-badge.vue"
 	}
 }
