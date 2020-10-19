@@ -59,8 +59,11 @@
 		}, {
 			"path": "pages/goodsDetail/goodsDetail",
 			"style": {
-				"van-button": "/wxcomponents/dist/button/index",
-				"navigationBarTitleText": "商品详情"
+				
+				"navigationBarTitleText": "商品详情",
+				"usingComponents": {
+					"van-button": "/wxcomponents/dist/button/index"
+				}
 			}
 		}, {
 			"path": "pages/order/order",
@@ -129,7 +132,8 @@
 			"van-dialog": "/wxcomponents/dist/dialog/index",
 			"van-popup": "/wxcomponents/dist/popup/index",
 			"van-icon": "/wxcomponents/dist/icon/index",
-			"van-stepper": "/wxcomponents/dist/stepper/index"
+			"van-stepper": "/wxcomponents/dist/stepper/index",
+			"van-rate": "/wxcomponents/dist/rate/index"
 		}
 	},
 	"tabBar": {
@@ -173,7 +177,9 @@
 		"^u-swiper": "uview-ui/components/u-swiper/u-swiper.vue",
 		"^u-tabs": "uview-ui/components/u-tabs/u-tabs.vue",
 		"^u-count-down": "uview-ui/components/u-count-down/u-count-down.vue",
-		"^u-tabs": "uview-ui/components/u-tabs/u-tabs.vue",
-		"^u-badge": "uview-ui/components/u-badge/u-badge.vue"
+		"^u-badge": "uview-ui/components/u-badge/u-badge.vue",
+		"^u-parse": "uview-ui/components/u-parse/u-parse.vue",
+		"^u-back-top": "uview-ui/components/u-back-top/u-back-top.vue",
+		"^u-icon": "uview-ui/components/u-icon/u-icon.vue"
 	}
 }

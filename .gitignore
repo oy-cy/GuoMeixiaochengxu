@@ -11,7 +11,7 @@ $RECYCLE.BIN/
 .Trashes
 
 # Node.js
-node_modules/
+0
 package.json
 package-lock.json
 
