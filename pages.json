@@ -1,97 +1,87 @@
 {
 	"pages": [
-	
-        {
-            "path" : "pages/home/home",
-            "style" : {
+
+		{
+			"path": "pages/home/home",
+			"style": {
 				"navigationBarTitleText": "国美"
 			}
-        }
-        ,{
-            "path" : "pages/shop/shop",
-            "style" : {
+		}, {
+			"path": "pages/shop/shop",
+			"style": {
 				"navigationBarTitleText": "推荐门店"
 			}
-        }
-        ,{
-            "path" : "pages/info/info",
-            "style" : {
+		}, {
+			"path": "pages/info/info",
+			"style": {
 				"navigationBarTitleText": "消息"
 			}
-        }
-        ,{
-            "path" : "pages/mycar/mycar",
-            "style" : {
+		}, {
+			"path": "pages/mycar/mycar",
+			"style": {
 				"navigationBarTitleText": "购物车"
 			}
-        }
-        ,{
-            "path" : "pages/user/user",
-            "style" : {
+		}, {
+			"path": "pages/user/user",
+			"style": {
 				"navigationBarTitleText": "我的"
 			}
-        },
-			{
+		},
+		{
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "uni-ui基础项目"
 			}
-		}
-        ,{
-            "path" : "pages/search/search",
-            "style" : {}
-        }
-        ,{
-            "path" : "pages/classify/classify",
-            "style" : {}
-        }
-        ,{
-            "path" : "pages/gongge/appliances/appliances",
-            "style" : {}
-        }
-        ,{
-            "path" : "pages/gongge/phoneComputer/phoneComputer",
-            "style" : {}
-        }
-        ,{
-            "path" : "pages/gongge/supermarket/supermarket",
-            "style" : {}
-        }
-        ,{
-            "path" : "pages/gongge/furniture/furniture",
-            "style" : {}
-        }
-        ,{
-            "path" : "pages/gongge/cabinet/cabinet",
-            "style" : {}
-        }
-        ,{
-            "path" : "pages/goodsList/goodsList",
-            "style" : {}
-        }
-        ,{
-            "path" : "pages/goodsDetail/goodsDetail",
-            "style" : {
+		}, {
+			"path": "pages/search/search",
+			"style": {}
+		}, {
+			"path": "pages/classify/classify",
+			"style": {}
+		}, {
+			"path": "pages/gongge/appliances/appliances",
+			"style": {}
+		}, {
+			"path": "pages/gongge/phoneComputer/phoneComputer",
+			"style": {}
+		}, {
+			"path": "pages/gongge/supermarket/supermarket",
+			"style": {}
+		}, {
+			"path": "pages/gongge/furniture/furniture",
+			"style": {}
+		}, {
+			"path": "pages/gongge/cabinet/cabinet",
+			"style": {}
+		}, {
+			"path": "pages/goodsList/goodsList",
+			"style": {}
+		}, {
+			"path": "pages/goodsDetail/goodsDetail",
+			"style": {
 				"navigationBarTitleText": "商品详情"
 			}
-        }
-        ,{
-            "path" : "pages/order/order",
-            "style" : {}
-        }
-        ,{
-            "path" : "pages/comment/comment",
-            "style" : {}
-        }
-        ,{
-            "path" : "pages/site/selectCity/selectCity",
-            "style" : {
+		}, {
+			"path": "pages/order/order",
+			"style": {}
+		}, {
+			"path": "pages/comment/comment",
+			"style": {}
+		}, {
+			"path": "component/seckill/seckill",
+			"style": {}
+		}, {
+			"path": "component/guideList/guideList",
+			"style": {}
+		},
+		{
+			"path": "pages/site/selectCity/selectCity",
+			"style": {
 				"navigationBarTitleText": "选择城市"
 			}
-        }
-		,{
-			"path" : "pages/site/receivingCity/receivingCity",
-			"style" : {
+		}, {
+			"path": "pages/site/receivingCity/receivingCity",
+			"style": {
 				"navigationBarTitleText": "选择收货地址"
 			}
 		}
@@ -125,26 +115,30 @@
 		"navigationBarBackgroundColor": "#007AFF",
 		"backgroundColor": "#FFFFFF",
 		"usingComponents": {
-		  "van-search": "/wxcomponents/dist/search/index",
-		   "van-grid": "/wxcomponents/dist/grid/index",
-		   "van-grid-item": "/wxcomponents/dist/grid-item/index",
-		   "van-button":"/wxcomponents/dist/button/index",
-		   "van-index-bar": "/wxcomponents/dist/index-bar/index",
-		   "van-index-anchor": "/wxcomponents/dist/index-anchor/index",
-		   "van-sticky": "/wxcomponents/dist/sticky/index",
-		   "van-cell": "/wxcomponents/dist/cell/index",
-		   "van-cell-group": "/wxcomponents/dist/cell-group/index",
-		   "van-dialog": "/wxcomponents/dist/dialog/index",
-		   "van-popup": "/wxcomponents/dist/popup/index"
+			"van-search": "/wxcomponents/dist/search/index",
+			"van-grid": "/wxcomponents/dist/grid/index",
+			"van-grid-item": "/wxcomponents/dist/grid-item/index",
+			"van-tab": "/wxcomponents/dist/tab/index",
+			"van-tabs": "/wxcomponents/dist/tabs/index",
+			"van-button": "/wxcomponents/dist/button/index",
+			"van-index-bar": "/wxcomponents/dist/index-bar/index",
+			"van-index-anchor": "/wxcomponents/dist/index-anchor/index",
+			"van-sticky": "/wxcomponents/dist/sticky/index",
+			"van-cell": "/wxcomponents/dist/cell/index",
+			"van-cell-group": "/wxcomponents/dist/cell-group/index",
+			"van-dialog": "/wxcomponents/dist/dialog/index",
+			"van-popup": "/wxcomponents/dist/popup/index",
+			"van-icon": "/wxcomponents/dist/icon/index",
+			"van-button": "/wxcomponents/dist/button/index",
+			"van-stepper": "/wxcomponents/dist/stepper/index"
 		}
 	},
 	"tabBar": {
-	    "color": "#7A7E83",
-	    "selectedColor": "#F20C59",
-	    "borderStyle": "black",
-	    "backgroundColor": "#ffffff",
-	    "list": [
-				{
+		"color": "#7A7E83",
+		"selectedColor": "#F20C59",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"list": [{
 				"pagePath": "pages/home/home",
 				"iconPath": "static/images/tabbar/home.png",
 				"selectedIconPath": "static/images/tabbar/home-selected.png",
@@ -156,28 +150,31 @@
 				"text": "门店"
 			},
 			{
-					"pagePath": "pages/info/info",
-					"iconPath": "static/images/tabbar/info.png",
-					"selectedIconPath": "static/images/tabbar/info-selected.png",
-					"text": "信息"
-				}, {
-					"pagePath": "pages/mycar/mycar",
-					"iconPath": "static/images/tabbar/cart.png",
-					"selectedIconPath": "static/images/tabbar/cart-selected.png",
-					"text": "购物车"
-				},
-				{
-					"pagePath": "pages/user/user",
-					"iconPath": "static/images/tabbar/user.png",
-					"selectedIconPath": "static/images/tabbar/user-selected.png",
-					"text": "我的"
-				}
-			
+				"pagePath": "pages/info/info",
+				"iconPath": "static/images/tabbar/info.png",
+				"selectedIconPath": "static/images/tabbar/info-selected.png",
+				"text": "信息"
+			}, {
+				"pagePath": "pages/mycar/mycar",
+				"iconPath": "static/images/tabbar/cart.png",
+				"selectedIconPath": "static/images/tabbar/cart-selected.png",
+				"text": "购物车"
+			},
+			{
+				"pagePath": "pages/user/user",
+				"iconPath": "static/images/tabbar/user.png",
+				"selectedIconPath": "static/images/tabbar/user-selected.png",
+				"text": "我的"
+			}
+
 		]
 	},
 	"easycom": {
 		"^u-button": "uview-ui/components/u-button/u-button.vue",
 		"^u-swiper": "uview-ui/components/u-swiper/u-swiper.vue",
-		"^u-tabs": "uview-ui/components/u-tabs/u-tabs.vue"
+		"^u-tabs": "uview-ui/components/u-tabs/u-tabs.vue",
+		"^u-count-down": "uview-ui/components/u-count-down/u-count-down.vue",
+		"^u-tabs": "uview-ui/components/u-tabs/u-tabs.vue",
+		"^u-badge": "uview-ui/components/u-badge/u-badge.vue"
 	}
 }

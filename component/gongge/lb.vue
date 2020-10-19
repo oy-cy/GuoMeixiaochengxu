@@ -12,14 +12,22 @@
 
 <script>
 		export default {
-			props:['lbdata']
+			data(){
+				return{
+					lbdata:[{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360'},
+						{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360'},
+						{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360'}],
+					
+				}
+			}
 		}
 </script>
 
 <style lang="scss"scoped>
 	.lbt{
+		// width: 100vw;
 		.swiper{ 
-			padding: 20rpx;
+			padding: 20rpx 0;
 			.imgbox{
 				width: 96%;
 				height: 96%;
