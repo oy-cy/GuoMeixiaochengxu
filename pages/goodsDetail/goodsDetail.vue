@@ -49,7 +49,7 @@
 			<van-popup
 			 :show="isSelect"
 			  position="bottom"
-			  custom-style="height: 72%;"
+			  custom-style="height: 72%"
 			  closeable
 			  @close="closeSelected"
 			  @click-overlay="closeSelected">
@@ -92,14 +92,12 @@
 				</view>
 			  </van-popup>
 		</view>
-		
 		<!-- 送至 -->
 		<view class="goods-site">
 			<van-cell-group>
 				<!-- @click="isSite = true" -->
 			  <van-cell
 				is-link
-				title-style=""
 				@click="isSite = true"
 				>
 				<view slot="title" class="site-title">
@@ -122,7 +120,34 @@
 				<view class="">
 					联动选择地址//todo
 				</view>
-			  </van-popup>
+			</van-popup>
+			  
+			<!-- 保证 -->
+			<view class="pledge">
+				<view class="pledge-item" v-for="(item,index) in pledge" :key="index">
+					<image src="@/static/images/goodsDetail/pledge.png" mode=""></image>
+					<text>{{item}}</text>
+				</view>
+			</view>
+		</view>
+		
+		<!-- 门店 -->
+		<view class="good-shop">
+			<image src="//gfs10.gomein.net.cn/T1kXb4BCZg1RCvBVdK.png"></image>
+			<view class="info">
+				<view class="shop-name">
+					<view class="name">
+						国美体验店 (深圳观澜店)
+					</view>
+					<view class="site">
+						<van-icon name="location-o" size="36rpx" color="#999A9C"/>
+						龙华区 距您>500km
+					</view>
+				</view>
+				<view class="into">
+					进店逛逛 <van-icon name="arrow" />
+				</view>
+			</view>
 		</view>
 		
 			
@@ -185,6 +210,7 @@
 						}]
 				},
 				sureSelect:[],
+				pledge:['7天无理由退换','正品保障','包邮']
 			};
 		},
 		methods:{
@@ -351,6 +377,60 @@
 					align-items: flex-end;
 				}
 			}
+			.pledge{
+				padding: 30rpx;
+				background-color: #fff;
+				display: flex;
+				.pledge-item{
+					display: flex;
+					align-items: center;
+					image{
+						width: 30rpx;
+						height: 30rpx;
+					}
+					text{
+						margin: 0rpx 10rpx;
+						color: #A2A4A6;
+					}
+				}
+			}
 		}
+	
+		.good-shop{
+			display: flex;
+			justify-content: space-around;
+			background-color: #fff;
+			padding: 30rpx;
+			image{
+				width: 80rpx;
+				height: 80rpx;
+				border-radius: 50%;
+			}
+			.info{
+				display: flex;
+				.shop-name{
+					display: flex;
+					flex-wrap: wrap;
+					width: 420rpx;
+					.name{
+						font-size: 34rpx;
+						color: #333;
+						margin-bottom: 8rpx;
+					}
+					.site{
+						display: flex;
+						align-items: center;
+						font-size: 30rpx;
+						color: #757A7F;
+					}
+				}
+			}
+			.into{
+				display: flex;
+				height: 30rpx;
+				align-items: center;
+				color: #757A7F;
+			}
+		}	
 	}
 </style>

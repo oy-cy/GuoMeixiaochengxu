@@ -59,6 +59,7 @@
 		}, {
 			"path": "pages/goodsDetail/goodsDetail",
 			"style": {
+				"van-button": "/wxcomponents/dist/button/index",
 				"navigationBarTitleText": "商品详情"
 			}
 		}, {
@@ -103,12 +104,16 @@
             }
             
         }
+        ,{
+            "path" : "pages/user/group/group",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
-	"permission": {
-		"scope.userLocation": {
-			"desc": "你的位置信息将用于小程序位置接口的效果展示" // 高速公路行驶持续后台定位
-		}
-	},
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "uni-app",
@@ -120,7 +125,6 @@
 			"van-grid-item": "/wxcomponents/dist/grid-item/index",
 			"van-tab": "/wxcomponents/dist/tab/index",
 			"van-tabs": "/wxcomponents/dist/tabs/index",
-			"van-button": "/wxcomponents/dist/button/index",
 			"van-index-bar": "/wxcomponents/dist/index-bar/index",
 			"van-index-anchor": "/wxcomponents/dist/index-anchor/index",
 			"van-sticky": "/wxcomponents/dist/sticky/index",
@@ -129,7 +133,6 @@
 			"van-dialog": "/wxcomponents/dist/dialog/index",
 			"van-popup": "/wxcomponents/dist/popup/index",
 			"van-icon": "/wxcomponents/dist/icon/index",
-			"van-button": "/wxcomponents/dist/button/index",
 			"van-stepper": "/wxcomponents/dist/stepper/index"
 		}
 	},
