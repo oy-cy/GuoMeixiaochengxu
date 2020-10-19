@@ -103,6 +103,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/user/group/group",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"permission": {
 		"scope.userLocation": {
