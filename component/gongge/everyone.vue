@@ -2,7 +2,7 @@
 	<view class="everyone">
 		<view class="top">
 			<view class="title">
-				<image src="../../static/images/gongge/everyone.jpg" style="width: 100%;height: 100%;"></image>
+				<!-- <image src="../../static/images/gongge/everyone.jpg" style="width: 100%;height: 100%;"></image> -->
 			</view>
 			<!--  -->
 			<u-tabs :list="tabsList" :is-scroll="true" active-color="#f20c59" :current="currentTitle" @change="change"></u-tabs>
