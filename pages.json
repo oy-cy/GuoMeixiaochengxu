@@ -59,6 +59,7 @@
 		}, {
 			"path": "pages/goodsDetail/goodsDetail",
 			"style": {
+				"van-button": "/wxcomponents/dist/button/index",
 				"navigationBarTitleText": "商品详情"
 			}
 		}, {
@@ -120,7 +121,6 @@
 			"van-grid-item": "/wxcomponents/dist/grid-item/index",
 			"van-tab": "/wxcomponents/dist/tab/index",
 			"van-tabs": "/wxcomponents/dist/tabs/index",
-			"van-button": "/wxcomponents/dist/button/index",
 			"van-index-bar": "/wxcomponents/dist/index-bar/index",
 			"van-index-anchor": "/wxcomponents/dist/index-anchor/index",
 			"van-sticky": "/wxcomponents/dist/sticky/index",
@@ -129,9 +129,13 @@
 			"van-dialog": "/wxcomponents/dist/dialog/index",
 			"van-popup": "/wxcomponents/dist/popup/index",
 			"van-icon": "/wxcomponents/dist/icon/index",
+<<<<<<< HEAD
 			"van-stepper": "/wxcomponents/dist/stepper/index",
 			"van-checkbox": "/wxcomponents/dist/checkbox/index",
 			"van-checkbox-group": "/wxcomponents/dist/checkbox-group/index"
+=======
+			"van-stepper": "/wxcomponents/dist/stepper/index"
+>>>>>>> 06304b059abede1381380a138619899e3281f08a
 		}
 	},
 	"tabBar": {
