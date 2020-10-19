@@ -145,7 +145,10 @@
 				</view>
 				
 			</view>
-			
+		</view>
+		<view class="bottom-content">
+			<!-- <image src="../../static/images/shop/bottom.png" mode=""></image> -->
+			<view class="template-no-more">看完啦</view>
 		</view>
 	</view>
 </template>
@@ -305,5 +308,15 @@
 			}
 
 		}
+		.bottom-content{
+			padding: 30rpx 0;
+			.template-no-more {
+				text-align: center;
+				font-size: 24rpx;
+				background: url("../../static/images/shop/bottom.png") no-repeat 50%;
+				background-size: 390rpx 12rpx;
+			}
+		}
+		
 	}
 </style>

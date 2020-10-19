@@ -341,10 +341,10 @@
 		}
 	}
 </script>
-
+    
 <style lang="scss" scoped>
 	.shop-container {
-		height: 5000rpx;
+		// height: 5000rpx;
 		background-color: #F2F2F2;
 
 		.br {
