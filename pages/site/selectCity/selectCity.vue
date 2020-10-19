@@ -70,18 +70,19 @@ import uniSearchBar from '@/components/uni-search-bar/uni-search-bar.vue';
 			getSite(){
 				this.amapPlugin = new amap.AMapWX({  
 					//高德地图KEY，随时失效，请务必替换为自己的KEY，参考：http://ask.dcloud.net.cn/article/35070
-					key: '7c235a9ac4e25e482614c6b8eac6fd8e'  
+					key: '99031ada35818bf92d6e349e218b83a5'  
 				});
-				//定位地址
-				// this.amapPlugin.getRegeo({  
-				// 	success: (data) => {
-				// 		this.currentCity = data[0].regeocodeData.addressComponent.city;//把"市"去掉
-				// 	},
-				// 	fail:(data)=>{
-				// 		console.log("请求失败：");
-				// 		console.log(data)
-				// 	}
-				// }); 
+				// 定位地址
+				this.amapPlugin.getRegeo({  
+					success: (data) => {
+						this.currentCity = data[0].regeocodeData.addressComponent.city;//把"市"去掉
+						console.log("请求成功")
+					},
+					fail:(data)=>{
+						console.log("请求失败：");
+						console.log(data)
+					}
+				}); 
 			},
 			// 监听value
 			input(){
