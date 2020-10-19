@@ -82,12 +82,12 @@
 						数量 <van-stepper :value="select.number" min="1" max="10"  @change='numberChange'/>
 					</view>
 					<view class="goods-button">
-						<van-button  size="large" color="linear-gradient(to right, #FFC71D, #FF8917)">
+						<!-- <van-button  size="large" color="linear-gradient(to right, #FFC71D, #FF8917)">
 						  加入购物车
 						</van-button>
 						<van-button  size="large" color="linear-gradient(to right, #FF5F34, #EE0B24)">
 						  立即购买
-						</van-button>
+						</van-button> -->
 					</view>
 				</view>
 			  </van-popup>
