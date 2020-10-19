@@ -128,6 +128,21 @@
 					provider:'wexin',
 					// 登录成功
 					success(info){
+						// 获取openid start
+						var appid = 'wxdc3ba8b14831e4db'; //填写微信小程序appid  
+						var secret = '1dea52b5f60ada9dfe7dd87cc50b440b'; //填写微信小程序secret  
+						//调用request请求api转换登录凭证  
+						uni.request({
+							url: 'https://api.weixin.qq.com/sns/jscode2session?appid='+appid+'&secret='+secret+'&grant_type=authorization_code&js_code=' + loginCode.code,
+							header: {
+								'content-type': 'application/json'
+							},
+							success: function (res) {
+								console.info(res.data.openid) //获取openid
+							}
+						})
+						// 获取openid end
+						
 						// 获取用户信息
 						uni.getUserInfo({
 							provider: 'weixin',

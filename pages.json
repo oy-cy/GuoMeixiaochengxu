@@ -95,6 +95,24 @@
 				"navigationBarTitleText": "选择收货地址"
 			}
 		}
+        ,{
+            "path" : "pages/user/balance/balance",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/user/rebate/rebate",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"permission": {
 		"scope.userLocation": {
@@ -159,6 +177,7 @@
 	},
 	"easycom": {
 		"^u-button": "uview-ui/components/u-button/u-button.vue",
-		"^u-swiper": "uview-ui/components/u-swiper/u-swiper.vue"
+		"^u-swiper": "uview-ui/components/u-swiper/u-swiper.vue",
+		"^u-tabs": "uview-ui/components/u-tabs/u-tabs.vue"
 	}
 }
