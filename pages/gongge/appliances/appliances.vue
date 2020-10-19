@@ -2,81 +2,30 @@
 	<view class="home">
 		
 		<!-- 轮播图 -->
-		<lb :lbdata='lbdata'></lb>
+		
+		<lb></lb>
 		
 		<!-- 宫格 -->
-		<view class="goge">
-			<gogei hang='4' :data='data'></gogei>
-		</view>
+		
+		<gogei hang='4'></gogei>
 		
 		<!-- 抢购 -->
 		
+		<scrollList title="抢购"></scrollList>
+		
 		<!-- 换新推荐 -->
-		<view class="renew">
-			<view class="headline">
-				换新推荐
-			</view>
-			
-			<scroll-view scroll-x class="strip" :enable-flex="true">
-				<!-- <view class="box"> -->
-					<view class="goodbox">
-						<view class="img">
-							
-						</view>
-						<view class="text">
-							mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...
-						</view>
-					</view>
-					<view class="goodbox">
-						<view class="img">
-							
-						</view>
-						<view class="text">
-							mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...
-						</view>
-					</view>
-					<view class="goodbox">
-						<view class="img">
-							
-						</view>
-						<view class="text">
-							mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...
-						</view>
-					</view>
-					<view class="goodbox">
-						<view class="img">
-							
-						</view>
-						<view class="text">
-							mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...
-						</view>
-					</view>
-					<view class="goodbox">
-						<view class="img">
-							
-						</view>
-						<view class="text">
-							mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...
-						</view>
-					</view>
-					<view class="goodbox">
-						<view class="img">
-							
-						</view>
-						<view class="text">
-							mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...
-						</view>
-					</view>
-					
-				<!-- </view> -->
-					
-			</scroll-view>
-		</view>
+		
+		<scrollList title="换新推荐" ></scrollList>
 		
 		
 		<!-- 热卖榜单 -->
 		
-		<!-- 大家都在买 -->
+		<scrollList title="热卖榜单"></scrollList>
+		
+		<!-- 大家都在买 -->   
+		 
+		<everyone></everyone>
+		
 		
 	</view>
 </template>
@@ -84,32 +33,26 @@
 <script>
 	import gogei from '../../../component/gongge/gogei.vue'
 	import lb from "../../../component/gongge/lb.vue"
-	
+	import scrollList from "../../../component/gongge/scrollList.vue"
+	import everyone from "../../../component/gongge/everyone.vue"
 	export default {
 		
 		data(){
 			return{
-				lbdata:[{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360'}],
-				data:[{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'}
-					]
-			}
+				
+			} 
 		},
 		created() {
+			this.robselect = this.robData[0].id;
+		},
+		methods:{
 			
 		},
-
 		components:{
 			gogei,
-			lb
+			lb,
+			scrollList,
+			everyone
 		}
 	}
 </script>
@@ -117,47 +60,9 @@
 <style lang="scss" scoped>
 	.home{
 		background-color: #F2F2F2;
+		// height: 30000rpx;
+		padding: 0 20rpx;
 		
-		.goge{
-			margin:20rpx;
-			padding: 20rpx;
-			background-color: #fff;
-			border-radius: 30rpx;
-		}
-		
-		.renew{
-			margin: 20rpx;
-			padding: 20rpx;
-			background-color: #fff;
-			
-			.strip{
-				width: 100%;
-				overflow: hidden;
-				white-space: nowrap;
-			
-					.goodbox{
-						display: inline-block;
-						background: #0062CC;
-						margin-right: 10rpx;
-						width: 210rpx;
-						
-						.img{
-							width: 210rpx;
-							height: 210rpx;
-							border-radius: 30rpx;
-							overflow: hidden;
-						}
-						.text{
-							display: -webkit-box;
-							-webkit-box-orient: vertical;
-							-webkit-line-clamp: 2;
-							overflow: hidden;
-						}
-						
-					}
-					
-			}
-		}
 		
 		
 	}
