@@ -26,7 +26,7 @@
 			</view>
 		</view>
 		<!-- 导航栏 -->
-		<u-tabs :list="list" active-color="red" :is-scroll="false" :current="current" @change="change"></u-tabs>
+		<u-tabs :list="list" active-color="rgb(255,87,87)" :is-scroll="false" :current="current" @change="change"></u-tabs>
 		<view class="message">
 			<image src="../../../static/images/user/no-rebate.png" mode=""></image>
 			<view class="text">暂无返利</view>
