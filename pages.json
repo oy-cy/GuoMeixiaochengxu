@@ -112,6 +112,33 @@
             }
             
         }
+        ,{
+            "path" : "pages/site/selectAddr/selectAddr",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/site/addAddr/addAddr",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/site/editAddr/editAddr",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
@@ -134,7 +161,8 @@
 			"van-popup": "/wxcomponents/dist/popup/index",
 			"van-icon": "/wxcomponents/dist/icon/index",
 			"van-button": "/wxcomponents/dist/button/index",
-			"van-stepper": "/wxcomponents/dist/stepper/index"
+			"van-stepper": "/wxcomponents/dist/stepper/index",
+			"van-switch": "/wxcomponents/dist/switch/index"
 		}
 	},
 	"tabBar": {

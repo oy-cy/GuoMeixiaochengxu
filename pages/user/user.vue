@@ -13,7 +13,7 @@
 			<!-- 金额、返利 -->
 			<view class="money">
 				<block v-for="(item,index) in money" :key='index'>
-					<navigator class="item">
+					<navigator class="item" :url="index==0?'/pages/user/balance/balance':'/pages/user/rebate/rebate'">
 						<view class="count">&yen;<text>{{item.balance}}</text></view>
 						<view class="info">{{item.info}}</view>
 					</navigator>
@@ -51,11 +51,11 @@
 				<view class="title">我的分享活动</view>
 				<view class="all-activity">
 					<view class="group-booking">
-						<navigator class="activity-title">
+						<navigator class="activity-title" url="/pages/user/group/group">
 							<image src="../../static/images/user/group-booking.png" mode=""></image>
 							<text>拼团</text>
 						</navigator>
-						<navigator class="info">
+						<navigator class="info" url="/pages/user/group/group">
 							<text>好友拼单享优惠</text>
 							<text> > </text>
 						</navigator>
