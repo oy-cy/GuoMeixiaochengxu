@@ -21,8 +21,11 @@ export function getSeckill(){
 }
 
 // 猜你喜欢
-export function getguessLike(){
-	
+export function getguessLike(catId){
+	return request({
+		url:"/getguessLike?catId="+catId
+	})
 }
+
 
 
