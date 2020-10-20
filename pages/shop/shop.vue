@@ -47,7 +47,7 @@
 		</view>
 		<!-- 轮播图 -->
 		<view class="wrap">
-			<u-swiper name="src" mode="rect" height="220" :list="list"></u-swiper>
+			<u-swiper name="s_img" mode="rect" height="220" :list="list"></u-swiper>
 		</view>
 		<view class="china br">
 			<view class="title">精选活动</view>
@@ -193,28 +193,14 @@
 
 <script>
 	import seckill from "@/component/seckill/seckill.vue"
-	import guideList from"@/component/guideList/guideList.vue"
+	import guideList from"@/component/guideList/guideList.vue";
+	import { getLunbotu } from "@/api/common.js"
 	export default {
 		data() {
 			return {
 				isShowLogo: false,
 				isLogo: false,
-				list: [{
-						"src": "https://s17.mogucdn.com/mlcdn/c45406/200921_87ldda0j8h471b350k3j4j385c4b0_1060x367.png_750x9999.v1c7E.81.webp"
-					},
-					{
-						"src": "https://s18.mogucdn.com/mlcdn/c45406/200921_4e5bg8jhl9g2cfe5ceicg390hd0jk_1060x367.png_750x9999.v1c7E.81.webp"
-					},
-					{
-						"src": "https://s11.mogucdn.com/mlcdn/c45406/200918_8ejchh64dibb26k7dij56jhkcg3e6_1060x367.jpg_750x9999.v1c7E.81.webp"
-					},
-					{
-						"src": "https://s17.mogucdn.com/mlcdn/c45406/200918_5el5c299817hl8g79ikbjh7fh1li3_1060x367.jpg_750x9999.v1c7E.81.webp"
-					},
-					{
-						"src": "https://s2.mogucdn.com/mlcdn/c45406/200921_42b2gi6cj54faak3lbah6c2abhh22_1060x367.png_750x9999.v1c7E.81.webp"
-					}
-				],
+				list: [],
 				goodsData: [{
 						"img": "//gfs17.gomein.net.cn/T12xYmB4dv1RCvBVdK_400.jpg",
 						"goodsPrice": 99.0,
@@ -299,6 +285,18 @@
 			};
 		},
 		methods: {
+			// 初始化
+			init(){
+				this.getLunbotu();
+			},
+			// 获取轮播图
+			async getLunbotu(){
+				var {message} = await getLunbotu('shop');
+				if(message.length != 0){
+					this.list = message;
+				}
+				
+			},
 			//地图选择地址
 			chooseLocation() {
 				uni.chooseLocation({
@@ -338,6 +336,9 @@
 		components: {
 			seckill,
 			guideList
+		},
+		onLoad() {
+			this.init()
 		}
 	}
 </script>

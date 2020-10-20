@@ -91,9 +91,17 @@
 			"style": {
 				"navigationBarTitleText": "选择收货地址"
 			}
+		},
+		{
+			"path" : "pages/user/balance/balance",
+			"style" :                                                                                    
+			{
+			    "navigationBarTitleText": "",
+			    "enablePullDownRefresh": false
+			}
 		}
         ,{
-            "path" : "pages/user/balance/balance",
+            "path" : "pages/user/rebate/rebate",
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
@@ -102,7 +110,29 @@
             
         }
         ,{
-            "path" : "pages/user/rebate/rebate",
+            "path" : "component/goTop/goTop",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/site/selectAddr/selectAddr",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/site/addAddr/addAddr",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/site/editAddr/editAddr",
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
@@ -125,6 +155,7 @@
 			"van-search": "/wxcomponents/dist/search/index",
 			"van-grid": "/wxcomponents/dist/grid/index",
 			"van-grid-item": "/wxcomponents/dist/grid-item/index",
+			"van-divider": "/wxcomponents/dist/divider/index",
 			"van-tab": "/wxcomponents/dist/tab/index",
 			"van-tabs": "/wxcomponents/dist/tabs/index",
 			"van-index-bar": "/wxcomponents/dist/index-bar/index",
@@ -135,11 +166,19 @@
 			"van-dialog": "/wxcomponents/dist/dialog/index",
 			"van-popup": "/wxcomponents/dist/popup/index",
 			"van-icon": "/wxcomponents/dist/icon/index",
+			"van-button": "/wxcomponents/dist/button/index",
+			"van-stepper": "/wxcomponents/dist/stepper/index",
+			"van-switch": "/wxcomponents/dist/switch/index",
 			"van-rate": "/wxcomponents/dist/rate/index",
 			"van-checkbox": "/wxcomponents/dist/checkbox/index",
 			"van-checkbox-group": "/wxcomponents/dist/checkbox-group/index",
 			"van-stepper": "/wxcomponents/dist/stepper/index",
-			"van-button": "/wxcomponents/dist/button/index"
+			"van-button": "/wxcomponents/dist/button/index",
+			"van-goods-action": "/wxcomponents/dist/goods-action/index",
+			"van-goods-action-icon": "/wxcomponents/dist/goods-action-icon/index",
+			"van-goods-action-button": "/wxcomponents/dist/goods-action-button/index"
+			
+
 		}
 	},
 	"tabBar": {
@@ -188,6 +227,7 @@
 		"^u-back-top": "uview-ui/components/u-back-top/u-back-top.vue",
 		"^u-icon": "uview-ui/components/u-icon/u-icon.vue",
 		"^u-loadmore": "uview-ui/components/u-loadmore/u-loadmore.vue",
-		"^u-number-box": "uview-ui/components/u-number-box/u-number-box.vue"
+		"^u-number-box": "uview-ui/components/u-number-box/u-number-box.vue",
+		"^u-loadmore": "uview-ui/components/u-loadmore/u-loadmore.vue"
 	}
 }

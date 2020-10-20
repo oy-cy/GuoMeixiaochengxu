@@ -18,5 +18,6 @@ package-lock.json
 # project.config
 .manifest.json
 
-#unpackage
+# unpackage
 unpackage/
+node_modules/

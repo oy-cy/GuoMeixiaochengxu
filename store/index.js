@@ -6,20 +6,20 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
     //数据
 	state: {
-		// 当前城市(格式：深圳)
-		currentCity:''
+		// 当前城市(格式：北京，默认北京)
+		currentCity:'北京'
 	},
 	// 存放获取数据的方法
 	getters:{
 		// 获取当前城市
 		getCurrentCity(state){
-			return this.currentCity;
+			return state.currentCity;
 		}
 	},
 	// 存放修改数据的方法
 	mutations: {
 		// 修改当前城市
-		setUserInfo(state,city){
+		setCurrentCity(state,city){
 			state.currentCity = city;
 		}
 	},
