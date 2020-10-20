@@ -7,8 +7,8 @@
 		<scroll-view scroll-x class="strip">
 				<view class="goodbox" v-for="(item,index) in goodlist" :key="index" @click="skipGood(index)">
 					<view class="img">
-						<view class="ranking" v-if="item.id == 1">
-							
+						<view class="ranking" v-if="title == '热卖榜单'">
+							<image :src="'../../static/images/gongge/LeaderboardNO'+(index+1)+'.png'" style="width: 100%;height: 100%;"></image>
 						</view>
 						<image :src="item.img_url" style="width: 100%;height: 100%;"></image>
 					</view>
@@ -34,7 +34,7 @@
 
 <script>
 	export default {
-		props:["title"],
+		props:["title","pageid"],
 		data(){
 			return{
 				goodlist:[
@@ -146,7 +146,7 @@
 				
 				.img{
 					
-						position: relative;
+					position: relative;
 					width: 210rpx;
 					height: 210rpx;
 					border-radius: 10rpx;
@@ -155,9 +155,8 @@
 						position: absolute;
 						top: 0rpx;
 						left: 0rpx;
-						width: 30rpx;
-						height: 30rpx;
-						background-color: red;
+						width: 40rpx;
+						height: 40rpx;
 						
 					}
 				}

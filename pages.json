@@ -55,14 +55,15 @@
 			"style": {}
 		}, {
 			"path": "pages/goodsList/goodsList",
-			"style": {
-				"navigationBarTitleText": "商品列表"
-			}
+			"style": {}
 		}, {
 			"path": "pages/goodsDetail/goodsDetail",
 			"style": {
-				"van-button": "/wxcomponents/dist/button/index",
-				"navigationBarTitleText": "商品详情"
+				
+				"navigationBarTitleText": "商品详情",
+				"usingComponents": {
+					"van-button": "/wxcomponents/dist/button/index"
+				}
 			}
 		}, {
 			"path": "pages/order/order",
@@ -87,16 +88,15 @@
 			"style": {
 				"navigationBarTitleText": "选择收货地址"
 			}
+		},
+		{
+			"path" : "pages/user/balance/balance",
+			"style" :                                                                                    
+			{
+			    "navigationBarTitleText": "",
+			    "enablePullDownRefresh": false
+			}
 		}
-        ,{
-            "path" : "pages/user/balance/balance",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
         ,{
             "path" : "pages/user/rebate/rebate",
             "style" :                                                                                    
@@ -106,6 +106,11 @@
             }
             
         }
+        ,{
+            "path" : "component/goTop/goTop",
+            "style" : {}
+        }
+		
     ],
 	"permission": {
 		"scope.userLocation": {
@@ -121,6 +126,7 @@
 			"van-search": "/wxcomponents/dist/search/index",
 			"van-grid": "/wxcomponents/dist/grid/index",
 			"van-grid-item": "/wxcomponents/dist/grid-item/index",
+			"van-divider": "/wxcomponents/dist/divider/index",
 			"van-tab": "/wxcomponents/dist/tab/index",
 			"van-tabs": "/wxcomponents/dist/tabs/index",
 			"van-index-bar": "/wxcomponents/dist/index-bar/index",
@@ -131,9 +137,14 @@
 			"van-dialog": "/wxcomponents/dist/dialog/index",
 			"van-popup": "/wxcomponents/dist/popup/index",
 			"van-icon": "/wxcomponents/dist/icon/index",
+			"van-rate": "/wxcomponents/dist/rate/index",
+			"van-checkbox": "/wxcomponents/dist/checkbox/index",
+			"van-checkbox-group": "/wxcomponents/dist/checkbox-group/index",
 			"van-stepper": "/wxcomponents/dist/stepper/index",
-			  "van-dropdown-menu": "/wxcomponents/dist/dropdown-menu/index",
-			  "van-dropdown-item": "/wxcomponents/dist/dropdown-item/index"
+			"van-goods-action": "/wxcomponents/dist/goods-action/index",
+			"van-goods-action-icon": "/wxcomponents/dist/goods-action-icon/index",
+			"van-goods-action-button": "/wxcomponents/dist/goods-action-button/index"
+			
 		}
 	},
 	"tabBar": {
@@ -177,8 +188,11 @@
 		"^u-swiper": "uview-ui/components/u-swiper/u-swiper.vue",
 		"^u-tabs": "uview-ui/components/u-tabs/u-tabs.vue",
 		"^u-count-down": "uview-ui/components/u-count-down/u-count-down.vue",
-		"^u-collapse-item": "uview-ui/components/u-collapse-item/u-collapse-item.vue",
-		"^u-collapse": "uview-ui/components/u-collapse/u-collapse.vue"
+		"^u-badge": "uview-ui/components/u-badge/u-badge.vue",
+		"^u-parse": "uview-ui/components/u-parse/u-parse.vue",
+		"^u-back-top": "uview-ui/components/u-back-top/u-back-top.vue",
+		"^u-icon": "uview-ui/components/u-icon/u-icon.vue",
+		"^u-loadmore": "uview-ui/components/u-loadmore/u-loadmore.vue"
 		
 	}
 }

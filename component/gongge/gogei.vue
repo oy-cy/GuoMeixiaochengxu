@@ -9,7 +9,7 @@
 <script>
 		export default {
 			
-			props:['hang'],
+			props:['hang',"pageid"],
 			data(){
 				return{
 					
