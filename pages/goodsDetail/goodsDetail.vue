@@ -277,7 +277,7 @@
 					price:0,
 					confirm:[],
 				},
-				isSite:true,
+				isSite:false,
 				site:"深圳市龙华区观澜街道",
 				lunbotu:[
 					{img:"//gfs17.gomein.net.cn/T14jD5B_xT1RCvBVdK_400.jpg?v=20170727"},
@@ -569,12 +569,15 @@
 				}
 				.number{
 					display: flex;
+					margin-bottom: 120rpx;
 					.van-stepper{
 						margin-left: 20rpx;
 					}
 				}
 				.goods-button{
-					margin-top: 20rpx;
+					position: fixed;
+					bottom: 0;
+					width: 100%;
 					.van-button{
 						width: 50%;
 					}
