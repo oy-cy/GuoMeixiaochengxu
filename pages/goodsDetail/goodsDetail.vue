@@ -41,7 +41,8 @@
 				>
 				<view slot="title">
 				    <text class="van-cell-text">已选</text>
-				    <text class="checked">{{select.confirm}}{{select.number}}个</text>
+					<text class="checked" v-for="(item,index) in select.confirm" :key='index'>{{item}}</text>
+				    <text class="checked">{{select.number}}个</text>
 				  </view>
 				</van-cell>
 			</van-cell-group>
@@ -85,7 +86,7 @@
 						<van-button  size="large" color="linear-gradient(to right, #FFC71D, #FF8917)">
 						  加入购物车
 						</van-button>
-						<van-button  size="large" color="linear-gradient(to right, #FF5F34, #EE0B24)">
+						<van-button  size="large" color="linear-gradient(to right, #FA1E8B, #FC1E58)">
 						  立即购买
 						</van-button>
 					</view>
@@ -239,17 +240,25 @@
 				<view class="param" @tap="onCut('param')" :class="[cut == 'param' ? 'cut':'']">规格参数</view>
 				<view class="packaging" @tap="onCut('packaging')" :class="[cut == 'packaging' ? 'cut':'']">包装售后</view>
 			</view>
-		</view>
-			
+		<!-- 富文本解析 -->
 		<u-parse :html="recommend[cut]" :lazy-load="true" ></u-parse>
-			
+		</view>
+		<!-- 底部商品导航 -->
+		<view class="goods-action">
+			<van-goods-action>
+			  <van-goods-action-icon icon="shop-o" text="门店" @click="goShop"/>
+			  <van-goods-action-icon icon="cart-o" text="购物车" info="5" @click="goShopCart"/>
+			  <van-goods-action-button size="large" text="加入购物车" color="linear-gradient(to right, #FFC71D, #FF8917)" @click="joinShopCart" />
+			  <van-goods-action-button size="large" text="立即购买" color="linear-gradient(to right, #FA1E8C, #FC1E58)" @click="promptlyBuy"/>
+			</van-goods-action>
+		</view>
 		
 	</view>
 </template>
 
 <script>
 	import Dialog from '@/wxcomponents/dist/dialog/dialog';
-	import {obj} from '@/common/detailRichText.js'
+	import {obj} from '@/common/detailRichText.js';
 	export default {
 		data() {
 			return {
@@ -266,9 +275,9 @@
 					number:1,
 					img:"//gfs17.gomein.net.cn/T1R0JKBjxT1RCvBVdK_160.jpg?v=20170727",
 					price:0,
-					confirm:'',
+					confirm:[],
 				},
-				isSite:false,
+				isSite:true,
 				site:"深圳市龙华区观澜街道",
 				lunbotu:[
 					{img:"//gfs17.gomein.net.cn/T14jD5B_xT1RCvBVdK_400.jpg?v=20170727"},
@@ -418,9 +427,9 @@
 			},
 			// 选择购买的规格
 			goodsConfirm(){
-				let confirm = '';
+				let confirm = [];
 				this.detailData.select.forEach((v,index) =>{
-					confirm += (v.list[this.sureSelect[index]].title)+" "
+					confirm.push(v.list[this.sureSelect[index]].title)
 				})
 				this.select.confirm = confirm
 			},
@@ -436,7 +445,6 @@
 			},
 			// 跳转到门店
 			goShop(){
-				console.log(123)
 				uni.switchTab({
 					url:"/pages/shop/shop",
 				})
@@ -445,15 +453,26 @@
 			onPageScroll(e) {
 					this.scrollTop = e.scrollTop;
 			},
+			// 切换商品介绍
 			onCut(value){
 				this.cut = value
+			},
+			// 跳转到购物车页面
+			goShopCart(){
+				console.log('跳转购物车')
+			},
+			joinShopCart(){
+				console.log('加入购物车')
+			},
+			promptlyBuy(){
+				console.log('立即购买')
 			}
+			
 			
 		},
 		onLoad() {
 			this.sureSelect = Array.apply(null, Array(this.detailData.select.length)).map(() => 0)
 			this.goodsConfirm()
-			console.log(this.recommend)
 		}
 	}
 </script>
@@ -820,6 +839,7 @@
 		// 商品介绍
 		.goods-recommend{
 			background-color: #fff;
+			margin-bottom: 100rpx;
 			.recommend-title{
 				display: flex;
 				font-size: 38rpx;

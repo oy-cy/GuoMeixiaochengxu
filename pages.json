@@ -135,7 +135,11 @@
 			"van-rate": "/wxcomponents/dist/rate/index",
 			"van-checkbox": "/wxcomponents/dist/checkbox/index",
 			"van-checkbox-group": "/wxcomponents/dist/checkbox-group/index",
-			"van-stepper": "/wxcomponents/dist/stepper/index"
+			"van-stepper": "/wxcomponents/dist/stepper/index",
+			"van-goods-action": "/wxcomponents/dist/goods-action/index",
+			"van-goods-action-icon": "/wxcomponents/dist/goods-action-icon/index",
+			"van-goods-action-button": "/wxcomponents/dist/goods-action-button/index"
+			
 		}
 	},
 	"tabBar": {
@@ -175,6 +179,7 @@
 		]
 	},
 	"easycom": {
+		"^u-tabs-swiper": "uview-ui/components/u-tabs-swiper/u-tabs-swiper.vue",
 		"^u-button": "uview-ui/components/u-button/u-button.vue",
 		"^u-swiper": "uview-ui/components/u-swiper/u-swiper.vue",
 		"^u-tabs": "uview-ui/components/u-tabs/u-tabs.vue",
@@ -184,5 +189,6 @@
 		"^u-back-top": "uview-ui/components/u-back-top/u-back-top.vue",
 		"^u-icon": "uview-ui/components/u-icon/u-icon.vue",
 		"^u-loadmore": "uview-ui/components/u-loadmore/u-loadmore.vue"
+		
 	}
 }
