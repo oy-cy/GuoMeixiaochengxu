@@ -1,4 +1,5 @@
 <script>
+import amap from '@/static/js/amap-wx.js';
 export default {
 	globalData: {  
 		// 用户是否授权(用户是否登录)
@@ -14,6 +15,21 @@ export default {
 		if(isLogin){
 			this.$scope.globalData.userInfo = uni.getStorageSync('userInfo');
 		}
+		// 定位城市
+		this.amapPlugin = new amap.AMapWX({
+			//高德地图KEY，随时失效，请务必替换为自己的KEY，参考：http://ask.dcloud.net.cn/article/35070
+			key: '99031ada35818bf92d6e349e218b83a5'
+		});
+		// 定位地址
+		this.amapPlugin.getRegeo({
+			success: (data) => {
+				this.$store.commit('setCurrentCity',data[0].regeocodeData.addressComponent.city.replace(/市/g,''))
+				console.log(this.$store.getters.getCurrentCity)
+			},
+			fail:(data)=>{
+				console.log("当前城市请求失败");
+			}
+		}); 
 	},
 	onShow: function() {
 		console.log('App Show');
