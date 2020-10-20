@@ -129,15 +129,16 @@
             "path" : "pages/goodsDetail/goodsDetail",
             "style" : {
 				"navigationBarTitleText": "商品详情"
-			},
-            "path" : "pages/user/balance/balance",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
+			}
+        },
+		{
+			"path" : "pages/user/balance/balance",
+			"style" :                                                                                    
+			{
+			    "navigationBarTitleText": "",
+			    "enablePullDownRefresh": false
+			}
+		}
         ,{
             "path" : "pages/user/rebate/rebate",
             "style" :                                                                                    
@@ -167,7 +168,7 @@
 			"van-search": "/wxcomponents/dist/search/index",
 			"van-grid": "/wxcomponents/dist/grid/index",
 			"van-grid-item": "/wxcomponents/dist/grid-item/index",
-			"van-divider": "/wxcomponents/dist/divider/index"
+			"van-divider": "/wxcomponents/dist/divider/index",
 			"van-tab": "/wxcomponents/dist/tab/index",
 			"van-tabs": "/wxcomponents/dist/tabs/index",
 			"van-index-bar": "/wxcomponents/dist/index-bar/index",
