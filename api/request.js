@@ -3,7 +3,7 @@ import {url} from "./config.js"
 console.log(url);
 
 function requset(options){
-	
+	console.log(url+options.url)
 	return new Promise((resolve,reject)=>{
 		uni.request({
 			url:url+options.url,
