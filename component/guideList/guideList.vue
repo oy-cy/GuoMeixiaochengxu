@@ -147,7 +147,6 @@
 			</view>
 		</view>
 		<view class="bottom-content">
-			<!-- <image src="../../static/images/shop/bottom.png" mode=""></image> -->
 			<view class="template-no-more">看完啦</view>
 		</view>
 	</view>

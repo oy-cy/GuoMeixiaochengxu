@@ -1,20 +1,20 @@
 <template>
 	<view class="shop-container">
 		<!-- 头部 -->
-		<view class="header">
+		<view class="header" :class="{selectedBgc:isShowLogo}">
 			<view class="guomei" v-if="isShowLogo" @click="chooseLocation">
 				<image src="../../static/images/shop/guomei-logo.png" mode=""></image>
 			</view>
 			<view class="search">
-				<van-search value="" shape="round" placeholder="请输入搜索关键词" />
+				<van-search value="" background="rgba($color: #fff, $alpha: 0.3)" shape="round" placeholder="请输入搜索关键词" />
 			</view>
-			<view class="scan-content">
-				<image class="scan" src="../../static/images/shop/scan2.png" mode=""></image>
-				<view class="text">扫一扫</view>
+			<view class="scan-content" @tap="scan">
+				<image class="scan" :src="isScan" mode=""></image>
+				<view class="text" :class="{scanSelected:isShowLogo}">扫一扫</view>
 			</view>
 			<view class="classify-content">
-				<image class="classify" src="../../static/images/shop/classify2.png" mode=""></image>
-				<view class="text">分类</view>
+				<image class="classify" :src="classify" mode=""></image>
+				<view class="text" :class="{classifySelected:isShowLogo}">分类</view>
 			</view>
 		</view>
 		<!-- 门店背景图 -->
@@ -39,12 +39,31 @@
 						<view class="slogan">精英团队，为您服务</view>
 					</view>
 				</view>
-				<view class="lightning">
+				<view class="lightning" @tap="lightning">
 					<image src="http://gfs10.gomein.net.cn/T1vjY5BKZv1RCvBVdK.png" mode=""></image>
 				</view>
 			</view>
-
 		</view>
+		<van-popup
+		  :show="isLightning"
+		  closeable
+		  round
+		  z-index="99999"
+		  close-icon="close"
+		  position="bottom"
+		  custom-style="height: 70%"
+		  @close="onClose"
+		>
+		<view class="flash-express-logo">
+			<image src="../../static/images/shop/shop-logo.png" mode=""></image>
+			<view class="tip-info">
+				国美依托线下门店的资源优势，
+				为周边3-5公里社区提供中小件订单直送到家服务，
+				用户下单后可享受最快30分钟闪电送达。
+			</view>
+		</view>
+		</van-popup>
+		
 		<!-- 轮播图 -->
 		<view class="wrap">
 			<u-swiper name="src" mode="rect" height="220" :list="list"></u-swiper>
@@ -199,6 +218,15 @@
 			return {
 				isShowLogo: false,
 				isLogo: false,
+				current: 0,
+				currentTitle: 0,
+				isLightning: false,
+				classify: "../../static/images/shop/classify.png",
+				classifyOne: "../../static/images/shop/classify.png",
+				classifyTwe: "../../static/images/shop/classify2.png",
+				isScan: "../../static/images/shop/scan.png",
+				scanImgOne:"../../static/images/shop/scan.png",
+				scanImgTwe:"../../static/images/shop/scan2.png",
 				list: [{
 						"src": "https://s17.mogucdn.com/mlcdn/c45406/200921_87ldda0j8h471b350k3j4j385c4b0_1060x367.png_750x9999.v1c7E.81.webp"
 					},
@@ -270,7 +298,6 @@
 					},
 				],
 				tabs: ['精品推荐', '全程导购'],
-				current: 0,
 				tabsList: [{
 					name: '全部',
 					id: 10,
@@ -295,7 +322,7 @@
 					id: 16
 				},
 				],
-				currentTitle: 0,
+				
 			};
 		},
 		methods: {
@@ -316,7 +343,23 @@
 			change(obj) {
 				console.log(obj)
 				this.currentTitle = obj.index;
-			}
+			},
+			lightning(){
+				this.isLightning = true;
+			},
+			 onClose() {
+			    this.isLightning = false;
+			 },
+			 // 扫一扫
+			 scan(){
+				uni.scanCode({
+					// onlyFromCamera: true,
+				    success: function (res) {
+				        console.log('条码类型：' + res.scanType);
+				        console.log('条码内容：' + res.result);
+				    }
+				}); 
+			 }
 		},
 		// 监听当前页面的滚动
 		onPageScroll: function(event) {
@@ -328,11 +371,15 @@
 			if (scrollTop > position && this.isLogo == false) {
 				this.isShowLogo = true;
 				this.isLogo = true;
-				console.log("大于50");
+				// 改变头部搜索的图片
+				this.isScan = this.scanImgTwe;
+				this.classify = this.classifyTwe;
 			} else if (scrollTop < position && this.isLogo == true) {
 				this.isShowLogo = false;
 				this.isLogo = false;
-				console.log("小于50");
+				// 改变头部搜索的图片
+				this.isScan = this.scanImgOne;
+				this.classify = this.classifyOne;
 			}
 		},
 		components: {
@@ -344,7 +391,6 @@
     
 <style lang="scss" scoped>
 	.shop-container {
-		// height: 5000rpx;
 		background-color: #F2F2F2;
 
 		.br {
@@ -353,18 +399,18 @@
 			margin: 20rpx auto;
 			background-color: #FFFFFF;
 		}
-
+		.selectedBgc {
+			background-color: #FFFFFF;
+		}
 		.header {
 			position: fixed;
 			display: flex;
 			justify-content: space-around;
 			align-items: center;
 			width: 100%;
-			background-color: #FFFFFF;
-			// background-color: rgba($color: #fff, $alpha: 0.5);
-			z-index: 999;
-
+			z-index: 9999;
 			// opacity: 0.6;
+			
 			.guomei {
 				width: 60rpx;
 				height: 60rpx;
@@ -383,37 +429,60 @@
 			}
 
 			.scan-content {
-				text-align: center;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
 
 				.scan {
 					width: 44rpx;
 					height: 44rpx;
-					margin-top: 12rpx;
 				}
 
 				.text {
 					font-size: 20rpx;
+					color: #FFFFFF;
+				}
+				.scanSelected {
 					color: #878787;
 				}
 			}
 
 			.classify-content {
-				text-align: center;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
 
 				.classify {
 					width: 44rpx;
 					height: 44rpx;
 					padding: 0 20rpx;
-					margin-top: 12rpx;
-					// background-color: red;
 				}
 
 				.text {
 					font-size: 20rpx;
+					color: #FFFFFF;
+				}
+				.classifySelected {
 					color: #878787;
 				}
 			}
 
+		}
+		.flash-express-logo {
+			width: 100%;
+			image {
+				display: block;
+				width: 210rpx;
+				height: 110rpx;
+				margin: 80rpx auto;
+			}
+			.tip-info {
+				font-size: 30rpx;
+				color: #262c32;
+				margin: 0 30rpx;
+			}
 		}
 
 		.shop-info {
