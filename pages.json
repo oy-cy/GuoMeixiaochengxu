@@ -19,7 +19,10 @@
 		}, {
 			"path": "pages/mycar/mycar",
 			"style": {
-				"navigationBarTitleText": "购物车"
+				"navigationBarTitleText": "购物车",
+				"usingComponents": {
+				  "van-stepper": "/wxcomponents/dist/stepper/index"
+				}
 			}
 		}, {
 			"path": "pages/user/user",
@@ -110,7 +113,33 @@
             "path" : "component/goTop/goTop",
             "style" : {}
         }
-		
+        ,{
+            "path" : "pages/site/selectAddr/selectAddr",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/site/addAddr/addAddr",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/site/editAddr/editAddr",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"permission": {
 		"scope.userLocation": {
@@ -137,14 +166,19 @@
 			"van-dialog": "/wxcomponents/dist/dialog/index",
 			"van-popup": "/wxcomponents/dist/popup/index",
 			"van-icon": "/wxcomponents/dist/icon/index",
+			"van-button": "/wxcomponents/dist/button/index",
+			"van-stepper": "/wxcomponents/dist/stepper/index",
+			"van-switch": "/wxcomponents/dist/switch/index",
 			"van-rate": "/wxcomponents/dist/rate/index",
 			"van-checkbox": "/wxcomponents/dist/checkbox/index",
 			"van-checkbox-group": "/wxcomponents/dist/checkbox-group/index",
 			"van-stepper": "/wxcomponents/dist/stepper/index",
+			"van-button": "/wxcomponents/dist/button/index",
 			"van-goods-action": "/wxcomponents/dist/goods-action/index",
 			"van-goods-action-icon": "/wxcomponents/dist/goods-action-icon/index",
 			"van-goods-action-button": "/wxcomponents/dist/goods-action-button/index"
 			
+
 		}
 	},
 	"tabBar": {
@@ -192,7 +226,8 @@
 		"^u-parse": "uview-ui/components/u-parse/u-parse.vue",
 		"^u-back-top": "uview-ui/components/u-back-top/u-back-top.vue",
 		"^u-icon": "uview-ui/components/u-icon/u-icon.vue",
+		"^u-loadmore": "uview-ui/components/u-loadmore/u-loadmore.vue",
+		"^u-number-box": "uview-ui/components/u-number-box/u-number-box.vue",
 		"^u-loadmore": "uview-ui/components/u-loadmore/u-loadmore.vue"
-		
 	}
 }
