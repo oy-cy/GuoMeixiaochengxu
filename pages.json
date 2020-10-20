@@ -90,6 +90,46 @@
 			}
 		}
         ,{
+            "path" : "pages/search/search",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/classify/classify",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/site/site",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/gongge/appliances/appliances",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/gongge/phoneComputer/phoneComputer",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/gongge/supermarket/supermarket",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/gongge/furniture/furniture",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/gongge/cabinet/cabinet",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/goodsList/goodsList",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/goodsDetail/goodsDetail",
+            "style" : {
+				"navigationBarTitleText": "商品详情"
+			},
             "path" : "pages/user/balance/balance",
             "style" :                                                                                    
             {
@@ -107,6 +147,11 @@
             }
             
         }
+        ,{
+            "path" : "component/goTop/goTop",
+            "style" : {}
+        }
+		
     ],
 	"permission": {
 		"scope.userLocation": {
@@ -122,6 +167,7 @@
 			"van-search": "/wxcomponents/dist/search/index",
 			"van-grid": "/wxcomponents/dist/grid/index",
 			"van-grid-item": "/wxcomponents/dist/grid-item/index",
+			"van-divider": "/wxcomponents/dist/divider/index"
 			"van-tab": "/wxcomponents/dist/tab/index",
 			"van-tabs": "/wxcomponents/dist/tabs/index",
 			"van-index-bar": "/wxcomponents/dist/index-bar/index",
