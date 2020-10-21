@@ -172,8 +172,6 @@
 			"van-rate": "/wxcomponents/dist/rate/index",
 			"van-checkbox": "/wxcomponents/dist/checkbox/index",
 			"van-checkbox-group": "/wxcomponents/dist/checkbox-group/index",
-			"van-stepper": "/wxcomponents/dist/stepper/index",
-			"van-button": "/wxcomponents/dist/button/index",
 			"van-goods-action": "/wxcomponents/dist/goods-action/index",
 			"van-goods-action-icon": "/wxcomponents/dist/goods-action-icon/index",
 			"van-goods-action-button": "/wxcomponents/dist/goods-action-button/index"
@@ -227,7 +225,6 @@
 		"^u-back-top": "uview-ui/components/u-back-top/u-back-top.vue",
 		"^u-icon": "uview-ui/components/u-icon/u-icon.vue",
 		"^u-loadmore": "uview-ui/components/u-loadmore/u-loadmore.vue",
-		"^u-number-box": "uview-ui/components/u-number-box/u-number-box.vue",
-		"^u-loadmore": "uview-ui/components/u-loadmore/u-loadmore.vue"
+		"^u-number-box": "uview-ui/components/u-number-box/u-number-box.vue"
 	}
 }

@@ -40,7 +40,5 @@ export function getguessLike(catId){
 	 })
  }
  
- // 
- export function 
 
 
