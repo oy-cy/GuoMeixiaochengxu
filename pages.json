@@ -40,22 +40,46 @@
 			"style": {}
 		}, {
 			"path": "pages/classify/classify",
-			"style": {}
+			"style": {
+				"navigationBarTitleText": "分类",
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTextStyle": "black"
+			}
 		}, {
 			"path": "pages/gongge/appliances/appliances",
-			"style": {}
+			"style": {
+				"navigationBarTitleText": "国美家电",
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTextStyle": "black"
+			}
 		}, {
 			"path": "pages/gongge/phoneComputer/phoneComputer",
-			"style": {}
+			"style": {
+				"navigationBarTitleText": "手机电脑",
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTextStyle": "black"
+			}
 		}, {
 			"path": "pages/gongge/supermarket/supermarket",
-			"style": {}
+			"style": {
+				"navigationBarTitleText": "国美超市",
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTextStyle": "black"
+			}
 		}, {
 			"path": "pages/gongge/furniture/furniture",
-			"style": {}
+			"style": {
+				"navigationBarTitleText": "家具家装",
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTextStyle": "black"
+			}
 		}, {
 			"path": "pages/gongge/cabinet/cabinet",
-			"style": {}
+			"style": {
+				"navigationBarTitleText": "橱柜厨具",
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTextStyle": "black"
+			}
 		}, {
 			"path": "pages/goodsList/goodsList",
 			"style": {}
