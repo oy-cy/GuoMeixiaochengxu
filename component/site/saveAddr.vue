@@ -11,7 +11,7 @@
 			</view>
 			<view class="item addr">
 				<view class="text">选择地址：</view>
-				<view class="site" @click="popup=true">{{addr.split('-').join('')}}</view>
+				<view class="site" @click="popup=true">{{getAddr}}</view>
 			</view>
 			<view class="item detailedAddr">
 				<view class="text">详细地址：</view>
@@ -72,6 +72,11 @@ import ehPicker from '@/component/site/erha-picker/erha-picker.vue';
 		components:{
 			ehPicker
 		},
+		computed: {
+			getAddr(){
+				return [...new Set(this.addr.split('-'))].join('')
+			}
+		},
 		methods: {
 			// 修改	是否为默认地址
 			setChecked(){
@@ -131,7 +136,7 @@ import ehPicker from '@/component/site/erha-picker/erha-picker.vue';
 					icon:'none'
 				})
 			}
-		}
+		},
 	}
 </script>
 
