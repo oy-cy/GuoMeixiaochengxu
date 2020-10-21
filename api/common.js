@@ -39,8 +39,3 @@ export function getguessLike(catId){
 		 url:"/getSellingList?catId="+catId
 	 })
  }
- 
- // 
- export function 
-
-

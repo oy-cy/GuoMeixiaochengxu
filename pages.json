@@ -96,7 +96,7 @@
 			"path" : "pages/user/balance/balance",
 			"style" :                                                                                    
 			{
-			    "navigationBarTitleText": "",
+			    "navigationBarTitleText": "国美币余额",
 			    "enablePullDownRefresh": false
 			}
 		}
@@ -104,7 +104,7 @@
             "path" : "pages/user/rebate/rebate",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "我的返利",
                 "enablePullDownRefresh": false
             }
             
@@ -117,7 +117,7 @@
             "path" : "pages/site/selectAddr/selectAddr",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "选择地址",
                 "enablePullDownRefresh": false
             }
             
@@ -126,7 +126,7 @@
             "path" : "pages/site/addAddr/addAddr",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "新增地址",
                 "enablePullDownRefresh": false
             }
             
@@ -135,7 +135,7 @@
             "path" : "pages/site/editAddr/editAddr",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "编辑地址",
                 "enablePullDownRefresh": false
             }
             
@@ -144,7 +144,7 @@
             "path" : "pages/user/orderList/orderList",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "我的订单",
                 "enablePullDownRefresh": false
             }
             
@@ -186,8 +186,6 @@
 			"van-goods-action": "/wxcomponents/dist/goods-action/index",
 			"van-goods-action-icon": "/wxcomponents/dist/goods-action-icon/index",
 			"van-goods-action-button": "/wxcomponents/dist/goods-action-button/index"
-			
-
 		}
 	},
 	"tabBar": {
@@ -236,7 +234,6 @@
 		"^u-back-top": "uview-ui/components/u-back-top/u-back-top.vue",
 		"^u-icon": "uview-ui/components/u-icon/u-icon.vue",
 		"^u-loadmore": "uview-ui/components/u-loadmore/u-loadmore.vue",
-		"^u-number-box": "uview-ui/components/u-number-box/u-number-box.vue",
-		"^u-loadmore": "uview-ui/components/u-loadmore/u-loadmore.vue"
+		"^u-number-box": "uview-ui/components/u-number-box/u-number-box.vue"
 	}
 }
