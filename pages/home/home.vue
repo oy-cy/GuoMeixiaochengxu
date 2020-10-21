@@ -31,7 +31,7 @@
 		</view>
 		<!-- 八空格 -->
 		<van-grid column-num="4">
-			<van-grid-item v-for="(item,index) in getGridData" :icon="item.g_img" :text="item.g_title" @click="select(index)"/>
+			<van-grid-item v-for="(item,index) in getGridData" :key="item.index" :icon="item.g_img" :text="item.g_title" @click="select(index)"/>
 		</van-grid>	
 		<!-- 国美秒杀 -->
 		<view class="seckill-content">
