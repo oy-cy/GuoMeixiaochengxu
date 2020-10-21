@@ -27,5 +27,26 @@ export function getguessLike(catId){
 	})
 }
 
+// 获取所有的导购
+export function getShoppingGuide(){
+	return request({
+		url:"/getShoppingGuide"
+	})
+}
+
+// 获取门店分类名字
+export function getCategory(){
+	return request({
+		url:`/getCategory?page=shop`
+	})
+}
+
+// 获取门店分类商品数据
+export function getGoodsList(id,page){
+	console.log(id);
+	return request({
+		url:`/getGoodsList?catId=${id}&page=${page}`
+	})
+}
 
 

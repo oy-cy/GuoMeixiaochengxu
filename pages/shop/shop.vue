@@ -117,83 +117,20 @@
 			<view class="goodsList" v-if="current === 0">
 				<u-tabs :list="tabsList" :is-scroll="true" active-color="#f20c59" :current="currentTitle" @change="change"></u-tabs>
 				<view class="classifyGoods">
-					<view class="goods-item">
+					<view class="goods-item" v-for="item in goodsList" :key="item.id">
 						<view class="img-container">
-							<image class="img" src="../../static/images/shop/goods1.png"></image>
+							<image class="img" :src="item.sku_thumbImg_url"></image>
 						</view>
 						<view class="info">
 							<view class="text">
-								<text class="title_tag">国美超市</text>
-								<text class="title">洋河蓝色经典天之蓝52度白酒520ml*6 旗舰版口感绵柔浓香型</text>
+								<text class="title_tag" v-if="item.extProperty">{{ item.extProperty }}</text>
+								<text class="title">{{ item.sku_name }}</text>
 							</view>
-							<view class="goods-tag-list">易卡分期</view>
+							<view class="goods-tag-list">{{ item.tagList[0].tagName }}</view>
 							<view class="price">
 								<view class="content">
 									<text class="symbol">￥</text>
-									<text class="money">2587</text>
-								</view>
-								<view class="car-logo">
-									<image class="img" src="../../static/images/shop/car-tag.png" mode=""></image>
-								</view>
-							</view>
-						</view>
-					</view>
-					<view class="goods-item">
-						<view class="img-container">
-							<image class="img" src="../../static/images/shop/goods1.png"></image>
-						</view>
-						<view class="info">
-							<view class="text">
-								<text class="title_tag">国美超市</text>
-								<text class="title">洋河蓝色经典天之蓝52度白酒520ml*6 旗舰版口感绵柔浓香型</text>
-							</view>
-							<view class="goods-tag-list">易卡分期</view>
-							<view class="price">
-								<view class="content">
-									<text class="symbol">￥</text>
-									<text class="money">2587</text>
-								</view>
-								<view class="car-logo">
-									<image class="img" src="../../static/images/shop/car-tag.png" mode=""></image>
-								</view>
-							</view>
-						</view>
-					</view>
-					<view class="goods-item">
-						<view class="img-container">
-							<image class="img" src="../../static/images/shop/goods1.png"></image>
-						</view>
-						<view class="info">
-							<view class="text">
-								<text class="title_tag">国美超市</text>
-								<text class="title">洋河蓝色经典天之蓝52度白酒520ml*6 旗舰版口感绵柔浓香型</text>
-							</view>
-							<view class="goods-tag-list">易卡分期</view>
-							<view class="price">
-								<view class="content">
-									<text class="symbol">￥</text>
-									<text class="money">2587</text>
-								</view>
-								<view class="car-logo">
-									<image class="img" src="../../static/images/shop/car-tag.png" mode=""></image>
-								</view>
-							</view>
-						</view>
-					</view>
-					<view class="goods-item">
-						<view class="img-container">
-							<image class="img" src="../../static/images/shop/goods1.png"></image>
-						</view>
-						<view class="info">
-							<view class="text">
-								<text class="title_tag">国美超市</text>
-								<text class="title">洋河蓝色经典天之蓝52度白酒520ml*6 旗舰版口感绵柔浓香型</text>
-							</view>
-							<view class="goods-tag-list">易卡分期</view>
-							<view class="price">
-								<view class="content">
-									<text class="symbol">￥</text>
-									<text class="money">2587</text>
+									<text class="money">{{ item.sku_price }}</text>
 								</view>
 								<view class="car-logo">
 									<image class="img" src="../../static/images/shop/car-tag.png" mode=""></image>
@@ -204,7 +141,7 @@
 				</view>
 			</view>
 			<view class="" v-else-if="current === 1">
-				<guideList></guideList>
+				<guideList :guideData="guideData"></guideList>
 			</view>
 		</view>
 	</view>
@@ -212,7 +149,8 @@
 
 <script>
 	import seckill from "@/component/seckill/seckill.vue"
-	import guideList from"@/component/guideList/guideList.vue"
+	import guideList from"@/component/guideList/guideList.vue";
+	import { getSeckill,getShoppingGuide,getCategory,getGoodsList } from "../../api/common.js";
 	export default {
 		data() {
 			return {
@@ -243,47 +181,7 @@
 						"src": "https://s2.mogucdn.com/mlcdn/c45406/200921_42b2gi6cj54faak3lbah6c2abhh22_1060x367.png_750x9999.v1c7E.81.webp"
 					}
 				],
-				goodsData: [{
-						"img": "//gfs17.gomein.net.cn/T12xYmB4dv1RCvBVdK_400.jpg",
-						"goodsPrice": 99.0,
-						"goodsName": "伊莱克斯（Electrolux）EBE2102TD 215升（L）双门冰箱（钛金灰色）"
-					},
-					{
-						"img": "//gfs17.gomein.net.cn/T12xYmB4dv1RCvBVdK_400.jpg",
-						"goodsPrice": 99.0,
-						"goodsName": "伊莱克斯（Electrolux）EBE2102TD 215升（L）双门冰箱（钛金灰色）"
-					},
-					{
-						"img": "//gfs17.gomein.net.cn/T12xYmB4dv1RCvBVdK_400.jpg",
-						"goodsPrice": 99.0,
-						"goodsName": "伊莱克斯（Electrolux）EBE2102TD 215升（L）双门冰箱（钛金灰色）"
-					},
-					{
-						"img": "//gfs17.gomein.net.cn/T12xYmB4dv1RCvBVdK_400.jpg",
-						"goodsPrice": 99.0,
-						"goodsName": "伊莱克斯（Electrolux）EBE2102TD 215升（L）双门冰箱（钛金灰色）"
-					},
-					{
-						"img": "//gfs17.gomein.net.cn/T12xYmB4dv1RCvBVdK_400.jpg",
-						"goodsPrice": 99.0,
-						"goodsName": "伊莱克斯（Electrolux）EBE2102TD 215升（L）双门冰箱（钛金灰色）"
-					},
-					{
-						"img": "//gfs17.gomein.net.cn/T12xYmB4dv1RCvBVdK_400.jpg",
-						"goodsPrice": 99.0,
-						"goodsName": "伊莱克斯（Electrolux）EBE2102TD 215升（L）双门冰箱（钛金灰色）"
-					},
-					{
-						"img": "//gfs17.gomein.net.cn/T12xYmB4dv1RCvBVdK_400.jpg",
-						"goodsPrice": 99.0,
-						"goodsName": "伊莱克斯（Electrolux）EBE2102TD 215升（L）双门冰箱（钛金灰色）"
-					},
-					{
-						"img": "//gfs17.gomein.net.cn/T12xYmB4dv1RCvBVdK_400.jpg",
-						"goodsPrice": 99.0,
-						"goodsName": "伊莱克斯（Electrolux）EBE2102TD 215升（L）双门冰箱（钛金灰色）"
-					},
-				],
+				goodsData: [],
 				videoData: [{
 						"url": "http://47.112.194.162:82/Trousers/goods1/goods_show.mp4"
 					},
@@ -298,34 +196,18 @@
 					},
 				],
 				tabs: ['精品推荐', '全程导购'],
-				tabsList: [{
-					name: '全部',
-					id: 10,
-				}, {
-					name: '国美超市',
-					id: 11
-				}, {
-					name: '空调',
-					id: 12
-				},
-				{
-					name: '彩电',
-					id: 13
-				},{
-					name: '冰箱',
-					id: 14
-				},{
-					name: '洗衣机',
-					id: 15
-				},{
-					name: '手机',
-					id: 16
-				},
-				],
-				
+				tabsList: [],
+				goodsList: [],
+				guideData: [],
+				page: 1,
 			};
 		},
 		methods: {
+			// 初始化
+			init(){
+				this.getSeckillData();
+				this.getCategoryData();
+			},
 			//地图选择地址
 			chooseLocation() {
 				uni.chooseLocation({
@@ -339,10 +221,16 @@
 			changeTab(index) {
 				console.log('当前选中的项：' + index)
 				this.current = index;
+				if(index == 0){
+					
+				}else {
+					this.getShoppingGuideData();
+				}
 			},
 			change(obj) {
-				console.log(obj)
+				console.log("分类changeid",obj);
 				this.currentTitle = obj.index;
+				this.getGoodsListData(obj.id);
 			},
 			lightning(){
 				this.isLightning = true;
@@ -359,7 +247,49 @@
 				        console.log('条码内容：' + res.result);
 				    }
 				}); 
-			 }
+			 },
+			 // 获取秒杀数据
+			 async getSeckillData(){
+				 var { message } = await getSeckill();
+				 this.goodsData = message;
+			 },
+			 // 获取导购人员数据
+			 async getShoppingGuideData(){
+				 var { message } = await getShoppingGuide();
+				message.forEach(v => {
+					v.goods_category = JSON.parse(v.goods_category)
+					var temp = JSON.parse(v.goods_category)
+					var arr = [];
+					temp.forEach((cg,index) => {
+						if(index >= 3){
+							arr.push(cg)
+							console.log("index")
+							return;
+						}
+					});
+					// console.log("arr",arr);
+					// v.goods_category = data;
+				})
+				 this.guideData = message;
+				 // console.log("导购",message.goods_category)
+			 },
+			 // 获取精品推荐分类
+			 async getCategoryData(){
+				 var { message } = await getCategory();
+				 console.log("分类",message);
+				 // 保存分类的第一个id
+				 var firstId = message[0].cat_id;
+				 this.tabsList = message;
+				 this.getGoodsListData(firstId)
+			 },
+			 async getGoodsListData(id){
+				 var { message } = await getGoodsList(id,this.page);
+				 message.forEach(v => {
+					 console.log(v.tagList);
+					 v.tagList = JSON.parse(v.tagList);
+				 })
+				 this.goodsList = message;
+ 			 }
 		},
 		// 监听当前页面的滚动
 		onPageScroll: function(event) {
@@ -381,6 +311,9 @@
 				this.isScan = this.scanImgOne;
 				this.classify = this.classifyOne;
 			}
+		},
+		onLoad(){
+			this.init();
 		},
 		components: {
 			seckill,
