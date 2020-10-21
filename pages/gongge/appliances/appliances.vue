@@ -10,21 +10,20 @@
 		<gogei hang='4' :pageid="pageid"></gogei>
 		
 		<!-- 抢购 -->
-		
-		<scrollList title="抢购" :pageid="pageid"></scrollList>
+		<scrollList title="rob" ></scrollList>
 		
 		<!-- 换新推荐 -->
 		
-		<scrollList title="换新推荐" :pageid="pageid"></scrollList>
+		<scrollList title="exchange"></scrollList>
 		
 		
 		<!-- 热卖榜单 -->
 		
-		<scrollList title="热卖榜单" :pageid="pageid"></scrollList>
+		<scrollList title="hot"></scrollList>
 		
 		<!-- 大家都在买 -->   
 		 
-		<everyone></everyone>
+		<everyone :pageid="pageid"></everyone>
 		
 		
 	</view>
@@ -39,7 +38,7 @@
 		
 		data(){
 			return{
-				pageid:1
+				pageid:"appliances"
 			} 
 		},
 		components:{

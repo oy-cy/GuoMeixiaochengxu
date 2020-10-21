@@ -40,3 +40,10 @@ export function getguessLike(catId){
 	 })
  }
  
+ // 获取列表页//大家都在买
+ export function getGoodsList(catId,page){
+ 	 return request({
+ 		 url:"/getGoodsList?catId="+catId+"&page="+page
+ 	 })
+ }
+ 
