@@ -27,5 +27,20 @@ export function getguessLike(catId){
 	})
 }
 
+//获取换新推荐
+ export function getRecommend(catId){
+	 return request({
+		 url:"/getRecommend?catId="+catId
+	 })
+ }
+ // 热卖榜单
+ export function getSellingList(catId){
+	 return request({
+		 url:"/getSellingList?catId="+catId
+	 })
+ }
+ 
+ // 
+ export function 
 
 
