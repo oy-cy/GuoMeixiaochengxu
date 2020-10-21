@@ -25,22 +25,22 @@
 				<view class="title">我的订单</view>
 				<view class="order-info">
 					<!-- 全部订单 -->
-					<navigator url="" class="item">
+					<navigator url="/pages/user/orderList/orderList" class="item">
 						<image src="../../static/images/user/all-order.png" mode=""></image>
 						<view class="info">全部订单</view>
 					</navigator>
 					<!-- 待付款 -->
-					<navigator url="" class="item">
+					<navigator url="/pages/user/orderList/orderList?status=1" class="item">
 						<image src="../../static/images/user/obligation.png" mode=""></image>
 						<view class="info">待付款</view>
 					</navigator>
 					<!-- 待收货 -->
-					<navigator url="" class="item">
+					<navigator url="/pages/user/orderList/orderList?status=2" class="item">
 						<image src="../../static/images/user/receiving.png" mode=""></image>
 						<view class="info">待收货</view>
 					</navigator>
 					<!-- 已完成 -->
-					<navigator url="" class="item">
+					<navigator url="/pages/user/orderList/orderList?status=3" class="item">
 						<image src="../../static/images/user/done.png" mode=""></image>
 						<view class="info">已完成</view>
 					</navigator>
@@ -129,15 +129,18 @@
 					// 登录成功
 					success(info){
 						// 获取openid start
-						var appid = 'wxdc3ba8b14831e4db'; //填写微信小程序appid  
-						var secret = '1dea52b5f60ada9dfe7dd87cc50b440b'; //填写微信小程序secret  
-						//调用request请求api转换登录凭证  
+						var appid = 'wxdc3ba8b14831e4db'; //填写微信小程序appid
+						var secret = '1dea52b5f60ada9dfe7dd87cc50b440b'; //填写微信小程序secret						
+						var openid ;
+						
+						//调用request请求api转换登录凭证
 						uni.request({
 							url: 'https://api.weixin.qq.com/sns/jscode2session?appid='+appid+'&secret='+secret+'&grant_type=authorization_code&js_code=' + loginCode.code,
 							header: {
 								'content-type': 'application/json'
 							},
 							success: function (res) {
+								openid = res.data.openid;
 								console.info(res.data.openid) //获取openid
 							}
 						})
@@ -147,6 +150,9 @@
 						uni.getUserInfo({
 							provider: 'weixin',
 							success: function (infoRes) {
+								
+								// todo 发送openid请求到后台
+								
 								var userInfo = infoRes.userInfo;
 								// 登录成功，保存当前登陆用户信息
 								getApp().globalData.userInfo = userInfo;
