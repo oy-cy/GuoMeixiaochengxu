@@ -39,6 +39,8 @@
 </template>
 
 <script>
+	
+	import {getGoodsList} from "../../api/common.js"
 	export default {
 		props:["pageid"],
 		data(){
@@ -87,7 +89,7 @@
 			}
 		},
 		created() {
-			
+			this.getGoodsListData();
 		},
 		methods:{
 			change(obj){
@@ -99,6 +101,11 @@
 				// 	this.status = 'nomore'
 				// }
 				this.status = 'loading'
+			},
+			async getGoodsListData(){
+				var data = await getGoodsList(1,this.page);
+				this.page++;
+				console.log('ev',data);
 			}
 		}
 	}

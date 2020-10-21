@@ -234,6 +234,7 @@
 					cityIndex
 				} = this;
 				
+				this.area = label;
 				try{
 					var streetsData = this.getStreetsAll[proIndex][cityIndex][index];
 				} catch(e){
@@ -250,7 +251,6 @@
 					})
 				}
 				
-				this.area = label;
 				this.showIndex = 3;
 				this.currentSelect = 3;
 				this.topIndex = 3;

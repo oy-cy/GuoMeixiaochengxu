@@ -3,7 +3,7 @@
 		<lb :pageid="pageid"></lb>
 		<gogei hang="3" :pageid="pageid"></gogei>
 		<scrollList :pageid="pageid"></scrollList>
-		<everyone  :pageid="pageid"></everyone>
+		<everyone :pageid="pageid"></everyone>
 	</view>
 </template>
 
@@ -15,7 +15,7 @@
 	export default {
 		data() {
 			return {
-				pageid:2
+				pageid:"kitchenWare"
 			};
 		},
 		components:{
