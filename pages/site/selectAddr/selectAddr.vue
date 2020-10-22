@@ -2,24 +2,24 @@
 	<view class="select-addr-container">
 		<view class="list" v-for="(item,index) in receivingAddr">
 			<view class="item">
-				<view class="info" @click="setSelectCity">
+				<view class="info" @click="setSelectCity(item.id)">
 					<view class="raduis-view">
 						<view class="raduis">
-							<view v-if="item.select" class="color"></view>
+							<view v-if="item.is_select==1" class="color"></view>
 						</view>
 					</view>
 					<view class="consignee-info">
 						<view class="basic-info">
-							<view class="name">{{item.name}}</view>
+							<view class="name">{{item.receiver}}</view>
 							<view class="phone">{{item.phone}}</view>
 						</view>
 						<view class="addr-info">
-							<view class="default" v-if="item.isDeafault">默认</view>
+							<view class="default" v-if="item.is_default">默认</view>
 							{{item.addr}}
 						</view>
 					</view>
 				</view>
-				<navigator :url="'/pages/site/editAddr/editAddr?id='" class="edit">
+				<navigator :url="'/pages/site/editAddr/editAddr?id='+item.id" class="edit">
 					<view class="image"><image src="../../../static/images/site/edit.png" mode=""></image></view>
 					<view class="text">编辑</view>
 				</navigator>
@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import { getAddrs,setSelectAddr } from '@/api/user.js';
 	export default {
 		data() {
 			return {
@@ -40,12 +41,15 @@
 				],
 			}
 		},
-		onLoad() {
-			// todo 获取当前用户的地址列表
+		async onLoad() {
+			// 获取当前用户的地址列表
+			var data = await getAddrs(getApp().globalData.userInfo.userId);
+			this.receivingAddr = data.message;
 		},
 		methods: {
-			setSelectCity(){
-				// todo 调用修改默认地址
+			setSelectCity(id){
+				// 调用修改默认地址
+				setSelectAddr(getApp().globalData.userInfo.userId,id);
 				uni.switchTab({
 					url:"/pages/home/home"
 				})

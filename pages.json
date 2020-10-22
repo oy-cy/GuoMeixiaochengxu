@@ -94,7 +94,9 @@
 			}
 		}, {
 			"path": "pages/order/order",
-			"style": {}
+			"style": {
+				"navigationBarTitleText": "填写订单"
+			}
 		}, {
 			"path": "pages/comment/comment",
 			"style": {}
@@ -165,6 +167,34 @@
             
         }
         ,{
+            "path" : "pages/guideIntroduce/guideIntroduce",
+            "style" : {
+				"navigationBarTitleText": "导购员介绍"
+			}
+        }
+        ,{
+            "path" : "pages/brand/sacon/sacon",
+            "style" : {
+				"navigationBarTitleText": "帅康品牌专场"
+			}
+        }
+        ,{
+            "path" : "pages/brand/guangdongMacro/guangdongMacro",
+            "style" : {
+				"navigationBarTitleText": "万家乐品牌专场"
+			}
+        }
+        ,{
+            "path" : "pages/brand/lake/lake",
+            "style" : {
+				"navigationBarTitleText": "莱克品牌专场"
+			}
+        }
+        ,{
+            "path" : "component/commodityTemplate/commodityTemplate",
+            "style" : {}
+        }
+        ,{
             "path" : "pages/user/orderList/orderList",
             "style" :                                                                                    
             {
@@ -178,6 +208,20 @@
 				"navigationBarTitleText":"我的拼团"
 			}
 		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     ],
 	"permission": {
 		"scope.userLocation": {
