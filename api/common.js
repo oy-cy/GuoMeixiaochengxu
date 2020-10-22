@@ -54,3 +54,12 @@ export function fuzzyQuery(name){
  	 })
  }
  
+ // 生成购物车
+ export function addShopCar (car){
+	 return request({
+		 url:"/addShopCar",
+		 methods:"post",
+		 data:car
+	 })
+ }
+ 
