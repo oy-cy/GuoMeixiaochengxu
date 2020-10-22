@@ -2,25 +2,14 @@
 	<view class="mycar">
 		
 		
-		<view class="nogood" v-if="goodList.length == 0">
-			<view class="noimg">
-				<image src="../../static/images/gongge/emptycar.png" style="width: 100%;height: 100%;"></image>
-			</view>
-			<view class="hint">
-				购物车还是空的
-			</view>
-			<navigator class="buttom" url="/pages/home/home">
-				
-				首页
-			</navigator>
-		</view>
+		
 		<!-- 地址，编辑 -->
-		<view class="top" v-if="goodList.length != 0">
+		<view class="top" >
 			<view class="background">
 				<view class="left" @click="siteCompile">
 					<image src="../../static/images/tabbar/shop.png" style="width: 30rpx;height: 30rpx;margin-right: 20rpx;">{{getCurrentCity}}
 				</view>
-				<view class="right" @click="clickcompile">
+				<view class="right" @click="clickcompile" v-if="goodList.length != 0">
 					{{compile==true?"编辑":"完成"}}
 				</view>
 			</view>
@@ -29,7 +18,20 @@
 		
 		<!-- 内容 -->
 		<view class="box">
-			<view class="goodList">
+			
+			<view class="nogood" v-if="goodList.length == 0">
+				<view class="noimg">
+					<image src="../../static/images/gongge/emptycar.png" style="width: 100%;height: 100%;"></image>
+				</view>
+				<view class="hint">
+					购物车还是空的
+				</view>
+				<navigator class="buttom" url="/pages/home/home"  open-type="switchTab">
+					首页
+				</navigator>
+			</view>
+			
+			<view class="goodList" v-if="goodList.length != 0">
 				<view class="goodbox">
 					<view class="good" v-for="(items,indexs) in goodList" :key="indexs" >
 						<van-checkbox
@@ -65,7 +67,7 @@
 				</view>
 			</view>
 			
-			<view class="like">
+			<view class="like" :style="{'margin-bottom':goodList.length != 0?'150rpx;':'0rpx'}">
 				<view class="img">
 					<image src="../../static/images/gongge/weni.jpg" style="width: 300rpx;height: 70rpx;"></image>
 				</view>
@@ -74,20 +76,21 @@
 				  <van-grid-item use-slot v-for="(item,index) in allgoodList" :key="index" class="goodlist" @click="details(item.id)">
 					<image
 					  style="width: 100%; height: 400rpx;"
-					  :src="item.image"
+					  :src="item.sku_thumbImg_url"
 					/>
 					<view class="goodmessage">
-						<view class="door">
-							{{item.door}}
-						</view>
 						<view class="title">
-							{{item.title}}
+							<text class="mie">
+								{{item.extProperty}}
+							</text>
+							
+							{{item.sku_name}}
 						</view>
 						<view class="price_car">
 							<view class="price">
 								
 								<text class="min">￥</text>
-								<text>{{item.price}}</text>
+								<text>{{item.sku_price}}</text>
 								<text class="min">.00</text>
 								
 							</view>
@@ -187,6 +190,8 @@
 		  
 		  <site ref="show"></site>
 		 
+		 
+		 <goTop></goTop>
 	</view>
 
 		
@@ -194,6 +199,10 @@
 
 <script>
 	import site from "../../component/gongge/site.vue"
+	import goTop from "../../component/goTop/goTop.vue"
+	import {getCarList} from "@/api/car.js"
+	
+	import {getguessLike} from "@/api/common.js"
 	export default {
 		data() {
 			return {
@@ -206,35 +215,28 @@
 				
 				goodList:[],
 				
-				allgoodList:[
-					{id:1,
-						title:"FHD全高清屏，人工智能语音",
-						image:"//cdn.cnbj1.fds.api.mi-img.com/mi-mall/7cd59729b9a02407979848839c0e5343.jpg?thumb=1&w=344&h=280",
-						door:"国美体验店",
-						price:"3000"},
-					{id:2,
-						title:"FHD全高清屏，人工智能语音",
-						image:"//cdn.cnbj1.fds.api.mi-img.com/mi-mall/7cd59729b9a02407979848839c0e5343.jpg?thumb=1&w=344&h=280",
-						door:"国美体验店",
-						price:"3000"},
-					{id:3,
-						title:"FHD全高清屏，人工智能语音",
-						image:"//cdn.cnbj1.fds.api.mi-img.com/mi-mall/7cd59729b9a02407979848839c0e5343.jpg?thumb=1&w=344&h=280",
-						door:"国美体验店",
-						price:"3000"},
-					{id:4,
-						title:"FHD全高清屏，人工智能语音",
-						image:"//cdn.cnbj1.fds.api.mi-img.com/mi-mall/7cd59729b9a02407979848839c0e5343.jpg?thumb=1&w=344&h=280",
-						door:"国美体验店",
-						price:"3000"},
-					
-				]
+				allgoodList:[]
 			};
 		},
 		created() {
-			this.goodList = this.$store.getters.getCarList
+			// this.goodList = this.$store.getters.getCarList
+			this.getCarListData(1)
+			this.getguessLikeData();
 		},
 		methods:{
+			
+			async getCarListData(userId){
+				var {message} = await getCarList(userId);
+				console.log("12213112313",message);
+				// this.$store.commit('setCarList',currentCity	);
+			},
+			
+			async getguessLikeData(){
+				var {message} = await getguessLike(1);
+				console.log('gwc',message)
+				this.allgoodList = message
+			},
+			
 			addcar(id){
 				console.log(id);
 			},
@@ -332,7 +334,6 @@
 			},
 			siteCompile(){
 				this.$refs.show.show()
-				// this.siteShow = true;
 			},
 			
 			
@@ -344,7 +345,8 @@
 			}
 		},
 		components:{
-			site
+			site,
+			goTop
 		}
 	}
 </script>
@@ -353,27 +355,6 @@
 	.mycar{
 		padding:20rpx;
 		background-color: #F3F5F7;
-		
-		.nogood{
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			.noimg{
-				width: 200rpx;
-				height: 200rpx;
-			}
-			.hint{
-				color: #919599;
-				font-size: 30rpx;
-			}
-				.buttom{
-					margin-top: 20rpx;
-					font-size: 26rpx;
-					padding: 6rpx 20rpx;
-					border-radius: 30rpx;
-					border: 1rpx solid #ccc;
-				}
-		}
 		
 		.top{
 		
@@ -402,6 +383,28 @@
 		
 		.box{
 			margin-top: 70rpx;
+			
+			.nogood{
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				.noimg{
+					width: 200rpx;
+					height: 200rpx;
+				}
+				.hint{
+					color: #919599;
+					font-size: 30rpx;
+				}
+					.buttom{
+						margin-top: 20rpx;
+						font-size: 26rpx;
+						padding: 6rpx 20rpx;
+						border-radius: 30rpx;
+						border: 1rpx solid #ccc;
+					}
+			}
+			
 			.goodList{
 				margin: 20rpx 0;
 					.goodbox{
@@ -445,7 +448,7 @@
 			}
 			
 			.like{
-				margin-bottom:150rpx;
+				// margin-bottom:150rpx;
 				
 				.img{
 					display: flex;
@@ -459,26 +462,25 @@
 					}
 					.goodmessage{
 						padding: 10rpx;
-						.door{
-							display: -webkit-box;
-							-webkit-box-orient: vertical;
-							-webkit-line-clamp: 1;
-							overflow: hidden;
-							color: #7A7F85;
-							font-size: 28rpx;
-							padding-bottom: 10rpx 0;
-							border-bottom: 1px dotted #7A7F85; 
-						}
+						
 						.title{
+							.mie{
+								    background-color: #F30E5D;
+								    color: #fff;
+								    font-size: 22rpx;
+								    padding: 3rpx;
+								    border-radius: 6rpx;
+									    margin-right: 10rpx;
+							}
 							display: -webkit-box;
 							-webkit-box-orient: vertical;
 							-webkit-line-clamp: 2;
 							overflow: hidden;
 							font-size: 28rpx;
-							margin: 10rpx;
 						}
 						
 						.price_car{
+							margin-top: 15rpx;
 							display: flex;
 							justify-content: space-between;
 							.price{
