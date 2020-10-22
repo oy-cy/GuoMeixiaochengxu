@@ -40,8 +40,6 @@
 			"style": {}
 		}, {
 			"path": "pages/classify/classify",
-			"style": {}
-		},{
 			"style": {
 				"navigationBarTitleText": "分类",
 				"navigationBarBackgroundColor": "#fff",
@@ -161,7 +159,6 @@
             "path" : "pages/site/editAddr/editAddr",
             "style" :                                                                                    
             {
-				
                 "navigationBarTitleText": "编辑地址",
                 "enablePullDownRefresh": false
             }
@@ -263,6 +260,6 @@
 		"^u-back-top": "uview-ui/components/u-back-top/u-back-top.vue",
 		"^u-icon": "uview-ui/components/u-icon/u-icon.vue",
 		"^u-loadmore": "uview-ui/components/u-loadmore/u-loadmore.vue",
-		"^u-number-box": "uview-ui/components/u-number-box/u-number-box.vue",
+		"^u-number-box": "uview-ui/components/u-number-box/u-number-box.vue"
 	}
 }

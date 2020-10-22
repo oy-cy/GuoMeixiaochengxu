@@ -1,18 +1,24 @@
 <template>
 	<view class="mycar">
-<<<<<<< HEAD
-		<view class="top">
-			<view class="background">
-				<view class="left">
-					深圳市
-=======
 		
+		
+		<view class="nogood" v-if="goodList.length == 0">
+			<view class="noimg">
+				<image src="../../static/images/gongge/emptycar.png" style="width: 100%;height: 100%;"></image>
+			</view>
+			<view class="hint">
+				购物车还是空的
+			</view>
+			<navigator class="buttom" url="/pages/home/home">
+				
+				首页
+			</navigator>
+		</view>
 		<!-- 地址，编辑 -->
-		<view class="top">
+		<view class="top" v-if="goodList.length != 0">
 			<view class="background">
 				<view class="left" @click="siteCompile">
 					<image src="../../static/images/tabbar/shop.png" style="width: 30rpx;height: 30rpx;margin-right: 20rpx;">{{getCurrentCity}}
->>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 				</view>
 				<view class="right" @click="clickcompile">
 					{{compile==true?"编辑":"完成"}}
@@ -20,47 +26,18 @@
 			</view>
 			
 		</view>
-<<<<<<< HEAD
-		<view class="box">
-			<view class="goodList">
-				<view class="goodbox">
-					<view class="good" v-for="(items,indexs) in goodList" :key="indexs">
-=======
 		
 		<!-- 内容 -->
 		<view class="box">
 			<view class="goodList">
 				<view class="goodbox">
 					<view class="good" v-for="(items,indexs) in goodList" :key="indexs" >
->>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 						<van-checkbox
 						  :value="items.select"
 						  checked-color="#F20C59"
 						  @change="good(items.id)"
 						  class="choose"
 						></van-checkbox>
-<<<<<<< HEAD
-						<image :src="items.image" style="width: 200rpx;height: 200rpx;"></image>
-						
-						<view class="message">
-							<view class="title">
-								<text><text></text>{{items.title}}</text>
-							</view>
-							<view class="price_num">
-								<text class="price">￥{{items.price}}</text>
-								<u-number-box 
-								:min="1" :max="100"
-								 size='18' 
-								 input-width="40" 
-								 v-model="items.num" 
-								 :index="items.id"
-								 @change="addSubtract"></u-number-box>
-							</view>
-						</view>
-					</view>
-				</view>
-				
-=======
 						<view class="good" @click="details(items.id)">
 							<image :src="items.image" style="width: 200rpx;height: 200rpx;"></image>
 							
@@ -86,7 +63,6 @@
 						
 					</view>
 				</view>
->>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 			</view>
 			
 			<view class="like">
@@ -116,7 +92,7 @@
 								
 							</view>
 							<view class="car" @click.stop="addcar(item.id)">
-								
+								<image src="../../static/images/gongge/nocar.png" style="width: 100%;height: 100%;"></image>
 							</view>
 						</view>
 					</view>
@@ -127,12 +103,9 @@
 			
 		</view>
 
-<<<<<<< HEAD
-=======
 
 		<!-- 全选 -->
->>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
-		<view class="end">
+		<view class="end" v-if="goodList.length != 0">
 			<view class="sum">
 				<van-checkbox
 				  :value="all"
@@ -163,8 +136,6 @@
 				@click="deleteGood()"
 				>删除</van-button>
 		</view>
-<<<<<<< HEAD
-=======
 	
 	
 		<!-- 格式 -->
@@ -216,7 +187,6 @@
 		  
 		  <site ref="show"></site>
 		 
->>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 	</view>
 
 		
@@ -230,51 +200,11 @@
 				all:false,
 				money:0.00,
 				compile:true,
-<<<<<<< HEAD
-=======
 				isSelect:false,
 				
 				siteShow:false,
->>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 				
-				goodList:[
-						{id:1,
-						title:"FHD全高清屏，人工智能语音",
-						image:"//cdn.cnbj1.fds.api.mi-img.com/mi-mall/7cd59729b9a02407979848839c0e5343.jpg?thumb=1&w=344&h=280",
-						num:4,
-						select:false,
-						price:3000},
-						{id:2,
-						title:"2FHD全高清屏，人工智能语音",
-						image:"//cdn.cnbj1.fds.api.mi-img.com/mi-mall/7cd59729b9a02407979848839c0e5343.jpg?thumb=1&w=344&h=280",
-						num:6,
-						select:false,
-						price:3000},
-						{id:3,
-						title:"3FHD全高清屏，人工智能语音",
-						image:"//cdn.cnbj1.fds.api.mi-img.com/mi-mall/7cd59729b9a02407979848839c0e5343.jpg?thumb=1&w=344&h=280",
-						num:7,
-						select:false,
-						price:3000},
-						{id:4,
-						title:"FHD全高清屏，人工智能语音",
-						image:"//cdn.cnbj1.fds.api.mi-img.com/mi-mall/7cd59729b9a02407979848839c0e5343.jpg?thumb=1&w=344&h=280",
-						num:'1',
-						select:false,
-						price:3000},
-						{id:5,
-						title:"2FHD全高清屏，人工智能语音",
-						image:"//cdn.cnbj1.fds.api.mi-img.com/mi-mall/7cd59729b9a02407979848839c0e5343.jpg?thumb=1&w=344&h=280",
-						num:'1',
-						select:false,
-						price:3000},
-						{id:6,
-						title:"3FHD全高清屏，人工智能语音",
-						image:"//cdn.cnbj1.fds.api.mi-img.com/mi-mall/7cd59729b9a02407979848839c0e5343.jpg?thumb=1&w=344&h=280",
-						num:'1',
-						select:false,
-						price:3000},
-				],
+				goodList:[],
 				
 				allgoodList:[
 					{id:1,
@@ -301,6 +231,9 @@
 				]
 			};
 		},
+		created() {
+			this.goodList = this.$store.getters.getCarList
+		},
 		methods:{
 			addcar(id){
 				console.log(id);
@@ -311,10 +244,6 @@
 				})
 				console.log(id)
 			},
-<<<<<<< HEAD
-			
-=======
->>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 			good(data){	
 				this.goodList.forEach(function(item,tempindex,arr){
 					if(item.id == data){
@@ -330,10 +259,7 @@
 				this.goodList.forEach(function(item,tempindex,arr){
 					item.select = _this.all
 				});
-<<<<<<< HEAD
-=======
 				this.calculateMoney();
->>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 			},
 			examineall(){
 				var temp = true;
@@ -377,8 +303,6 @@
 						item.select  = false;
 					})
 					
-				}else{
-					
 				}
 				this.examineall();
 				this.calculateMoney();
@@ -395,13 +319,6 @@
 				})
 				carId = carId.join(",")
 				console.log(carId)
-<<<<<<< HEAD
-			}
-			
-		
-			
-			
-=======
 			},
 			
 			
@@ -428,10 +345,6 @@
 		},
 		components:{
 			site
->>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
-		},
-		created() {
-			
 		}
 	}
 </script>
@@ -440,6 +353,28 @@
 	.mycar{
 		padding:20rpx;
 		background-color: #F3F5F7;
+		
+		.nogood{
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			.noimg{
+				width: 200rpx;
+				height: 200rpx;
+			}
+			.hint{
+				color: #919599;
+				font-size: 30rpx;
+			}
+				.buttom{
+					margin-top: 20rpx;
+					font-size: 26rpx;
+					padding: 6rpx 20rpx;
+					border-radius: 30rpx;
+					border: 1rpx solid #ccc;
+				}
+		}
+		
 		.top{
 		
 			width: 100vw;
@@ -486,8 +421,6 @@
 								display: flex;
 								flex-direction: column;
 								justify-content: space-between;
-<<<<<<< HEAD
-=======
 								
 								.specificationsbox{
 									// display: inline;
@@ -497,7 +430,6 @@
 										background-color: #ccc;
 									}
 								}
->>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 								.price_num{
 									display: flex;
 									justify-content: space-between;
@@ -557,10 +489,8 @@
 								}
 							}
 							.car{
-								width: 30rpx;
-								height: 30rpx;
-								background-color: red;
-								    margin: 20rpx 20rpx 0rpx 0rpx;
+								width: 60rpx;
+								height: 60rpx;
 							}
 						}
 					}
@@ -664,9 +594,6 @@
 			}
 		
 	}
-<<<<<<< HEAD
-</style>
-=======
 
 		/deep/ .level-container{
 			height: 680rpx;
@@ -676,4 +603,3 @@
 			display: none;
 		}
  </style>
->>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca

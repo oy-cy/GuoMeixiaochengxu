@@ -2,23 +2,6 @@
 	<view class="select-addr-container">
 		<view class="list" v-for="(item,index) in receivingAddr">
 			<view class="item">
-<<<<<<< HEAD
-				<navigator class="raduis-view" url="/pages/home/home" open-type="switchTab">
-					<view v-if="index==0" class="raduis">
-						<view class="color"></view>
-					</view>
-				</navigator>
-				<navigator class="consignee-info" url="/pages/home/home" open-type="switchTab">
-					<view class="basic-info">
-						<view class="name">{{item.name}}</view>
-						<view class="phone">{{item.phone}}</view>
-					</view>
-					<view class="addr-info">
-						<view class="default" v-if="item.isDeafault">默认</view>
-						{{item.addr}}
-					</view>
-				</navigator>
-=======
 				<view class="info" @click="setSelectCity">
 					<view class="raduis-view">
 						<view class="raduis">
@@ -36,18 +19,13 @@
 						</view>
 					</view>
 				</view>
->>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 				<navigator :url="'/pages/site/editAddr/editAddr?id='" class="edit">
 					<view class="image"><image src="../../../static/images/site/edit.png" mode=""></image></view>
 					<view class="text">编辑</view>
 				</navigator>
 			</view>
 		</view>
-<<<<<<< HEAD
-		<navigator url="/pages/site/addAddr/addAddr" class="button" @click="save">新增地址</navigator>
-=======
 		<navigator url="/pages/site/addAddr/addAddr" class="button">新增地址</navigator>
->>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 	</view>
 </template>
 
@@ -57,14 +35,6 @@
 			return {
 				// 收货地址
 				receivingAddr:[
-<<<<<<< HEAD
-					{addr:'深圳市龙华区观澜街道淑女路',name:'花花的贝贝',phone:'157****1010',isDeafault:1}
-				],
-			}
-		},
-		methods: {
-			
-=======
 					// {addr:'深圳市龙华区观澜街道淑女路',name:'花花的贝贝',phone:'157****1010',isDeafault:1,select:0},
 					// {addr:'深圳市龙华区观澜街道淑女路',name:'花花的贝贝',phone:'157****1010',isDeafault:1,select:1}
 				],
@@ -80,7 +50,6 @@
 					url:"/pages/home/home"
 				})
 			}
->>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 		}
 	}
 </script>
@@ -99,13 +68,10 @@
 			display: flex;
 			height: 150rpx;
 			background-color: #fff;
-<<<<<<< HEAD
-=======
 			.info {
 				flex: 1;
 				display: flex;
 			}
->>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 			.raduis-view {
 				width: 50rpx;
 				padding-left: 20rpx;
