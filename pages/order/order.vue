@@ -8,7 +8,16 @@
 			    <view class="site">{{site}}</view>
 			  </view>
 			</van-cell>
-			
+			<view class="SiteMessage">
+				<view class="info">
+					<view class="isDefault" v-if="userSite.is_default == 1">
+						默认
+					</view>
+					<view class="addr">
+						{{userSite.addr}}
+					</view>
+				</view>
+			</view>
 			<view class="line"></view>
 		</view>
 	</view>
@@ -73,6 +82,18 @@
 				height: 10rpx;
 				width: 100%;
 			}
+			
+			.SiteMessage{
+				.info{
+					display: flex;
+					.isDefault{
+						font-size: 30rpx;
+						color: #F20C59;
+						border: 2rpx solid #F20C59;
+					}
+				}
+			}
+		
 		}
 	}
 
