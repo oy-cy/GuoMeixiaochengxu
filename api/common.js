@@ -50,6 +50,13 @@ export function getCategory(type){
 // }
 
 
+// 模糊查询
+export function fuzzyQuery(name){
+	return request({
+		url:"/fuzzyQuery?name="+name
+	})
+}
+
 //获取换新推荐
  export function getRecommend(catId){
 	 return request({
@@ -68,5 +75,14 @@ export function getCategory(type){
  	 return request({
  		 url:"/getGoodsList?catId="+catId+"&page="+page
  	 })
+ }
+ 
+ // 生成购物车
+ export function addShopCar (car){
+	 return request({
+		 url:"/addShopCar",
+		 methods:"post",
+		 data:car
+	 })
  }
  

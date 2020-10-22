@@ -1,8 +1,21 @@
 <template>
 	<view class="mycar">
 		
+		
+		<view class="nogood" v-if="goodList.length == 0">
+			<view class="noimg">
+				<image src="../../static/images/gongge/emptycar.png" style="width: 100%;height: 100%;"></image>
+			</view>
+			<view class="hint">
+				购物车还是空的
+			</view>
+			<navigator class="buttom" url="/pages/home/home">
+				
+				首页
+			</navigator>
+		</view>
 		<!-- 地址，编辑 -->
-		<view class="top">
+		<view class="top" v-if="goodList.length != 0">
 			<view class="background">
 				<view class="left" @click="siteCompile">
 					<image src="../../static/images/tabbar/shop.png" style="width: 30rpx;height: 30rpx;margin-right: 20rpx;">{{getCurrentCity}}
@@ -79,7 +92,7 @@
 								
 							</view>
 							<view class="car" @click.stop="addcar(item.id)">
-								
+								<image src="../../static/images/gongge/nocar.png" style="width: 100%;height: 100%;"></image>
 							</view>
 						</view>
 					</view>
@@ -92,7 +105,7 @@
 
 
 		<!-- 全选 -->
-		<view class="end">
+		<view class="end" v-if="goodList.length != 0">
 			<view class="sum">
 				<van-checkbox
 				  :value="all"
@@ -191,44 +204,7 @@
 				
 				siteShow:false,
 				
-				goodList:[
-						{id:1,
-						title:"FHD全高清屏，人工智能语音",
-						image:"//cdn.cnbj1.fds.api.mi-img.com/mi-mall/7cd59729b9a02407979848839c0e5343.jpg?thumb=1&w=344&h=280",
-						num:4,
-						select:false,
-						price:3000},
-						{id:2,
-						title:"2FHD全高清屏，人工智能语音",
-						image:"//cdn.cnbj1.fds.api.mi-img.com/mi-mall/7cd59729b9a02407979848839c0e5343.jpg?thumb=1&w=344&h=280",
-						num:6,
-						select:false,
-						price:3000},
-						{id:3,
-						title:"3FHD全高清屏，人工智能语音",
-						image:"//cdn.cnbj1.fds.api.mi-img.com/mi-mall/7cd59729b9a02407979848839c0e5343.jpg?thumb=1&w=344&h=280",
-						num:7,
-						select:false,
-						price:3000},
-						{id:4,
-						title:"FHD全高清屏，人工智能语音",
-						image:"//cdn.cnbj1.fds.api.mi-img.com/mi-mall/7cd59729b9a02407979848839c0e5343.jpg?thumb=1&w=344&h=280",
-						num:'1',
-						select:false,
-						price:3000},
-						{id:5,
-						title:"2FHD全高清屏，人工智能语音",
-						image:"//cdn.cnbj1.fds.api.mi-img.com/mi-mall/7cd59729b9a02407979848839c0e5343.jpg?thumb=1&w=344&h=280",
-						num:'1',
-						select:false,
-						price:3000},
-						{id:6,
-						title:"3FHD全高清屏，人工智能语音",
-						image:"//cdn.cnbj1.fds.api.mi-img.com/mi-mall/7cd59729b9a02407979848839c0e5343.jpg?thumb=1&w=344&h=280",
-						num:'1',
-						select:false,
-						price:3000},
-				],
+				goodList:[],
 				
 				allgoodList:[
 					{id:1,
@@ -254,6 +230,9 @@
 					
 				]
 			};
+		},
+		created() {
+			this.goodList = this.$store.getters.getCarList
 		},
 		methods:{
 			addcar(id){
@@ -324,8 +303,6 @@
 						item.select  = false;
 					})
 					
-				}else{
-					
 				}
 				this.examineall();
 				this.calculateMoney();
@@ -368,9 +345,6 @@
 		},
 		components:{
 			site
-		},
-		created() {
-			
 		}
 	}
 </script>
@@ -379,6 +353,28 @@
 	.mycar{
 		padding:20rpx;
 		background-color: #F3F5F7;
+		
+		.nogood{
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			.noimg{
+				width: 200rpx;
+				height: 200rpx;
+			}
+			.hint{
+				color: #919599;
+				font-size: 30rpx;
+			}
+				.buttom{
+					margin-top: 20rpx;
+					font-size: 26rpx;
+					padding: 6rpx 20rpx;
+					border-radius: 30rpx;
+					border: 1rpx solid #ccc;
+				}
+		}
+		
 		.top{
 		
 			width: 100vw;
@@ -493,10 +489,8 @@
 								}
 							}
 							.car{
-								width: 30rpx;
-								height: 30rpx;
-								background-color: red;
-								    margin: 20rpx 20rpx 0rpx 0rpx;
+								width: 60rpx;
+								height: 60rpx;
 							}
 						}
 					}

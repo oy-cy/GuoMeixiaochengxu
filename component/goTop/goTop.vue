@@ -43,16 +43,16 @@
 		position: fixed;
 		bottom: 30rpx;
 		right: 30rpx;
-		padding: 4rpx;
+		padding: 4rpx 18rpx;
 		border-radius: 50%;
-		background-color: rgba($color: #ffffff, $alpha: 0.6);
+		background-color: rgba($color: #ffffff, $alpha: 0.8);
 		image{
 			padding-top: 6rpx;
 			width: 32rpx;
 			height: 32rpx;
 		}
 		text{
-			font-size: 30rpx;
+			font-size: 20rpx;
 		}
 		
 	}

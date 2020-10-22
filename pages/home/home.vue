@@ -9,7 +9,7 @@
 			<navigator class="search" hover-class="none" url="../search/search">
 				<van-search class="van-search" value="" background="background:transparen(0)" disabled="true" shape="round" placeholder="请输入搜索关键词" />
 			</navigator>
-			<view class="scan-photo" @click="scanCode()" >
+			<view class="scan-photo" @click="scanCode()">
 				<image src="../../static/images/home/scan.png" mode=""></image>
 				<text class="text">扫一扫</text>
 				<!-- <button @click="show=true"></button> -->
@@ -18,19 +18,9 @@
 		<!-- 轮播图 -->
 		<view class="page-section-spacing">
 			<swiper class="swiper" indicator-dots="true" autoplay="ture" circular="ture">
-				<swiper-item class="swiper-item-check">
+				<swiper-item class="swiper-item-check" v-for="item in goLunboData" :key="item.id">
 					<view class="swiper-item uni-bg-red">
-						<image src="http://gfs5.gomein.net.cn/wireless/T1kC_7Bj__1RCvBVdK_1065_390.jpg" mode=""></image>
-					</view>
-				</swiper-item>
-				<swiper-item class="swiper-item-check">
-					<view class="swiper-item uni-bg-green">
-						<image src="https://gfs7.gomein.net.cn/wireless/T1joV7B7LT1RCvBVdK_1065_390.jpg" mode=""></image>
-					</view>
-				</swiper-item>
-				<swiper-item class="swiper-item-check">
-					<view class="swiper-item uni-bg-blue">
-						<image src="https://gfs9.gomein.net.cn/wireless/T1g.x7B_Vv1RCvBVdK_1065_390.jpg" mode=""></image>
+						<image :src="item.s_img" mode=""></image>
 					</view>
 				</swiper-item>
 			</swiper>
@@ -41,8 +31,12 @@
 		</view>
 		<!-- 八空格 -->
 		<van-grid column-num="4">
-			<van-grid-item v-for="(item,index) in lbcdata" :icon="item.img_url" :text="item.name" @click="select(index)"/>
-		</van-grid>
+			<van-grid-item v-for="(item,index) in getGridData" :key="item.index" :icon="item.g_img" :text="item.g_title" @click="select(index)"/>
+		</van-grid>	
+		<!-- 国美秒杀 -->
+		<view class="seckill-content">
+			<seckill :goodsData="getSeckillData"></seckill>
+		</view>
 		<!-- 猜你喜欢 -->
 		<view class="related">
 			<van-divider
@@ -51,60 +45,21 @@
 			  <image src="../../static/images/home/favour.png" mode=""></image>猜你喜欢
 			</van-divider>
 			<view class="list">
-				<view class="goodslist">
+				<view class="goodslist" v-for="item in getguessLikeData" :key="item.id">
 					<view class="photo">
-						<image src="../../static/images/home/favour.png" mode=""></image>
+						<image :src="item.sku_thumbImg_url" mode=""></image>
 					</view>
 					<view class="title">
 						<image src="../../static/images/home/favour.png" mode=""></image>
-						<text>国美体验店(观澜观光店霏霏城城)</text>
+						<text>{{item.shop_id}}</text>
 					</view>
 					<view class="recommend">
-						<view class="name"><text>国美超市</text>泸州老窖白酒52hiuh iuh i度500ml dfgdrfd </view>
+						<view class="name"><text>{{item.extProperty}}</text>{{item.sku_name}}</view>
 					</view>
-					<view class="price">￥78.9</view>
-				</view>
-				
-				<view class="goodslist">
-					<view class="photo">
-						<image src="../../static/images/home/favour.png" mode=""></image>
+					<view class="price">
+						<text>￥</text> 
+						{{item.sku_price}}
 					</view>
-					<view class="title">
-						<image src="../../static/images/home/favour.png" mode=""></image>
-						<text>国美体验店(观澜观光店霏霏城城)</text>
-					</view>
-					<view class="recommend">
-						<view class="name"><text>国美超市</text>泸州老窖白酒52hiuh iuh i度500ml dfgdrfd </view>
-					</view>
-					<view class="price">￥78.9</view>
-				</view>
-				
-				<view class="goodslist">
-					<view class="photo">
-						<image src="../../static/images/home/favour.png" mode=""></image>
-					</view>
-					<view class="title">
-						<image src="../../static/images/home/favour.png" mode=""></image>
-						<text>国美体验店(观澜观光店霏霏城城)</text>
-					</view>
-					<view class="recommend">
-						<view class="name"><text>国美超市</text>泸州老窖白酒52hiuh iuh i度500ml dfgdrfd </view>
-					</view>
-					<view class="price">￥78.9</view>
-				</view>
-				
-				<view class="goodslist">
-					<view class="photo">
-						<image src="../../static/images/home/favour.png" mode=""></image>
-					</view>
-					<view class="title">
-						<image src="../../static/images/home/favour.png" mode=""></image>
-						<text>国美体验店(观澜观光店霏霏城城)</text>
-					</view>
-					<view class="recommend">
-						<view class="name"><text>国美超市</text>泸州老窖白酒52hiuh iuh i度500ml dfgdrfd </view>
-					</view>
-					<view class="price">￥78.9</view>
 				</view>
 			</view>
 		</view>
@@ -120,23 +75,53 @@
 <script>
 	// import gogei from '../../component/gongge/gogei.vue';
 	import goTop from '../../component/goTop/goTop.vue';
+	import seckill from "@/component/seckill/seckill.vue";
+	import {getLunbotu,getguessLike,getSeckill,getGrid} from "../../api/common.js";
 	export default {
 		data() {
 			return {
-				lbcdata:[{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'}
-					],
+					getSeckillData: [],
 					isShow:false,
-					show:false
+					show:false,
+					goLunboData:[],
+					getguessLikeData:[],
+					getGridData:[]
 			};
 		},
 		methods: {
+			// 初始化
+			init(){
+				this.getLunboWay();
+				this.getguesslikeWay();
+				this.getSeckillWay();
+				this.getGridWay();
+			},
+			async getGridWay(){
+				var {message} = await getGrid("home");
+				console.log("gonge",message);
+				this.getGridData = message;
+			},
+			async getSeckillWay(){
+				var {message} = await getSeckill();
+				console.log(message)
+				message.map(v=>{
+					this.getSeckillData.push({
+						"img": v.sku_thumbImg_url,
+						"goodsPrice": v.sku_price,
+						"goodsName": v.sku_name
+					})
+				})
+				// this.getSeckillData = message;
+			},
+			async getguesslikeWay(){
+				var {message} = await getguessLike(1);
+				console.log("aaa",message);
+				this.getguessLikeData = message;
+			},
+			async getLunboWay(){
+				var {message} = await getLunbotu("home");
+				this.goLunboData = message;
+			},
 			scanCode(){
 				uni.scanCode({
 					// onlyFromCamera: true,// 只允许通过相机扫码
@@ -155,7 +140,7 @@
 			select(index){
 				console.log(index)
 				uni.navigateTo({
-					url:"/pages/goodsList/goodsList"
+					url:""
 				})
 			}
 		},
@@ -172,7 +157,12 @@
 			}
 		},
 		components:{
-			goTop
+			goTop,
+			seckill
+		},
+		created() {
+			this.init();
+			
 		}
 	}
 </script>
@@ -243,6 +233,9 @@
 				height: 100%;
 			}
 		}
+		.seckill-content {
+			margin: 25rpx 0;
+		}
 		.goge{
 			margin:20rpx;
 			padding: 20rpx;
@@ -274,7 +267,8 @@
 						align-items: center;
 						margin: 0rpx 20rpx;
 						padding-bottom: 20rpx;
-						border-bottom: 2rpx dotted gray;
+						// border-bottom: 2rpx dotted gray;
+						 border-bottom: 2rpx dashed #dcddde;
 						image{}
 						text{
 							flex: 1;
@@ -292,17 +286,23 @@
 							display: -webkit-box;
 							-webkit-line-clamp: 2;
 							-webkit-box-orient: vertical;
+							font-size: 26rpx;
 							text{
-								font-size: 28rpx;
+								font-size: 26rpx;
 								background-color: rgb(250, 29, 137);
+								color: #FFFFFF;
 							}
 						}
 					}
 					.price{
-						font-size: 40rpx;
+						font-size: 38rpx;
+						font-weight: bold;
 						color: rgb(243, 30, 101);
 						margin: 25rpx 20rpx;
-						
+						text{
+							font-weight: bold;
+							font-size: 20rpx;
+						}
 					}
 				}
 			}

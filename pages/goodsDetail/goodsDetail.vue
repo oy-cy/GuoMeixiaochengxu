@@ -66,24 +66,26 @@
 							</view>
 						</view>
 					</view>
-					<view class="select" v-for="(item,index) in detailData.select" :key='index'>
-						<view class="select-item">
-							{{item.name}}
+					<scroll-view scroll-y='true' style="height: 550rpx;">
+						<view class="select" v-for="(item,index) in detailData.select" :key='index'>
+							<view class="select-item">
+								{{item.name}}
+							</view>
+							<view class="item-content">
+								<block v-for="(items,indexs) in item.list" :key="indexs">
+									<view class="default" @click="goodsSelect(index,indexs)" :class="[sureSelect[index] == indexs ? 'choose':'']" >
+										{{items.title}}
+									</view>
+								</block>
+							</view>
 						</view>
-						<view class="item-content">
-							<block v-for="(items,indexs) in item.list" :key="indexs">
-								<view class="default" @click="goodsSelect(index,indexs)" :class="[sureSelect[index] == indexs ? 'choose':'']" >
-									{{items.title}}
-								</view>
-							</block>
+					
+						<view class="number">
+							数量 <van-stepper :value="select.number" min="1" max="10"  @change='numberChange'/>
 						</view>
-					</view>
-					<view class="number">
-						
-						数量 <van-stepper :value="select.number" min="1" max="10"  @change='numberChange'/>
-					</view>
+					</scroll-view>
 					<view class="goods-button">
-						<van-button  size="large" color="linear-gradient(to right, #FFC71D, #FF8917)" @click="joinShopCart">
+						<van-button  size="large" color="linear-gradient(to right, #FFC71D, #FF8917)" @click="joinShopCart" >
 						  加入购物车
 						</van-button>
 						<van-button  size="large" color="linear-gradient(to right, #FA1E8B, #FC1E58)" @click="promptlyBuy">
@@ -99,30 +101,17 @@
 				<!-- @click="isSite = true" -->
 			  <van-cell
 				is-link
-				@click="isSite = true"
+				@click="siteCompile"
 				>
 				<view slot="title" class="site-title">
 					<text class="van-cell-text">送至</text>
 					<view class="site">
 						<van-icon name="location-o" size="50rpx" color="#999A9C"/>
-						{{site}}, 免运费
+						{{getDefaultSite}}, 免运费
 					</view>
 				</view>
 			  </van-cell>
 			</van-cell-group>
-			<!-- 弹出框 -->
-			<van-popup
-			 :show="isSite"
-			  position="bottom"
-			  custom-style="height: 72%;"
-			  closeable
-			  @close="closeSite"
-			  @click-overlay="closeSite">
-				<view class="">
-					联动选择地址//todo
-				</view>
-			</van-popup>
-			  
 			<!-- 保证 -->
 			<view class="pledge">
 				<view class="pledge-item" v-for="(item,index) in pledge" :key="index">
@@ -232,7 +221,6 @@
 		<view class="wrap">
 				<u-back-top :scroll-top="scrollTop" ><u-icon name="arrow-upward"></u-icon></u-back-top>
 		</view>
-		<!-- <u-parse :html="recommend.img" ></u-parse> -->
 		<!-- 商品介绍 -->
 		<view class="goods-recommend">
 			<view class="recommend-title">
@@ -252,7 +240,8 @@
 			  <van-goods-action-button size="large" text="立即购买" color="linear-gradient(to right, #FA1E8C, #FC1E58)" @click="promptlyBuy"/>
 			</van-goods-action>
 		</view>
-		
+		<site ref="show"></site>
+		<u-toast ref="uToast" />
 	</view>
 </template>
 
@@ -260,14 +249,15 @@
 	import Dialog from '@/wxcomponents/dist/dialog/dialog';
 	// import {obj} from '@/common/detailRichText.js';
 	import {getGoodsLunbotu,getCommodityDetails,getcomment} from "@/api/goodsDetail.js";
-	import {getguessLike} from "@/api/common.js";
+	import {getguessLike,addShopCar} from "@/api/common.js";
+	import site from "@/component/gongge/site.vue";
 	export default {
 		data() {
 			return {
 				cut:"product_desciption",
 				scrollTop:0,
 				goods:{
-					id:1,
+					id:3,
 					title:"华硕(ASUS) Y5200FB 15.6英寸商务办公轻薄笔记本电脑(I5-8265 4G 512SSD MX110 2G独显)银",
 					price:2199,
 					tag:"自营",
@@ -281,7 +271,6 @@
 					confirm:[],
 				},
 				isSite:false,
-				site:"深圳市龙华区观澜街道",
 				lunbotu:[
 					{url:"https://img.yzcdn.cn/vant/custom-empty-image.png"}
 				],
@@ -319,7 +308,7 @@
 				this.getGoodsLunbotu();
 				this.getCommodityDetails();
 				this.getcomment();
-				this.goodsConfirm();
+				
 				
 			},
 			// 获取轮播图
@@ -342,6 +331,8 @@
 				if(message.length != 0){
 					this.recommend = message[0]
 					this.detailData.select = JSON.parse(message[0].specification);
+					this.sureSelect = Array.apply(null, Array(this.detailData.select.length)).map(() => 0)
+					this.goodsConfirm();
 					this.getguessLike();
 				}
 			},
@@ -360,7 +351,6 @@
 							arr = []
 						}
 					})
-					console.log("message",this.fondGoods);
 				}
 			},
 			// 分期
@@ -383,7 +373,6 @@
 			// 选择购买的规格
 			goodsConfirm(){
 				if(this.detailData.select.length != 0){
-					
 					let confirm = [];
 					this.detailData.select.forEach((v,index) =>{
 						confirm.push(v.list[this.sureSelect[index]].title)
@@ -417,25 +406,55 @@
 			},
 			// 跳转到购物车页面
 			goShopCart(){
-				console.log('跳转购物车')
+				uni.switchTab({
+					url:"/pages/mycar/mycar",
+				})
 			},
-			joinShopCart(){
+			async joinShopCart(){
 				console.log('加入购物车')
+				let car = {
+					userId : 1,
+					comId : this.goods.id,
+					comCount : this.select.number,
+					specification : this.select.confirm,
+					price : (this.select.price == 0 ? this.goods.price : this.goods.price),
+				}
+				console.log(car);
+				// await addShopCar(car);
+				this.$refs.uToast.show({
+					title: '加入购物车成功',
+					type: 'default',
+				})
+				
 			},
 			promptlyBuy(){
 				console.log('立即购买')
+			},
+			siteCompile(){
+				this.$refs.show.show()
+				// this.siteShow = true;
 			}
-			
-			
+		},
+		components:{
+			site
 		},
 		onLoad() {
-			this.sureSelect = Array.apply(null, Array(this.detailData.select.length)).map(() => 0)
 			this.init();
-		}
+		},
+		computed: {
+			getDefaultSite(){
+				return this.$store.getters.getDefaultSite;
+			}
+		},
 	}
 </script>
 
 <style lang="scss">
+	
+	.interlayer {
+		display: flex !important;
+		flex-direction: column !important;
+	}
 	.detail-container{
 		background-color: #F3F5F7;
 		height: 5000rpx;
@@ -527,7 +546,7 @@
 				}
 				.number{
 					display: flex;
-					margin: 30rpx 0 120rpx 30rpx;
+					margin: 30rpx 0 ;
 					align-items: center;
 					.van-stepper{
 						margin-left: 20rpx;
@@ -549,14 +568,28 @@
 			.site-title{
 				display: flex;
 				font-size:34rpx;
+				// color: #FF0000;
 				align-items: flex-end;
 				.van-cell-text{
 					color:#999A9C;
 					margin-right: 20rpx;
+					// flex: 1;
 				}
 				.site{
-					display: flex;
-					align-items: flex-end;
+					flex: 1;
+					position: relative;
+					padding-left:40rpx;
+					.van-icon{
+						position: absolute;
+						top: 0;
+						left: -6rpx;
+					}
+					// display: flex;
+					// align-items: flex-end;
+					display: -webkit-box;
+					-webkit-box-orient: vertical;
+					-webkit-line-clamp: 1;
+					overflow: hidden;
 				}
 			}
 			.pledge{
@@ -604,6 +637,7 @@
 						align-items: center;
 						font-size: 30rpx;
 						color: #757A7F;
+						
 					}
 				}
 			}

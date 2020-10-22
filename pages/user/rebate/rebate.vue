@@ -48,6 +48,11 @@
 				current: 0
 			}
 		},
+		onLoad(option) {
+			if(option && option.index){
+				this.current = option.index;
+			}
+		},
 		methods: {
 			change(index) {
 				this.current = index;

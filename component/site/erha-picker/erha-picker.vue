@@ -250,7 +250,6 @@
 						street:''
 					})
 				}
-				
 				this.showIndex = 3;
 				this.currentSelect = 3;
 				this.topIndex = 3;

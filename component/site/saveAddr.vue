@@ -66,8 +66,8 @@ import ehPicker from '@/component/site/erha-picker/erha-picker.vue';
 				this.cityName = tempAddr[1];
 				this.areaName = tempAddr[2];
 				this.strName = tempAddr[3];
+				console.log(this.isEdit,this.oldChecked,this.oldConsignee,this.oldPhone,this.oldAddr,this.oldDetailedAddr);
 			}
-			console.log(this.isEdit,this.oldChecked,this.oldConsignee,this.oldPhone,this.oldAddr,this.oldDetailedAddr);
 		},
 		components:{
 			ehPicker

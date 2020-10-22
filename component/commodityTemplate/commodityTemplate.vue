@@ -1,7 +1,7 @@
 <template>
 	<view class="goods-container">
 		<view class="classifyGoods">
-			<view class="goods-item" v-for="item in goodsList" :key="item.id">
+			<view class="goods-item" v-for="item in goodsList" :key="item.id" @tap="goGoodsDetail(item.id)">
 				<view class="img-container">
 					<image class="img" :src="item.sku_thumbImg_url"></image>
 				</view>
@@ -33,6 +33,14 @@
 			return {
 				
 			};
+		},
+		methods:{
+			//跳转到商品详情页
+			goGoodsDetail(id){
+				uni.navigateTo({
+					url: "/pages/goodsDetail/goodsDetail?goodsId="+ id
+				})
+			}
 		}
 	}
 </script>

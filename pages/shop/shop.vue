@@ -5,17 +5,19 @@
 			<view class="guomei" v-if="isShowLogo" @click="chooseLocation">
 				<image src="../../static/images/shop/guomei-logo.png" mode=""></image>
 			</view>
-			<view class="search">
-				<van-search value="" background="rgba($color: #fff, $alpha: 0.3)" shape="round" placeholder="请输入搜索关键词" />
-			</view>
+			<navigator class="search" url="../search/search">
+					<van-search value="" background="rgba($color: #fff, $alpha: 0.3)" shape="round" placeholder="请输入搜索关键词" />
+			</navigator>
 			<view class="scan-content" @tap="scan">
 				<image class="scan" :src="imgData.isScan" mode=""></image>
 				<view class="text" :class="{scanSelected:isShowLogo}">扫一扫</view>
 			</view>
-			<view class="classify-content">
-				<image class="classify" :src="imgData.classify" mode=""></image>
-				<view class="text" :class="{classifySelected:isShowLogo}">分类</view>
-			</view>
+			<navigator url="../classify/classify">
+				<view class="classify-content">
+					<image class="classify" :src="imgData.classify" mode=""></image>
+					<view class="text" :class="{classifySelected:isShowLogo}">分类</view>
+				</view>
+			</navigator>
 		</view>
 		<!-- 门店背景图 -->
 		<view class="shop-info">
@@ -66,7 +68,7 @@
 		
 		<!-- 轮播图 -->
 		<view class="wrap">
-			<u-swiper name="src" mode="rect" height="220" :list="list"></u-swiper>
+			<u-swiper name="s_img" mode="rect" height="220" :list="lunboData"></u-swiper>
 		</view>
 		<view class="china br">
 			<view class="title">精选活动</view>
@@ -121,7 +123,7 @@
 	import seckill from "@/component/seckill/seckill.vue"
 	import guideList from"@/component/guideList/guideList.vue";
 	import commodityTemplate from "@/component/commodityTemplate/commodityTemplate.vue"
-	import { getSeckill,getShoppingGuide,getCategory,getGoodsList } from "../../api/common.js";
+	import { getSeckill,getShoppingGuide,getCategory,getGoodsList,getLunbotu } from "../../api/common.js";
 	export default {
 		data() {
 			return {
@@ -138,22 +140,7 @@
 					scanImgOne:"../../static/images/shop/scan.png",
 					scanImgTwe:"../../static/images/shop/scan2.png",
 				},
-				list: [{
-						"src": "https://s17.mogucdn.com/mlcdn/c45406/200921_87ldda0j8h471b350k3j4j385c4b0_1060x367.png_750x9999.v1c7E.81.webp"
-					},
-					{
-						"src": "https://s18.mogucdn.com/mlcdn/c45406/200921_4e5bg8jhl9g2cfe5ceicg390hd0jk_1060x367.png_750x9999.v1c7E.81.webp"
-					},
-					{
-						"src": "https://s11.mogucdn.com/mlcdn/c45406/200918_8ejchh64dibb26k7dij56jhkcg3e6_1060x367.jpg_750x9999.v1c7E.81.webp"
-					},
-					{
-						"src": "https://s17.mogucdn.com/mlcdn/c45406/200918_5el5c299817hl8g79ikbjh7fh1li3_1060x367.jpg_750x9999.v1c7E.81.webp"
-					},
-					{
-						"src": "https://s2.mogucdn.com/mlcdn/c45406/200921_42b2gi6cj54faak3lbah6c2abhh22_1060x367.png_750x9999.v1c7E.81.webp"
-					}
-				],
+				lunboData: [],
 				goodsData: [],
 				videoData: [{
 						"url": "http://47.112.194.162:82/Trousers/goods1/goods_show.mp4"
@@ -186,6 +173,7 @@
 			init(){
 				this.getSeckillData();
 				this.getCategoryData();
+				this.getLunbotuData();
 			},
 			//地图选择地址
 			chooseLocation() {
@@ -263,6 +251,11 @@
 				 })
 				 this.goodsList = message;
  			 },
+			 // 获取轮播图
+			 async getLunbotuData(){
+				 var { message } = await getLunbotu(this.shop);
+				 this.lunboData = message;
+			 },
 			 // 跳转到对应的专场页
 			 gobrandSpecial(id){
 				console.log("专场",id);
