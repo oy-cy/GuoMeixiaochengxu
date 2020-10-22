@@ -27,6 +27,7 @@ export function getguessLike(catId){
 	})
 }
 
+<<<<<<< HEAD
 // 模糊查询
 export function fuzzyQuery(name){
 	return request({
@@ -36,3 +37,25 @@ export function fuzzyQuery(name){
 
 
 
+=======
+//获取换新推荐
+ export function getRecommend(catId){
+	 return request({
+		 url:"/getRecommend?catId="+catId
+	 })
+ }
+ // 热卖榜单
+ export function getSellingList(catId){
+	 return request({
+		 url:"/getSellingList?catId="+catId
+	 })
+ }
+ 
+ // 获取列表页//大家都在买
+ export function getGoodsList(catId,page){
+ 	 return request({
+ 		 url:"/getGoodsList?catId="+catId+"&page="+page
+ 	 })
+ }
+ 
+>>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca

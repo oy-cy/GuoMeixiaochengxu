@@ -13,7 +13,11 @@
 			<!-- 金额、返利 -->
 			<view class="money">
 				<block v-for="(item,index) in money" :key='index'>
+<<<<<<< HEAD
 					<navigator class="item" :url="index==0?'/pages/user/balance/balance':'/pages/user/rebate/rebate'">
+=======
+					<navigator class="item" :url="index==0?'/pages/user/balance/balance':`/pages/user/rebate/rebate?index=`+(index-1)">
+>>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 						<view class="count">&yen;<text>{{item.balance}}</text></view>
 						<view class="info">{{item.info}}</view>
 					</navigator>
@@ -25,22 +29,22 @@
 				<view class="title">我的订单</view>
 				<view class="order-info">
 					<!-- 全部订单 -->
-					<navigator url="" class="item">
+					<navigator url="/pages/user/orderList/orderList" class="item">
 						<image src="../../static/images/user/all-order.png" mode=""></image>
 						<view class="info">全部订单</view>
 					</navigator>
 					<!-- 待付款 -->
-					<navigator url="" class="item">
+					<navigator url="/pages/user/orderList/orderList?status=1" class="item">
 						<image src="../../static/images/user/obligation.png" mode=""></image>
 						<view class="info">待付款</view>
 					</navigator>
 					<!-- 待收货 -->
-					<navigator url="" class="item">
+					<navigator url="/pages/user/orderList/orderList?status=2" class="item">
 						<image src="../../static/images/user/receiving.png" mode=""></image>
 						<view class="info">待收货</view>
 					</navigator>
 					<!-- 已完成 -->
-					<navigator url="" class="item">
+					<navigator url="/pages/user/orderList/orderList?status=3" class="item">
 						<image src="../../static/images/user/done.png" mode=""></image>
 						<view class="info">已完成</view>
 					</navigator>

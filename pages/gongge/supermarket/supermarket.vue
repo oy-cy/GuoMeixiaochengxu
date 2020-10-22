@@ -3,13 +3,13 @@
 		<scroll-view class="lbt">
 			<swiper class="swiper" :indicator-dots='true' indicator-color="rgba(255, 255, 255, .3)" indicator-active-color="#fff" :circular="true" :autoplay="true">  
 				<swiper-item class="imgbox" v-for="(item,index) in lbdata" :key="index">
-						<image :src="item.img_url" style="width: 100%;height: 100%;"></image>
+						<image :src="item.s_img" style="width: 100%;height: 100%;"></image>
 				</swiper-item>
 			</swiper>
 		</scroll-view>
 		
-		<van-grid column-num="4" class="gogei">
-			<van-grid-item v-for="(item,index) in gogeidata" :icon="item.img_url" :text="item.name" @click="select(index)"/>
+		<van-grid column-num="4" class="gogei" icon-size="50">
+			<van-grid-item v-for="(item,index) in gogeidata" :icon="item.g_img" :text="item.g_title" @click="select(index)"/>
 		</van-grid>
 		
 		<view class="refinedselect">
@@ -23,14 +23,14 @@
 						 
 					    <image
 					      style="width: 100%; height: 280rpx;"
-					      :src="item.img_url"
+					      :src="item.sku_thumbImg_url"
 					    />
 						<view class="describe">
 							<view class="title">
-								{{item.text}}
+								{{item.sku_name}}
 							</view>
 							<view class="price">
-								￥{{item.price}}
+								￥{{item.sku_price}}
 							</view>
 						</view>
 					  </van-grid-item>
@@ -45,14 +45,14 @@
 		</view>
 	
 			<view class="goodbox" v-for="(item,index) in goodlist">
-				<image :src="item.img_url" style="width: 200rpx;height: 200rpx;"></image>
+				<image :src="item.sku_thumbImg_url" style="width: 200rpx;height: 200rpx;"></image>
 				<view class="describe">
 					<view class="title">
 						
-						<text class="title_text"><text class="title_tag">国美超市</text>{{item.text}}</text>
+						<text class="title_text"><text class="title_tag">国美超市</text>{{item.sku_name}}</text>
 					</view>
 					<view class="price">
-						￥{{item.price}}
+						￥{{item.sku_price}}
 					</view>
 					
 				</view>
@@ -68,6 +68,9 @@
 </template>
 
 <script>
+	import {getLunbotu} from "../../../api/common.js"
+	import {getGrid} from "../../../api/common.js"
+	import {getSeckill} from "../../../api/common.js"
 	export default {
 		data() {
 			return {
@@ -166,10 +169,30 @@
 			}
 		},
 		methods:{
+			select(index){
+				console.log(index)
+			},
 			change(obj){
 				this.currentTitle = obj.index
 				console.log(obj)
 			},
+			async getLunboData(){
+				var {message} = await getLunbotu("coles");
+				this.lbdata = message
+			},
+			async getGridData(){
+				var {message} = await getGrid("coles");
+				this.gogeidata = message
+			},
+			async getSeckillData(){
+				var {message} = await getSeckill(1);
+				this.goodlist = message
+			}
+		},
+		created() {
+			this.getLunboData();
+			this.getGridData();
+			this.getSeckillData();
 		}
 	}
 </script>

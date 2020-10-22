@@ -1,27 +1,19 @@
 <template>
 		<view class="goge">
-			<van-grid :column-num="hang">
-				<van-grid-item v-for="(item,index) in gogeidata" :icon="item.img_url" :text="item.name" @click="select(index)"/>
+			<van-grid :column-num="hang" icon-size="60" :border="false">
+				<van-grid-item v-for="(item,index) in gogeidata" :icon="item.g_img" :text="item.g_title"  @click="select(index)"/>
 			</van-grid>
 		</view>
 </template>
 
 <script>
+	import {getGrid} from "../../api/common.js"
 		export default {
 			
 			props:['hang',"pageid"],
 			data(){
 				return{
-					
-				gogeidata:[{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'}
-				]
+					gogeidata:[]
 				}
 			},
 			methods:{
@@ -30,7 +22,14 @@
 					uni.navigateTo({
 						url:"/pages/goodsList/goodsList"
 					})
+				},
+				async getGaidData(){
+					var {message} = await getGrid(this.pageid);
+					this.gogeidata = message;
 				}
+			},
+			created() {
+				this.getGaidData();
 			}
 		}
 </script> 
