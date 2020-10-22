@@ -129,12 +129,12 @@ import { login } from '@/api/user.js';
 					provider:'wexin',
 					// 登录成功
 					success(info){
-						// 获取openid startW
-						var appid = 'wxdc3ba8b14831e4db'; //填写微信小程序appid
-						var secret = '1dea52b5f60ada9dfe7dd87cc50b440b'; //填写微信小程序secret						
-						var openid ;
-						
-						//调用request请求api转换登录凭证
+						// 获取openid start
+						var appid = 'wxdc3ba8b14831e4db'; //填写微信小程序appid  
+						var secret = '74de67986515ccb5c8b8c9e1bf4b9c88'; //填写微信小程序secret  
+						var openId ;
+
+						//调用request请求api转换登录凭证  
 						uni.request({
 							url: 'https://api.weixin.qq.com/sns/jscode2session?appid='+appid+'&secret='+secret+'&grant_type=authorization_code&js_code=' + info.code,
 							header: {
@@ -173,6 +173,8 @@ import { login } from '@/api/user.js';
 							}
 						})
 						// 获取openid end
+						
+						
 					},
 					fail(res) {
 						uni.showToast({
