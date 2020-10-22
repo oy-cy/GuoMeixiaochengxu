@@ -77,7 +77,7 @@
 		
 			.line {
 				background-color: #FF0000;
-				background: url(../../static/images/line.png) 0 100% repeat-x #fff;
+				// background: url(../../static/images/line.png) 0 100% repeat-x #fff;
 				background-size: 100rpx;
 				height: 10rpx;
 				width: 100%;

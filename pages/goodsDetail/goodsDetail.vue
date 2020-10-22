@@ -255,7 +255,7 @@
 			return {
 				cut:"product_desciption",
 				scrollTop:0,
-				goodsId:3,
+				goodsId: '',
 				isSelect:false,
 				select:{
 					number:1,
@@ -432,7 +432,8 @@
 		components:{
 			site
 		},
-		onLoad() {
+		onLoad(e) {
+			this.goodsId = e.goodsId;
 			this.init();
 		},
 		computed: {
