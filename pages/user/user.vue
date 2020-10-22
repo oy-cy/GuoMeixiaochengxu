@@ -13,7 +13,11 @@
 			<!-- 金额、返利 -->
 			<view class="money">
 				<block v-for="(item,index) in money" :key='index'>
+<<<<<<< HEAD
+					<navigator class="item" :url="index==0?'/pages/user/balance/balance':'/pages/user/rebate/rebate'">
+=======
 					<navigator class="item" :url="index==0?'/pages/user/balance/balance':`/pages/user/rebate/rebate?index=`+(index-1)">
+>>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 						<view class="count">&yen;<text>{{item.balance}}</text></view>
 						<view class="info">{{item.info}}</view>
 					</navigator>

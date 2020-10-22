@@ -86,7 +86,11 @@
 						<van-button  size="large" color="linear-gradient(to right, #FFC71D, #FF8917)" @click="joinShopCart">
 						  加入购物车
 						</van-button>
+<<<<<<< HEAD
+						<van-button  size="large" color="linear-gradient(to right, #FA1E8B, #FC1E58)">
+=======
 						<van-button  size="large" color="linear-gradient(to right, #FA1E8B, #FC1E58)" @click="promptlyBuy">
+>>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 						  立即购买
 						</van-button>
 					</view>
@@ -258,9 +262,13 @@
 
 <script>
 	import Dialog from '@/wxcomponents/dist/dialog/dialog';
+<<<<<<< HEAD
+	import {obj} from '@/common/detailRichText.js';
+=======
 	// import {obj} from '@/common/detailRichText.js';
 	import {getGoodsLunbotu,getCommodityDetails,getcomment} from "@/api/goodsDetail.js";
 	import {getguessLike} from "@/api/common.js";
+>>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 	export default {
 		data() {
 			return {
@@ -382,6 +390,13 @@
 			},
 			// 选择购买的规格
 			goodsConfirm(){
+<<<<<<< HEAD
+				let confirm = [];
+				this.detailData.select.forEach((v,index) =>{
+					confirm.push(v.list[this.sureSelect[index]].title)
+				})
+				this.select.confirm = confirm
+=======
 				if(this.detailData.select.length != 0){
 					
 					let confirm = [];
@@ -390,6 +405,7 @@
 					})
 					this.select.confirm = confirm
 				}
+>>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 			},
 			// 点击切换规格
 			goodsSelect(index,value){
@@ -430,7 +446,11 @@
 		},
 		onLoad() {
 			this.sureSelect = Array.apply(null, Array(this.detailData.select.length)).map(() => 0)
+<<<<<<< HEAD
+			this.goodsConfirm()
+=======
 			this.init();
+>>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 		}
 	}
 </script>
@@ -527,8 +547,12 @@
 				}
 				.number{
 					display: flex;
+<<<<<<< HEAD
+					margin-bottom: 120rpx;
+=======
 					margin: 30rpx 0 120rpx 30rpx;
 					align-items: center;
+>>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 					.van-stepper{
 						margin-left: 20rpx;
 					}

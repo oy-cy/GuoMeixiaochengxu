@@ -11,7 +11,11 @@
 			</view>
 			<view class="item addr">
 				<view class="text">选择地址：</view>
+<<<<<<< HEAD
+				<view class="site" @click="popup=true">{{addr.split('-').join('')}}</view>
+=======
 				<view class="site" @click="popup=true">{{getAddr}}</view>
+>>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 			</view>
 			<view class="item detailedAddr">
 				<view class="text">详细地址：</view>
@@ -66,17 +70,25 @@ import ehPicker from '@/component/site/erha-picker/erha-picker.vue';
 				this.cityName = tempAddr[1];
 				this.areaName = tempAddr[2];
 				this.strName = tempAddr[3];
+<<<<<<< HEAD
+			}
+			console.log(this.isEdit,this.oldChecked,this.oldConsignee,this.oldPhone,this.oldAddr,this.oldDetailedAddr);
+=======
 				console.log(this.isEdit,this.oldChecked,this.oldConsignee,this.oldPhone,this.oldAddr,this.oldDetailedAddr);
 			}
+>>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 		},
 		components:{
 			ehPicker
 		},
+<<<<<<< HEAD
+=======
 		computed: {
 			getAddr(){
 				return [...new Set(this.addr.split('-'))].join('')
 			}
 		},
+>>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 		methods: {
 			// 修改	是否为默认地址
 			setChecked(){
@@ -136,7 +148,11 @@ import ehPicker from '@/component/site/erha-picker/erha-picker.vue';
 					icon:'none'
 				})
 			}
+<<<<<<< HEAD
+		}
+=======
 		},
+>>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 	}
 </script>
 

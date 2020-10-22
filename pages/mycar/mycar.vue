@@ -1,11 +1,18 @@
 <template>
 	<view class="mycar">
+<<<<<<< HEAD
+		<view class="top">
+			<view class="background">
+				<view class="left">
+					深圳市
+=======
 		
 		<!-- 地址，编辑 -->
 		<view class="top">
 			<view class="background">
 				<view class="left" @click="siteCompile">
 					<image src="../../static/images/tabbar/shop.png" style="width: 30rpx;height: 30rpx;margin-right: 20rpx;">{{getCurrentCity}}
+>>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 				</view>
 				<view class="right" @click="clickcompile">
 					{{compile==true?"编辑":"完成"}}
@@ -13,18 +20,47 @@
 			</view>
 			
 		</view>
+<<<<<<< HEAD
+		<view class="box">
+			<view class="goodList">
+				<view class="goodbox">
+					<view class="good" v-for="(items,indexs) in goodList" :key="indexs">
+=======
 		
 		<!-- 内容 -->
 		<view class="box">
 			<view class="goodList">
 				<view class="goodbox">
 					<view class="good" v-for="(items,indexs) in goodList" :key="indexs" >
+>>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 						<van-checkbox
 						  :value="items.select"
 						  checked-color="#F20C59"
 						  @change="good(items.id)"
 						  class="choose"
 						></van-checkbox>
+<<<<<<< HEAD
+						<image :src="items.image" style="width: 200rpx;height: 200rpx;"></image>
+						
+						<view class="message">
+							<view class="title">
+								<text><text></text>{{items.title}}</text>
+							</view>
+							<view class="price_num">
+								<text class="price">￥{{items.price}}</text>
+								<u-number-box 
+								:min="1" :max="100"
+								 size='18' 
+								 input-width="40" 
+								 v-model="items.num" 
+								 :index="items.id"
+								 @change="addSubtract"></u-number-box>
+							</view>
+						</view>
+					</view>
+				</view>
+				
+=======
 						<view class="good" @click="details(items.id)">
 							<image :src="items.image" style="width: 200rpx;height: 200rpx;"></image>
 							
@@ -50,6 +86,7 @@
 						
 					</view>
 				</view>
+>>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 			</view>
 			
 			<view class="like">
@@ -90,8 +127,11 @@
 			
 		</view>
 
+<<<<<<< HEAD
+=======
 
 		<!-- 全选 -->
+>>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 		<view class="end">
 			<view class="sum">
 				<van-checkbox
@@ -123,6 +163,8 @@
 				@click="deleteGood()"
 				>删除</van-button>
 		</view>
+<<<<<<< HEAD
+=======
 	
 	
 		<!-- 格式 -->
@@ -174,6 +216,7 @@
 		  
 		  <site ref="show"></site>
 		 
+>>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 	</view>
 
 		
@@ -187,9 +230,12 @@
 				all:false,
 				money:0.00,
 				compile:true,
+<<<<<<< HEAD
+=======
 				isSelect:false,
 				
 				siteShow:false,
+>>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 				
 				goodList:[
 						{id:1,
@@ -265,6 +311,10 @@
 				})
 				console.log(id)
 			},
+<<<<<<< HEAD
+			
+=======
+>>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 			good(data){	
 				this.goodList.forEach(function(item,tempindex,arr){
 					if(item.id == data){
@@ -280,7 +330,10 @@
 				this.goodList.forEach(function(item,tempindex,arr){
 					item.select = _this.all
 				});
+<<<<<<< HEAD
+=======
 				this.calculateMoney();
+>>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 			},
 			examineall(){
 				var temp = true;
@@ -342,6 +395,13 @@
 				})
 				carId = carId.join(",")
 				console.log(carId)
+<<<<<<< HEAD
+			}
+			
+		
+			
+			
+=======
 			},
 			
 			
@@ -368,6 +428,7 @@
 		},
 		components:{
 			site
+>>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 		},
 		created() {
 			
@@ -425,6 +486,8 @@
 								display: flex;
 								flex-direction: column;
 								justify-content: space-between;
+<<<<<<< HEAD
+=======
 								
 								.specificationsbox{
 									// display: inline;
@@ -434,6 +497,7 @@
 										background-color: #ccc;
 									}
 								}
+>>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 								.price_num{
 									display: flex;
 									justify-content: space-between;
@@ -600,6 +664,9 @@
 			}
 		
 	}
+<<<<<<< HEAD
+</style>
+=======
 
 		/deep/ .level-container{
 			height: 680rpx;
@@ -609,3 +676,4 @@
 			display: none;
 		}
  </style>
+>>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca

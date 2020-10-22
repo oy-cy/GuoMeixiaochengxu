@@ -16,9 +16,12 @@ import saveAddr from '@/component/site/saveAddr.vue';
 				detailedAddr:''
 			}
 		},
+<<<<<<< HEAD
+=======
 		onLoad() {
 			// todo 获取编辑的地址(外部参数：地址id)
 		},
+>>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 		components:{ 	
 			saveAddr
 		}

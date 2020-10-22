@@ -234,7 +234,10 @@
 					cityIndex
 				} = this;
 				
+<<<<<<< HEAD
+=======
 				this.area = label;
+>>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 				try{
 					var streetsData = this.getStreetsAll[proIndex][cityIndex][index];
 				} catch(e){
@@ -251,6 +254,10 @@
 					})
 				}
 				
+<<<<<<< HEAD
+				this.area = label;
+=======
+>>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
 				this.showIndex = 3;
 				this.currentSelect = 3;
 				this.topIndex = 3;

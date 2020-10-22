@@ -27,6 +27,17 @@ export function getguessLike(catId){
 	})
 }
 
+<<<<<<< HEAD
+// 模糊查询
+export function fuzzyQuery(name){
+	return request({
+		url:"/fuzzyQuery?name="+name
+	})
+}
+
+
+
+=======
 //获取换新推荐
  export function getRecommend(catId){
 	 return request({
@@ -47,3 +58,4 @@ export function getguessLike(catId){
  	 })
  }
  
+>>>>>>> 3f92226f0f0103c181045eaa820ab7c56e9774ca
