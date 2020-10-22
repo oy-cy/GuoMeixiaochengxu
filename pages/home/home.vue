@@ -33,7 +33,8 @@
 		</view>
 		<!-- 八空格 -->
 		<van-grid column-num="4">
-			<van-grid-item v-for="(item,index) in getGridData" :key="item.index" :icon="item.g_img" :text="item.g_title" @click="select(index)"/>
+			<van-grid-item v-for="(item,index) in getGridData" :key="index" :icon="item.g_img" :text="item.g_title" @click="select(item.g_url)"/>
+			<van-dialog id="van-dialog" />
 		</van-grid>	
 		<!-- 国美秒杀 -->
 		<view class="seckill-content">
@@ -43,7 +44,7 @@
 		<view class="related">
 			<van-divider
 			  contentPosition="center"
-			  customStyle="color: rgb(209, 20, 91); border-color: rgb(209, 20, 91); font-size: 14px;margin:0rpx 200rpx">
+			  customStyle="color: rgb(229, 54, 117); border-color: rgb(229, 54, 117); font-weight: bold; font-size: 14px;margin:0rpx 200rpx">
 			  <image src="../../static/images/home/favour.png" mode=""></image>猜你喜欢
 			</van-divider>
 			<view class="list">
@@ -79,6 +80,7 @@
 	import goTop from '../../component/goTop/goTop.vue';
 	import seckill from "@/component/seckill/seckill.vue";
 	import {getLunbotu,getguessLike,getSeckill,getGrid} from "../../api/common.js";
+	import Dialog from '@/wxcomponents/dist/dialog/dialog';
 	export default {
 		data() {
 			return {
@@ -131,19 +133,29 @@
 					success: function (res) {
 						console.log('条码类型：' + res.scanType);
 						console.log('条码内容：' + res.result);
+					},
+					fall:function(res){
+						Dialog.alert({
+							message: '抱歉，没有找到对应的商品',
+						}).then(() => {
+							// on close
+						});
 					}
 				});
-				uni.showToast({
-					fall:function(res){
-						Toast:'aaaaaa'
-					}
-				})
 			},
-			select(index){
-				console.log(index)
-				uni.navigateTo({
-					url:""
-				})
+			select(path){
+				if(path == null){
+					Dialog.alert({
+						message: '请使用国美App查看更多内容',
+					}).then(() => {
+						// on close
+					});
+				}else{
+					uni.navigateTo({
+						url:path
+					})
+				}
+				
 			}
 		},
 		

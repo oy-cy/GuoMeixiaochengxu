@@ -19,11 +19,7 @@
 					<text>热门搜索</text>
 				</view>
 				<view class="keyword">
-					<view class="word">iphone 12</view>
-					<view class="word">格力空调自营</view>
-					<view class="word">格力空调自营</view>
-					<view class="word">格力空调自营</view>
-					<view class="word">格力空调自营</view>
+					<view class="word" v-for="(item,index) in hotSearchData" :key="index">{{item}}</view>
 				</view>
 			</view>
 			<!-- 搜索历史 -->
@@ -56,7 +52,10 @@
 				historyArray:[],
 				isShow:false,
 				allShow:false,
-				fuzzyQueryData:[]
+				fuzzyQueryData:[],
+				hotSearchData:[
+					'iphone 12','冰箱自营','美的洗衣机','冷暖空调','休闲零食','超薄电视','电热水器','微波炉'
+				]
 			};
 		},
 		created() {
@@ -66,6 +65,11 @@
 			}
 		},
 		methods:{
+			//搜索框点回车时拿到输入的数据保存起来
+			//拿到点击热门搜索与历史记录中的数据保存起来
+			//把拿到的数据发送给
+			
+			
 			// 清空历史记录
 			//如果没有数据 就把清空记录按钮隐藏掉
 			//有数据的话 就把数据与按钮显示出来
