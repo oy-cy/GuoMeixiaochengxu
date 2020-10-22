@@ -22,7 +22,7 @@
 						<!-- 等阿宇的收货地址数据 -->
 						<view class="y">
 							<scroll-view scroll-y="true" class="consigneeSite">
-								<view class="location" v-for="(item,index) in siteList" :key="index" @click="selectSite(item.id,item.city)">
+								<view class="location" v-for="(item,index) in siteList" :key="index" @click="selectSite(item.id,item.city,item.name)">
 									<image src="../../static/images/tabbar/shop.png" style="width: 30rpx;height: 30rpx;margin-right: 20rpx;"></image>
 									{{item.name}}
 									<image src="../../static/images/gongge/true.png" :class="item.id != siteId?'show':''" style="width: 30rpx;height: 30rpx;margin-left: 200rpx;"></image>
@@ -76,7 +76,8 @@
 		},
 		methods:{
 			conceal(param){
-				console.log(param);
+				console.log("param",param);
+				this.$store.commit('setDefaultSite',param)
 				this.leftRight = true;
 				this.siteShow = false;
 				var currentCity = '';
@@ -102,11 +103,12 @@
 			towards(){
 				this.leftRight = !this.leftRight
 			},
-			selectSite(id,city){
+			selectSite(id,city,name){
 				
 				this.siteShow = false;
 				this.siteId = id;
 				this.$store.commit('setCurrentCity',city);
+				this.$store.commit('setDefaultSite',name)
 			}
 		},
 		components:{

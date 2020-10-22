@@ -107,24 +107,11 @@
 					<text class="van-cell-text">送至</text>
 					<view class="site">
 						<van-icon name="location-o" size="50rpx" color="#999A9C"/>
-						{{site}}, 免运费
+						{{getDefaultSite}}, 免运费
 					</view>
 				</view>
 			  </van-cell>
 			</van-cell-group>
-		<!-- 	弹出框
-			<van-popup
-			 :show="isSite"
-			  position="bottom"
-			  custom-style="height: 72%;"
-			  closeable
-			  @close="closeSite"
-			  @click-overlay="closeSite">
-				<view class="">
-					联动选择地址//todo
-				</view>
-			</van-popup> -->
-			  
 			<!-- 保证 -->
 			<view class="pledge">
 				<view class="pledge-item" v-for="(item,index) in pledge" :key="index">
@@ -284,7 +271,6 @@
 					confirm:[],
 				},
 				isSite:false,
-				site:this.$store.getters.getCurrentCity,
 				lunbotu:[
 					{url:"https://img.yzcdn.cn/vant/custom-empty-image.png"}
 				],
@@ -454,7 +440,12 @@
 		},
 		onLoad() {
 			this.init();
-		}
+		},
+		computed: {
+			getDefaultSite(){
+				return this.$store.getters.getDefaultSite;
+			}
+		},
 	}
 </script>
 
@@ -577,14 +568,28 @@
 			.site-title{
 				display: flex;
 				font-size:34rpx;
+				// color: #FF0000;
 				align-items: flex-end;
 				.van-cell-text{
 					color:#999A9C;
 					margin-right: 20rpx;
+					// flex: 1;
 				}
 				.site{
-					display: flex;
-					align-items: flex-end;
+					flex: 1;
+					position: relative;
+					padding-left:40rpx;
+					.van-icon{
+						position: absolute;
+						top: 0;
+						left: -6rpx;
+					}
+					// display: flex;
+					// align-items: flex-end;
+					display: -webkit-box;
+					-webkit-box-orient: vertical;
+					-webkit-line-clamp: 1;
+					overflow: hidden;
 				}
 			}
 			.pledge{
@@ -632,6 +637,7 @@
 						align-items: center;
 						font-size: 30rpx;
 						color: #757A7F;
+						
 					}
 				}
 			}
