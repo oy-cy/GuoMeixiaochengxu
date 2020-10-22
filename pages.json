@@ -164,6 +164,34 @@
             }
             
         }
+        ,{
+            "path" : "pages/guideIntroduce/guideIntroduce",
+            "style" : {
+				"navigationBarTitleText": "导购员介绍"
+			}
+        }
+        ,{
+            "path" : "pages/brand/sacon/sacon",
+            "style" : {
+				"navigationBarTitleText": "帅康品牌专场"
+			}
+        }
+        ,{
+            "path" : "pages/brand/guangdongMacro/guangdongMacro",
+            "style" : {
+				"navigationBarTitleText": "万家乐品牌专场"
+			}
+        }
+        ,{
+            "path" : "pages/brand/lake/lake",
+            "style" : {
+				"navigationBarTitleText": "莱克品牌专场"
+			}
+        }
+        ,{
+            "path" : "component/commodityTemplate/commodityTemplate",
+            "style" : {}
+        }
     ],
 	"permission": {
 		"scope.userLocation": {

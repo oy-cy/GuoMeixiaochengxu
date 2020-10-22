@@ -35,19 +35,19 @@ export function getShoppingGuide(){
 }
 
 // 获取门店分类名字
-export function getCategory(){
+export function getCategory(type){
 	return request({
-		url:`/getCategory?page=shop`
+		url:`/getCategory?page=${type}`
 	})
 }
 
 // 获取门店分类商品数据
-export function getGoodsList(id,page){
-	console.log(id);
-	return request({
-		url:`/getGoodsList?catId=${id}&page=${page}`
-	})
-}
+// export function getGoodsList(id,page){
+// 	console.log(id);
+// 	return request({
+// 		url:`/getGoodsList?catId=${id}&page=${page}`
+// 	})
+// }
 
 
 //获取换新推荐
@@ -63,7 +63,7 @@ export function getGoodsList(id,page){
 	 })
  }
  
- // 获取列表页//大家都在买
+ // 获取列表页和获取门店分类商品数据//大家都在买
  export function getGoodsList(catId,page){
  	 return request({
  		 url:"/getGoodsList?catId="+catId+"&page="+page

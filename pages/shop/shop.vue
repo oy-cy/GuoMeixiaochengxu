@@ -9,11 +9,11 @@
 				<van-search value="" background="rgba($color: #fff, $alpha: 0.3)" shape="round" placeholder="请输入搜索关键词" />
 			</view>
 			<view class="scan-content" @tap="scan">
-				<image class="scan" :src="isScan" mode=""></image>
+				<image class="scan" :src="imgData.isScan" mode=""></image>
 				<view class="text" :class="{scanSelected:isShowLogo}">扫一扫</view>
 			</view>
 			<view class="classify-content">
-				<image class="classify" :src="classify" mode=""></image>
+				<image class="classify" :src="imgData.classify" mode=""></image>
 				<view class="text" :class="{classifySelected:isShowLogo}">分类</view>
 			</view>
 		</view>
@@ -91,17 +91,9 @@
 		<view class="brand-recommend">
 			<view class="brand-title">品牌推荐</view>
 			<view class="list">
-				<view class="item">
-					<image src="../../static/images/shop/brand1.webp" mode=""></image>
-					<image class="img" src="../../static/images/shop/water-heater.png" mode=""></image>
-				</view>
-				<view class="item">
-					<image src="../../static/images/shop/brand2.webp" mode=""></image>
-					<image class="img" src="../../static/images/shop/gas-station.png" mode=""></image>
-				</view>
-				<view class="item">
-					<image src="../../static/images/shop/brand3.webp" mode=""></image>
-					<image class="img" src="../../static/images/shop/shaver.png" mode=""></image>
+				<view class="item" v-for="item in brandRecommend" :key="item.id" @tap="gobrandSpecial(item.id)">
+					<image :src="item.bgcImg" mode=""></image>
+					<image class="img" :src="item.goodsImg" mode=""></image>
 				</view>
 			</view>
 		</view>
@@ -116,29 +108,7 @@
 			</view>
 			<view class="goodsList" v-if="current === 0">
 				<u-tabs :list="tabsList" :is-scroll="true" active-color="#f20c59" :current="currentTitle" @change="change"></u-tabs>
-				<view class="classifyGoods">
-					<view class="goods-item" v-for="item in goodsList" :key="item.id">
-						<view class="img-container">
-							<image class="img" :src="item.sku_thumbImg_url"></image>
-						</view>
-						<view class="info">
-							<view class="text">
-								<text class="title_tag" v-if="item.extProperty">{{ item.extProperty }}</text>
-								<text class="title">{{ item.sku_name }}</text>
-							</view>
-							<view class="goods-tag-list">{{ item.tagList[0].tagName }}</view>
-							<view class="price">
-								<view class="content">
-									<text class="symbol">￥</text>
-									<text class="money">{{ item.sku_price }}</text>
-								</view>
-								<view class="car-logo">
-									<image class="img" src="../../static/images/shop/car-tag.png" mode=""></image>
-								</view>
-							</view>
-						</view>
-					</view>
-				</view>
+				<commodityTemplate :goodsList="goodsList"></commodityTemplate>
 			</view>
 			<view class="" v-else-if="current === 1">
 				<guideList :guideData="guideData"></guideList>
@@ -150,6 +120,7 @@
 <script>
 	import seckill from "@/component/seckill/seckill.vue"
 	import guideList from"@/component/guideList/guideList.vue";
+	import commodityTemplate from "@/component/commodityTemplate/commodityTemplate.vue"
 	import { getSeckill,getShoppingGuide,getCategory,getGoodsList } from "../../api/common.js";
 	export default {
 		data() {
@@ -159,12 +130,14 @@
 				current: 0,
 				currentTitle: 0,
 				isLightning: false,
-				classify: "../../static/images/shop/classify.png",
-				classifyOne: "../../static/images/shop/classify.png",
-				classifyTwe: "../../static/images/shop/classify2.png",
-				isScan: "../../static/images/shop/scan.png",
-				scanImgOne:"../../static/images/shop/scan.png",
-				scanImgTwe:"../../static/images/shop/scan2.png",
+				imgData: {
+					classify: "../../static/images/shop/classify.png",
+					classifyOne: "../../static/images/shop/classify.png",
+					classifyTwe: "../../static/images/shop/classify2.png",
+					isScan: "../../static/images/shop/scan.png",
+					scanImgOne:"../../static/images/shop/scan.png",
+					scanImgTwe:"../../static/images/shop/scan2.png",
+				},
 				list: [{
 						"src": "https://s17.mogucdn.com/mlcdn/c45406/200921_87ldda0j8h471b350k3j4j385c4b0_1060x367.png_750x9999.v1c7E.81.webp"
 					},
@@ -196,10 +169,16 @@
 					},
 				],
 				tabs: ['精品推荐', '全程导购'],
+				brandRecommend: [
+					{id:1,bgcImg:"/static/images/shop/brand1.webp",goodsImg:"../../static/images/shop/water-heater.png"},
+					{id:2,bgcImg:"../../static/images/shop/brand2.webp",goodsImg:"../../static/images/shop/gas-station.png"},
+					{id:3,bgcImg:"../../static/images/shop/brand3.webp",goodsImg:"../../static/images/shop/shaver.png"},
+				],
 				tabsList: [],
 				goodsList: [],
 				guideData: [],
 				page: 1,
+				shop: 'shop',
 			};
 		},
 		methods: {
@@ -219,7 +198,7 @@
 				})
 			},
 			changeTab(index) {
-				console.log('当前选中的项：' + index)
+				// console.log('当前选中的项：' + index)
 				this.current = index;
 				if(index == 0){
 					
@@ -228,7 +207,7 @@
 				}
 			},
 			change(obj) {
-				console.log("分类changeid",obj);
+				// console.log("分类changeid",obj);
 				this.currentTitle = obj.index;
 				this.getGoodsListData(obj.id);
 			},
@@ -257,26 +236,20 @@
 			 async getShoppingGuideData(){
 				 var { message } = await getShoppingGuide();
 				message.forEach(v => {
-					v.goods_category = JSON.parse(v.goods_category)
-					var temp = JSON.parse(v.goods_category)
-					var arr = [];
-					temp.forEach((cg,index) => {
-						if(index >= 3){
-							arr.push(cg)
-							console.log("index")
-							return;
-						}
-					});
-					// console.log("arr",arr);
-					// v.goods_category = data;
+					// 字符串转为数组
+					v.good_at_brand = JSON.parse(v.good_at_brand);
+					v.g_category = JSON.parse(v.goods_category);
+					var temp = JSON.parse(v.goods_category);
+					// 保留3个good_at_brand
+					temp.length = 3;
+					v.goods_category = temp;
 				})
 				 this.guideData = message;
-				 // console.log("导购",message.goods_category)
 			 },
 			 // 获取精品推荐分类
 			 async getCategoryData(){
-				 var { message } = await getCategory();
-				 console.log("分类",message);
+				 var { message } = await getCategory(this.shop);
+				 // console.log("分类",message);
 				 // 保存分类的第一个id
 				 var firstId = message[0].cat_id;
 				 this.tabsList = message;
@@ -285,11 +258,32 @@
 			 async getGoodsListData(id){
 				 var { message } = await getGoodsList(id,this.page);
 				 message.forEach(v => {
-					 console.log(v.tagList);
+					 // console.log(v.tagList);
 					 v.tagList = JSON.parse(v.tagList);
 				 })
 				 this.goodsList = message;
- 			 }
+ 			 },
+			 // 跳转到对应的专场页
+			 gobrandSpecial(id){
+				console.log("专场",id);
+				switch(id){
+					case 1:
+						uni.navigateTo({
+							url: "/pages/brand/sacon/sacon"
+						})
+						break;
+					case 2:
+						uni.navigateTo({
+							url: "/pages/brand/guangdongMacro/guangdongMacro"
+						})
+						break;
+					case 3:
+						uni.navigateTo({
+							url: "/pages/brand/lake/lake"
+						})
+						break;
+				}
+			 }
 		},
 		// 监听当前页面的滚动
 		onPageScroll: function(event) {
@@ -302,14 +296,14 @@
 				this.isShowLogo = true;
 				this.isLogo = true;
 				// 改变头部搜索的图片
-				this.isScan = this.scanImgTwe;
-				this.classify = this.classifyTwe;
+				this.imgData.isScan = this.imgData.scanImgTwe;
+				this.imgData.classify = this.imgData.classifyTwe;
 			} else if (scrollTop < position && this.isLogo == true) {
 				this.isShowLogo = false;
 				this.isLogo = false;
 				// 改变头部搜索的图片
-				this.isScan = this.scanImgOne;
-				this.classify = this.classifyOne;
+				this.imgData.isScan = this.imgData.scanImgOne;
+				this.imgData.classify = this.imgData.classifyOne;
 			}
 		},
 		onLoad(){
@@ -317,7 +311,8 @@
 		},
 		components: {
 			seckill,
-			guideList
+			guideList,
+			commodityTemplate
 		}
 	}
 </script>

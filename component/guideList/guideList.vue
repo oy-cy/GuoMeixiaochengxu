@@ -5,7 +5,7 @@
 			<view class="after"></view>
 		</view>
 		<view class="list">
-			<view class="item" v-for="item in guideData" :key="item.id">
+			<view class="item" v-for="item in guideData" :key="item.id" @tap="goIntroduce(item)">
 				<view class="container">
 					<view class="left">
 						<view class="img-container">
@@ -32,10 +32,12 @@
 					</view>
 				</view>
 				<view class="bottom">
-					<view class="good-brand">所属品牌：{{ item.good_at_brand }}</view>
+					<!-- <view class="" v-for="brand in item.good_at_brand"> -->
+						<view class="good-brand">所属品牌：{{ item.good_at_brand }}</view>
+					<!-- </view> -->
 					<view class="tags-content">
-						<view class="sale-tags-list" v-for="category in item.goods_category">
-							<view class="text-content">
+						<view class="sale-tags-list" v-for="(category,index) in item.goods_category" :key="index">
+							<view class="text-content" v-if="category">
 								<text class="text">{{ category }}</text>
 							</view>
 						</view>
@@ -58,7 +60,13 @@
 			}
 		},
 		methods: {
-
+			goIntroduce(item){
+				var data = JSON.stringify(item)
+				uni.navigateTo({
+					url: "/pages/guideIntroduce/guideIntroduce?Introduce="+ data
+				})
+				console.log(item);
+			}
 		}
 	}
 </script>
@@ -96,10 +104,6 @@
 				.container {
 					display: flex;
 					justify-content: space-between;
-					// align-items: center;
-
-
-
 
 					.left {
 						display: flex;
@@ -202,12 +206,6 @@
 					.tags-content {
 						display: flex;
 						.sale-tags-list {
-							// display: flex;
-							// text-overflow: ellipsis;
-							// display: -webkit-box;
-							// -webkit-line-clamp: ;
-							// -webkit-box-orient: vertical;
-							// overflow: hidden;
 							margin-top: 20rpx;
 
 							.text-content {
@@ -221,12 +219,12 @@
 								.text {
 									display: inline-block;
 									// width: 200rpx;
-									// padding: 10rpx 20rpx;
+									padding: 10rpx 20rpx;
 									text-align: center;
-									font-size: 24rpx;
-									border-radius: 20rpx;
+									font-size: 22rpx;
+									border-radius: 30rpx;
 									background-color: #f3f5f7;
-									margin-right: 8rpx;
+									margin-right: 10rpx;
 								}
 							}
 
@@ -244,7 +242,7 @@
 			.template-no-more {
 				text-align: center;
 				font-size: 24rpx;
-				background: url("../../static/images/shop/bottom.png") no-repeat 50%;
+				background: url("@/static/images/shop/bottom.png") no-repeat 50%;
 				background-size: 390rpx 12rpx;
 			}
 		}
