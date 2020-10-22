@@ -63,24 +63,24 @@
 				active: 0,
 				// 订单数据
 				orderList:[
-					{
-						shopName:'深圳观澜店',
-						status:'已完成',
-						goodImg:'http://gfs17.gomein.net.cn/T17OD5BKAT1RCvBVdK_80.jpg?v=2?v=2',
-						goodName:'七河源大米25kg 长粒粳米 东北大米 长粒香米',
-						goodPrice:20,
-						count:4,
-						totalPrice:80
-					},
-					{
-						shopName:'深圳观澜店',
-						status:'已完成',
-						goodImg:'http://gfs17.gomein.net.cn/T17OD5BKAT1RCvBVdK_80.jpg?v=2?v=2',
-						goodName:'七河源大米25kg 长粒粳米 东北大米 长粒香米',
-						goodPrice:20,
-						count:4,
-						totalPrice:80
-					}
+					// {
+					// 	shopName:'深圳观澜店',
+					// 	status:'已完成',
+					// 	goodImg:'http://gfs17.gomein.net.cn/T17OD5BKAT1RCvBVdK_80.jpg?v=2?v=2',
+					// 	goodName:'七河源大米25kg 长粒粳米 东北大米 长粒香米',
+					// 	goodPrice:20,
+					// 	count:4,
+					// 	totalPrice:80
+					// },
+					// {
+					// 	shopName:'深圳观澜店',
+					// 	status:'已完成',
+					// 	goodImg:'http://gfs17.gomein.net.cn/T17OD5BKAT1RCvBVdK_80.jpg?v=2?v=2',
+					// 	goodName:'七河源大米25kg 长粒粳米 东北大米 长粒香米',
+					// 	goodPrice:20,
+					// 	count:4,
+					// 	totalPrice:80
+					// }
 				]
 			}
 		},

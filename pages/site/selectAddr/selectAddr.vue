@@ -25,7 +25,7 @@
 				</navigator>
 			</view>
 		</view>
-		<navigator url="/pages/site/addAddr/addAddr" class="button" @click="save">新增地址</navigator>
+		<navigator url="/pages/site/addAddr/addAddr" class="button">新增地址</navigator>
 	</view>
 </template>
 
