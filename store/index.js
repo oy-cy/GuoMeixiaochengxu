@@ -13,13 +13,19 @@ const store = new Vuex.Store({
 		// 当前城市(格式：北京，默认北京)
 		currentCity:'北京',
 		carList:[],
-		historyArray:[]
+		historyArray:[],
+		// 商品详情显示的地址( 市 区 街道)
+		defaultSite:'深圳市龙华区观澜街道'
 	},
 	// 存放获取数据的方法
 	getters:{
 		// 获取当前城市
 		getCurrentCity(state){
 			return state.currentCity;
+		},
+		// 商品详情显示的地址
+		getDefaultSite(start){
+			return start.defaultSite;
 		},
 		
 		getCarList(state){
@@ -46,6 +52,21 @@ const store = new Vuex.Store({
 			state.currentCity = city;
 		},
 		
+		setDefaultSite(state,site){
+			console.log(site);
+			console.log(typeof site == "string");
+			var str = "";
+			if(typeof site == "string"){
+				str = site
+			}else{
+				for(let s in site){
+					if(s !== "province"){
+						str += site[s];
+					}
+				}
+			}
+			state.defaultSite = str;
+		},
 		setCarList(state,carList){
 			state.carList = carList;
 		},
