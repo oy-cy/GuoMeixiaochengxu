@@ -1,21 +1,23 @@
 <template>
 	<view class="shop-container">
 		<!-- 头部 -->
-		<view class="header">
+		<view class="header" :class="{selectedBgc:isShowLogo}">
 			<view class="guomei" v-if="isShowLogo" @click="chooseLocation">
 				<image src="../../static/images/shop/guomei-logo.png" mode=""></image>
 			</view>
-			<view class="search">
-				<van-search value="" shape="round" placeholder="请输入搜索关键词" />
+			<navigator class="search" url="../search/search">
+					<van-search value="" background="rgba($color: #fff, $alpha: 0.3)" shape="round" placeholder="请输入搜索关键词" />
+			</navigator>
+			<view class="scan-content" @tap="scan">
+				<image class="scan" :src="imgData.isScan" mode=""></image>
+				<view class="text" :class="{scanSelected:isShowLogo}">扫一扫</view>
 			</view>
-			<view class="scan-content">
-				<image class="scan" src="../../static/images/shop/scan2.png" mode=""></image>
-				<view class="text">扫一扫</view>
-			</view>
-			<view class="classify-content">
-				<image class="classify" src="../../static/images/shop/classify2.png" mode=""></image>
-				<view class="text">分类</view>
-			</view>
+			<navigator url="../classify/classify">
+				<view class="classify-content">
+					<image class="classify" :src="imgData.classify" mode=""></image>
+					<view class="text" :class="{classifySelected:isShowLogo}">分类</view>
+				</view>
+			</navigator>
 		</view>
 		<!-- 门店背景图 -->
 		<view class="shop-info">
@@ -39,15 +41,34 @@
 						<view class="slogan">精英团队，为您服务</view>
 					</view>
 				</view>
-				<view class="lightning">
+				<view class="lightning" @tap="lightning">
 					<image src="http://gfs10.gomein.net.cn/T1vjY5BKZv1RCvBVdK.png" mode=""></image>
 				</view>
 			</view>
-
 		</view>
+		<van-popup
+		  :show="isLightning"
+		  closeable
+		  round
+		  z-index="99999"
+		  close-icon="close"
+		  position="bottom"
+		  custom-style="height: 70%"
+		  @close="onClose"
+		>
+		<view class="flash-express-logo">
+			<image src="../../static/images/shop/shop-logo.png" mode=""></image>
+			<view class="tip-info">
+				国美依托线下门店的资源优势，
+				为周边3-5公里社区提供中小件订单直送到家服务，
+				用户下单后可享受最快30分钟闪电送达。
+			</view>
+		</view>
+		</van-popup>
+		
 		<!-- 轮播图 -->
 		<view class="wrap">
-			<u-swiper name="s_img" mode="rect" height="220" :list="list"></u-swiper>
+			<u-swiper name="s_img" mode="rect" height="220" :list="lunboData"></u-swiper>
 		</view>
 		<view class="china br">
 			<view class="title">精选活动</view>
@@ -72,17 +93,9 @@
 		<view class="brand-recommend">
 			<view class="brand-title">品牌推荐</view>
 			<view class="list">
-				<view class="item">
-					<image src="../../static/images/shop/brand1.webp" mode=""></image>
-					<image class="img" src="../../static/images/shop/water-heater.png" mode=""></image>
-				</view>
-				<view class="item">
-					<image src="../../static/images/shop/brand2.webp" mode=""></image>
-					<image class="img" src="../../static/images/shop/gas-station.png" mode=""></image>
-				</view>
-				<view class="item">
-					<image src="../../static/images/shop/brand3.webp" mode=""></image>
-					<image class="img" src="../../static/images/shop/shaver.png" mode=""></image>
+				<view class="item" v-for="item in brandRecommend" :key="item.id" @tap="gobrandSpecial(item.id)">
+					<image :src="item.bgcImg" mode=""></image>
+					<image class="img" :src="item.goodsImg" mode=""></image>
 				</view>
 			</view>
 		</view>
@@ -97,95 +110,10 @@
 			</view>
 			<view class="goodsList" v-if="current === 0">
 				<u-tabs :list="tabsList" :is-scroll="true" active-color="#f20c59" :current="currentTitle" @change="change"></u-tabs>
-				<view class="classifyGoods">
-					<view class="goods-item">
-						<view class="img-container">
-							<image class="img" src="../../static/images/shop/goods1.png"></image>
-						</view>
-						<view class="info">
-							<view class="text">
-								<text class="title_tag">国美超市</text>
-								<text class="title">洋河蓝色经典天之蓝52度白酒520ml*6 旗舰版口感绵柔浓香型</text>
-							</view>
-							<view class="goods-tag-list">易卡分期</view>
-							<view class="price">
-								<view class="content">
-									<text class="symbol">￥</text>
-									<text class="money">2587</text>
-								</view>
-								<view class="car-logo">
-									<image class="img" src="../../static/images/shop/car-tag.png" mode=""></image>
-								</view>
-							</view>
-						</view>
-					</view>
-					<view class="goods-item">
-						<view class="img-container">
-							<image class="img" src="../../static/images/shop/goods1.png"></image>
-						</view>
-						<view class="info">
-							<view class="text">
-								<text class="title_tag">国美超市</text>
-								<text class="title">洋河蓝色经典天之蓝52度白酒520ml*6 旗舰版口感绵柔浓香型</text>
-							</view>
-							<view class="goods-tag-list">易卡分期</view>
-							<view class="price">
-								<view class="content">
-									<text class="symbol">￥</text>
-									<text class="money">2587</text>
-								</view>
-								<view class="car-logo">
-									<image class="img" src="../../static/images/shop/car-tag.png" mode=""></image>
-								</view>
-							</view>
-						</view>
-					</view>
-					<view class="goods-item">
-						<view class="img-container">
-							<image class="img" src="../../static/images/shop/goods1.png"></image>
-						</view>
-						<view class="info">
-							<view class="text">
-								<text class="title_tag">国美超市</text>
-								<text class="title">洋河蓝色经典天之蓝52度白酒520ml*6 旗舰版口感绵柔浓香型</text>
-							</view>
-							<view class="goods-tag-list">易卡分期</view>
-							<view class="price">
-								<view class="content">
-									<text class="symbol">￥</text>
-									<text class="money">2587</text>
-								</view>
-								<view class="car-logo">
-									<image class="img" src="../../static/images/shop/car-tag.png" mode=""></image>
-								</view>
-							</view>
-						</view>
-					</view>
-					<view class="goods-item">
-						<view class="img-container">
-							<image class="img" src="../../static/images/shop/goods1.png"></image>
-						</view>
-						<view class="info">
-							<view class="text">
-								<text class="title_tag">国美超市</text>
-								<text class="title">洋河蓝色经典天之蓝52度白酒520ml*6 旗舰版口感绵柔浓香型</text>
-							</view>
-							<view class="goods-tag-list">易卡分期</view>
-							<view class="price">
-								<view class="content">
-									<text class="symbol">￥</text>
-									<text class="money">2587</text>
-								</view>
-								<view class="car-logo">
-									<image class="img" src="../../static/images/shop/car-tag.png" mode=""></image>
-								</view>
-							</view>
-						</view>
-					</view>
-				</view>
+				<commodityTemplate :goodsList="goodsList"></commodityTemplate>
 			</view>
 			<view class="" v-else-if="current === 1">
-				<guideList></guideList>
+				<guideList :guideData="guideData"></guideList>
 			</view>
 		</view>
 	</view>
@@ -194,54 +122,26 @@
 <script>
 	import seckill from "@/component/seckill/seckill.vue"
 	import guideList from"@/component/guideList/guideList.vue";
-	import { getLunbotu } from "@/api/common.js"
+	import commodityTemplate from "@/component/commodityTemplate/commodityTemplate.vue"
+	import { getSeckill,getShoppingGuide,getCategory,getGoodsList,getLunbotu } from "../../api/common.js";
 	export default {
 		data() {
 			return {
 				isShowLogo: false,
 				isLogo: false,
-				list: [],
-				goodsData: [{
-						"img": "//gfs17.gomein.net.cn/T12xYmB4dv1RCvBVdK_400.jpg",
-						"goodsPrice": 99.0,
-						"goodsName": "伊莱克斯（Electrolux）EBE2102TD 215升（L）双门冰箱（钛金灰色）"
-					},
-					{
-						"img": "//gfs17.gomein.net.cn/T12xYmB4dv1RCvBVdK_400.jpg",
-						"goodsPrice": 99.0,
-						"goodsName": "伊莱克斯（Electrolux）EBE2102TD 215升（L）双门冰箱（钛金灰色）"
-					},
-					{
-						"img": "//gfs17.gomein.net.cn/T12xYmB4dv1RCvBVdK_400.jpg",
-						"goodsPrice": 99.0,
-						"goodsName": "伊莱克斯（Electrolux）EBE2102TD 215升（L）双门冰箱（钛金灰色）"
-					},
-					{
-						"img": "//gfs17.gomein.net.cn/T12xYmB4dv1RCvBVdK_400.jpg",
-						"goodsPrice": 99.0,
-						"goodsName": "伊莱克斯（Electrolux）EBE2102TD 215升（L）双门冰箱（钛金灰色）"
-					},
-					{
-						"img": "//gfs17.gomein.net.cn/T12xYmB4dv1RCvBVdK_400.jpg",
-						"goodsPrice": 99.0,
-						"goodsName": "伊莱克斯（Electrolux）EBE2102TD 215升（L）双门冰箱（钛金灰色）"
-					},
-					{
-						"img": "//gfs17.gomein.net.cn/T12xYmB4dv1RCvBVdK_400.jpg",
-						"goodsPrice": 99.0,
-						"goodsName": "伊莱克斯（Electrolux）EBE2102TD 215升（L）双门冰箱（钛金灰色）"
-					},
-					{
-						"img": "//gfs17.gomein.net.cn/T12xYmB4dv1RCvBVdK_400.jpg",
-						"goodsPrice": 99.0,
-						"goodsName": "伊莱克斯（Electrolux）EBE2102TD 215升（L）双门冰箱（钛金灰色）"
-					},
-					{
-						"img": "//gfs17.gomein.net.cn/T12xYmB4dv1RCvBVdK_400.jpg",
-						"goodsPrice": 99.0,
-						"goodsName": "伊莱克斯（Electrolux）EBE2102TD 215升（L）双门冰箱（钛金灰色）"
-					},
-				],
+				current: 0,
+				currentTitle: 0,
+				isLightning: false,
+				imgData: {
+					classify: "../../static/images/shop/classify.png",
+					classifyOne: "../../static/images/shop/classify.png",
+					classifyTwe: "../../static/images/shop/classify2.png",
+					isScan: "../../static/images/shop/scan.png",
+					scanImgOne:"../../static/images/shop/scan.png",
+					scanImgTwe:"../../static/images/shop/scan2.png",
+				},
+				lunboData: [],
+				goodsData: [],
 				videoData: [{
 						"url": "http://47.112.194.162:82/Trousers/goods1/goods_show.mp4"
 					},
@@ -256,46 +156,24 @@
 					},
 				],
 				tabs: ['精品推荐', '全程导购'],
-				current: 0,
-				tabsList: [{
-					name: '全部',
-					id: 10,
-				}, {
-					name: '国美超市',
-					id: 11
-				}, {
-					name: '空调',
-					id: 12
-				},
-				{
-					name: '彩电',
-					id: 13
-				},{
-					name: '冰箱',
-					id: 14
-				},{
-					name: '洗衣机',
-					id: 15
-				},{
-					name: '手机',
-					id: 16
-				},
+				brandRecommend: [
+					{id:1,bgcImg:"/static/images/shop/brand1.webp",goodsImg:"../../static/images/shop/water-heater.png"},
+					{id:2,bgcImg:"../../static/images/shop/brand2.webp",goodsImg:"../../static/images/shop/gas-station.png"},
+					{id:3,bgcImg:"../../static/images/shop/brand3.webp",goodsImg:"../../static/images/shop/shaver.png"},
 				],
-				currentTitle: 0,
+				tabsList: [],
+				goodsList: [],
+				guideData: [],
+				page: 1,
+				shop: 'shop',
 			};
 		},
 		methods: {
 			// 初始化
 			init(){
-				this.getLunbotu();
-			},
-			// 获取轮播图
-			async getLunbotu(){
-				var {message} = await getLunbotu('shop');
-				if(message.length != 0){
-					this.list = message;
-				}
-				
+				this.getSeckillData();
+				this.getCategoryData();
+				this.getLunbotuData();
 			},
 			//地图选择地址
 			chooseLocation() {
@@ -308,13 +186,97 @@
 				})
 			},
 			changeTab(index) {
-				console.log('当前选中的项：' + index)
+				// console.log('当前选中的项：' + index)
 				this.current = index;
+				if(index == 0){
+					
+				}else {
+					this.getShoppingGuideData();
+				}
 			},
 			change(obj) {
-				console.log(obj)
+				// console.log("分类changeid",obj);
 				this.currentTitle = obj.index;
-			}
+				this.getGoodsListData(obj.id);
+			},
+			lightning(){
+				this.isLightning = true;
+			},
+			 onClose() {
+			    this.isLightning = false;
+			 },
+			 // 扫一扫
+			 scan(){
+				uni.scanCode({
+					// onlyFromCamera: true,
+				    success: function (res) {
+				        console.log('条码类型：' + res.scanType);
+				        console.log('条码内容：' + res.result);
+				    }
+				}); 
+			 },
+			 // 获取秒杀数据
+			 async getSeckillData(){
+				 var { message } = await getSeckill();
+				 this.goodsData = message;
+			 },
+			 // 获取导购人员数据
+			 async getShoppingGuideData(){
+				 var { message } = await getShoppingGuide();
+				message.forEach(v => {
+					// 字符串转为数组
+					v.good_at_brand = JSON.parse(v.good_at_brand);
+					v.g_category = JSON.parse(v.goods_category);
+					var temp = JSON.parse(v.goods_category);
+					// 保留3个good_at_brand
+					temp.length = 3;
+					v.goods_category = temp;
+				})
+				 this.guideData = message;
+			 },
+			 // 获取精品推荐分类
+			 async getCategoryData(){
+				 var { message } = await getCategory(this.shop);
+				 // console.log("分类",message);
+				 // 保存分类的第一个id
+				 var firstId = message[0].cat_id;
+				 this.tabsList = message;
+				 this.getGoodsListData(firstId)
+			 },
+			 async getGoodsListData(id){
+				 var { message } = await getGoodsList(id,this.page);
+				 message.forEach(v => {
+					 // console.log(v.tagList);
+					 v.tagList = JSON.parse(v.tagList);
+				 })
+				 this.goodsList = message;
+ 			 },
+			 // 获取轮播图
+			 async getLunbotuData(){
+				 var { message } = await getLunbotu(this.shop);
+				 this.lunboData = message;
+			 },
+			 // 跳转到对应的专场页
+			 gobrandSpecial(id){
+				console.log("专场",id);
+				switch(id){
+					case 1:
+						uni.navigateTo({
+							url: "/pages/brand/sacon/sacon"
+						})
+						break;
+					case 2:
+						uni.navigateTo({
+							url: "/pages/brand/guangdongMacro/guangdongMacro"
+						})
+						break;
+					case 3:
+						uni.navigateTo({
+							url: "/pages/brand/lake/lake"
+						})
+						break;
+				}
+			 }
 		},
 		// 监听当前页面的滚动
 		onPageScroll: function(event) {
@@ -326,26 +288,30 @@
 			if (scrollTop > position && this.isLogo == false) {
 				this.isShowLogo = true;
 				this.isLogo = true;
-				console.log("大于50");
+				// 改变头部搜索的图片
+				this.imgData.isScan = this.imgData.scanImgTwe;
+				this.imgData.classify = this.imgData.classifyTwe;
 			} else if (scrollTop < position && this.isLogo == true) {
 				this.isShowLogo = false;
 				this.isLogo = false;
-				console.log("小于50");
+				// 改变头部搜索的图片
+				this.imgData.isScan = this.imgData.scanImgOne;
+				this.imgData.classify = this.imgData.classifyOne;
 			}
+		},
+		onLoad(){
+			this.init();
 		},
 		components: {
 			seckill,
-			guideList
-		},
-		onLoad() {
-			this.init()
+			guideList,
+			commodityTemplate
 		}
 	}
 </script>
-
+    
 <style lang="scss" scoped>
 	.shop-container {
-		height: 5000rpx;
 		background-color: #F2F2F2;
 
 		.br {
@@ -354,18 +320,18 @@
 			margin: 20rpx auto;
 			background-color: #FFFFFF;
 		}
-
+		.selectedBgc {
+			background-color: #FFFFFF;
+		}
 		.header {
 			position: fixed;
 			display: flex;
 			justify-content: space-around;
 			align-items: center;
 			width: 100%;
-			background-color: #FFFFFF;
-			// background-color: rgba($color: #fff, $alpha: 0.5);
-			z-index: 999;
-
+			z-index: 9999;
 			// opacity: 0.6;
+			
 			.guomei {
 				width: 60rpx;
 				height: 60rpx;
@@ -384,37 +350,60 @@
 			}
 
 			.scan-content {
-				text-align: center;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
 
 				.scan {
 					width: 44rpx;
 					height: 44rpx;
-					margin-top: 12rpx;
 				}
 
 				.text {
 					font-size: 20rpx;
+					color: #FFFFFF;
+				}
+				.scanSelected {
 					color: #878787;
 				}
 			}
 
 			.classify-content {
-				text-align: center;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
 
 				.classify {
 					width: 44rpx;
 					height: 44rpx;
 					padding: 0 20rpx;
-					margin-top: 12rpx;
-					// background-color: red;
 				}
 
 				.text {
 					font-size: 20rpx;
+					color: #FFFFFF;
+				}
+				.classifySelected {
 					color: #878787;
 				}
 			}
 
+		}
+		.flash-express-logo {
+			width: 100%;
+			image {
+				display: block;
+				width: 210rpx;
+				height: 110rpx;
+				margin: 80rpx auto;
+			}
+			.tip-info {
+				font-size: 30rpx;
+				color: #262c32;
+				margin: 0 30rpx;
+			}
 		}
 
 		.shop-info {
