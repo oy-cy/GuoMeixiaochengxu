@@ -2,10 +2,12 @@
 	<view class="home-component">
 		<!-- 首页头部 -->
 		<view class="home-top">
-			<view class="location-photo">
-				<image src="../../static/images/home/location.png" mode=""></image>
-				<text class="text">深圳</text>
-			</view>
+			<navigator url="../site/receivingCity/receivingCity">
+				<view class="location-photo">
+					<image src="../../static/images/home/location.png" mode=""></image>
+					<text class="text">深圳</text>
+				</view>
+			</navigator>
 			<navigator class="search" hover-class="none" url="../search/search">
 				<van-search class="van-search" value="" background="background:transparen(0)" disabled="true" shape="round" placeholder="请输入搜索关键词" />
 			</navigator>
