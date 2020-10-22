@@ -13,7 +13,7 @@
 			<!-- 金额、返利 -->
 			<view class="money">
 				<block v-for="(item,index) in money" :key='index'>
-					<navigator class="item" :url="index==0?'/pages/user/balance/balance':'/pages/user/rebate/rebate'">
+					<navigator class="item" :url="index==0?'/pages/user/balance/balance':`/pages/user/rebate/rebate?index=`+(index-1)">
 						<view class="count">&yen;<text>{{item.balance}}</text></view>
 						<view class="info">{{item.info}}</view>
 					</navigator>
@@ -25,22 +25,22 @@
 				<view class="title">我的订单</view>
 				<view class="order-info">
 					<!-- 全部订单 -->
-					<navigator url="" class="item">
+					<navigator url="/pages/user/orderList/orderList" class="item">
 						<image src="../../static/images/user/all-order.png" mode=""></image>
 						<view class="info">全部订单</view>
 					</navigator>
 					<!-- 待付款 -->
-					<navigator url="" class="item">
+					<navigator url="/pages/user/orderList/orderList?status=1" class="item">
 						<image src="../../static/images/user/obligation.png" mode=""></image>
 						<view class="info">待付款</view>
 					</navigator>
 					<!-- 待收货 -->
-					<navigator url="" class="item">
+					<navigator url="/pages/user/orderList/orderList?status=2" class="item">
 						<image src="../../static/images/user/receiving.png" mode=""></image>
 						<view class="info">待收货</view>
 					</navigator>
 					<!-- 已完成 -->
-					<navigator url="" class="item">
+					<navigator url="/pages/user/orderList/orderList?status=3" class="item">
 						<image src="../../static/images/user/done.png" mode=""></image>
 						<view class="info">已完成</view>
 					</navigator>
@@ -83,6 +83,7 @@
 </template>
 
 <script>
+import { login } from '@/api/user.js';
 	export default {
 		data() {
 			return {
@@ -130,41 +131,50 @@
 					success(info){
 						// 获取openid start
 						var appid = 'wxdc3ba8b14831e4db'; //填写微信小程序appid  
-						var secret = '1dea52b5f60ada9dfe7dd87cc50b440b'; //填写微信小程序secret  
+						var secret = '74de67986515ccb5c8b8c9e1bf4b9c88'; //填写微信小程序secret  
+						var openId ;
+
 						//调用request请求api转换登录凭证  
 						uni.request({
-							url: 'https://api.weixin.qq.com/sns/jscode2session?appid='+appid+'&secret='+secret+'&grant_type=authorization_code&js_code=' + loginCode.code,
+							url: 'https://api.weixin.qq.com/sns/jscode2session?appid='+appid+'&secret='+secret+'&grant_type=authorization_code&js_code=' + info.code,
 							header: {
 								'content-type': 'application/json'
 							},
 							success: function (res) {
+								openId = res.data.openid;
 								console.info(res.data.openid) //获取openid
+								
+								// 获取用户信息
+								uni.getUserInfo({
+									provider: 'weixin',
+									success: async function (infoRes) {
+										var data = await login(openId);
+										var userInfo = infoRes.userInfo;
+										userInfo.userId = data.message;
+										console.log(userInfo)
+										// 登录成功，保存当前登陆用户信息
+										getApp().globalData.userInfo = userInfo;
+										getApp().globalData.isLogin = true;
+										_this.isLogin = true;
+										uni.setStorage({
+											key:'userInfo',
+											data:userInfo
+										})
+										uni.setStorage({
+											key:'isLogin',
+											data:true
+										})
+									},
+									fail() {
+										console.log("用户信息获取失败");
+									}
+								})
+								
 							}
 						})
 						// 获取openid end
 						
-						// 获取用户信息
-						uni.getUserInfo({
-							provider: 'weixin',
-							success: function (infoRes) {
-								var userInfo = infoRes.userInfo;
-								// 登录成功，保存当前登陆用户信息
-								getApp().globalData.userInfo = userInfo;
-								getApp().globalData.isLogin = true;
-								_this.isLogin = true;
-								uni.setStorage({
-									key:'userInfo',
-									data:userInfo
-								})
-								uni.setStorage({
-									key:'isLogin',
-									data:true
-								})
-							},
-							fail() {
-								console.log("用户信息获取失败");
-							}
-						})
+						
 					},
 					fail(res) {
 						uni.showToast({

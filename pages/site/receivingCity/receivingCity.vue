@@ -26,14 +26,14 @@
 			<view class="receiving-site">
 				<view class="my-receiving-site">
 					<text class="text">我的收货地址</text>
-					<view class="manage">
+					<navigator class="manage" :url="receivingAddr.length == 0?'/pages/site/addAddr/addAddr':'/pages/site/selectAddr/selectAddr'">
 						<image src="../../../static/images/user/addr-manage.png" mode=""></image>
 						<text>管理地址</text>
-					</view>
+					</navigator>
 				</view>
 				<!-- 收货地址列表 -->
 				<view class="list" v-for="(item,index) in receivingAddr" :key="index">
-					<view class="item">
+					<view class="item" @click="setSelectAddr">
 						<view class="addr">
 							<view class="addr">{{item.addr}}</view>
 							<view class="user-info">
@@ -48,7 +48,7 @@
 				</view>
 				<view class="no-addr" v-if="receivingAddr.length == 0">
 					<view class="text">您还没有收货地址</view>
-					<van-button size="small" color="linear-gradient(to right, #ff478e, #f64649)" round="true">新增地址</van-button>
+					<navigator url="/pages/site/addAddr/addAddr" class="button">新增地址</navigator>
 				</view>
 			</view>
 			<!-- 附近地址 -->
@@ -95,6 +95,7 @@ import amap from '@/static/js/amap-wx.js';
 		onLoad() {
 			this.getSite();
 			this.getNearbySiteData();
+			// todo 获取当前用户的地址列表
 		},
 		methods:{
 			getSite(){
@@ -149,6 +150,13 @@ import amap from '@/static/js/amap-wx.js';
 					  console.log(err)
 					}
 			    })
+			},
+			// 切换选中地址
+			setSelectAddr(item){
+				// todo 调用修改选中地址接口
+				uni.switchTab({
+					url:"/pages/home/home"
+				})
 			}
 		},
 		computed:{
@@ -208,6 +216,11 @@ import amap from '@/static/js/amap-wx.js';
 				justify-content: space-between;
 				align-items: center;
 				font-size: 30rpx;
+				.button {
+					background-color: #ff478e;
+					border-radius: 30rpx;
+					padding: 10rpx 20rpx;
+				}
 			}
 			.my-receiving-site {
 				display: flex;

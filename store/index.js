@@ -25,6 +25,9 @@ const store = new Vuex.Store({
 		getCarList(state){
 			return state.carList;
 		},
+		getCarListCount(state){
+			return state.carList.length;
+		},
 		// 获取历史记录
 		getHistoryArray(state){
 			return state.historyArray;

@@ -27,6 +27,13 @@ export function getguessLike(catId){
 	})
 }
 
+// 模糊查询
+export function fuzzyQuery(name){
+	return request({
+		url:"/fuzzyQuery?name="+name
+	})
+}
+
 //获取换新推荐
  export function getRecommend(catId){
 	 return request({
