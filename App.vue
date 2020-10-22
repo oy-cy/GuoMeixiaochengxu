@@ -8,10 +8,7 @@ export default {
 		// 用户信息
 		userInfo:{}
 	},
-	async getCarListData(userId){
-		var data = await getCarList(userId)
-		// this.$store.commit('setCarList',currentCity	);
-	},
+	
 	onLaunch: function() {
 		console.log('App Launch');
 		// 通过本地存储获取用户是否登录
@@ -19,8 +16,8 @@ export default {
 		this.$scope.globalData.isLogin = isLogin;
 		if(isLogin){
 			this.$scope.globalData.userInfo = uni.getStorageSync('userInfo');
-			// this.getCarListData()
-			
+			this.getCarListData(1)
+			// console.log(123)
 		}
 		// 定位城市
 		this.amapPlugin = new amap.AMapWX({
@@ -46,6 +43,16 @@ export default {
 	onHide: function() {
 		console.log('App Hide');
 		
+	},
+	methods:{
+		async getCarListData(userId){
+			var {message} = await getCarList(userId)
+			// console.log("",data)
+			
+			// 购物车初始化数据
+			this.$store.commit('setCarList',message);
+			console.log("hh",this.$store.getters.getCarList)
+		},
 	}
 };
 </script>

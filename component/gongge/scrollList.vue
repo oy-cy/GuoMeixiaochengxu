@@ -5,7 +5,7 @@
 		</view>
 		
 		<scroll-view scroll-x class="strip">
-				<view class="goodbox" v-for="(item,index) in goodlist" :key="index" @click="skipGood(index)">
+				<view class="goodbox" v-for="(item,index) in goodlist" :key="index" @click="skipGood(item.id)">
 					<view class="img">
 						<view class="ranking" v-if="headline == '热卖榜单'">
 							<image :src="'../../static/images/gongge/LeaderboardNO'+(index+1)+'.png'" style="width: 100%;height: 100%;"></image>
@@ -46,6 +46,7 @@
 			if(this.title == "rob"){
 				this.headline = "抢购"
 				this.getSeckillData();
+				
 			}else if(this.title == "exchange"){
 				this.headline = "换新推荐"
 				this.getRecommendData()
@@ -55,6 +56,8 @@
 			}else{
 				this.getSellingListData()
 			}
+			
+			
 		},
 		methods:{
 			skipGood(index){
@@ -67,7 +70,8 @@
 			},
 			async getSeckillData(){
 				var {message} = await getSeckill();
-				this.goodlist = message
+				this.goodlist = message;
+				console.log("zz",this.goodlist)
 			},
 			async getRecommendData(){
 				var {message} = await getRecommend(1);
