@@ -173,12 +173,6 @@
             }
         },
 		{
-			"path":"pages/user/orderList/orderList",
-			"style":{
-				"navigationBarTitleText":"我的订单"
-			}
-		},
-		{
 			"path":"pages/user/group/group",
 			"style":{
 				"navigationBarTitleText":"我的拼团"
