@@ -14,10 +14,10 @@
 		<!-- 商品基本信息 -->
 		<view class="goods-title">
 			<view class="title">
-				<view class="goods-tag">{{goods.tag}}</view>
-				{{goods.title}}
+				<view class="goods-tag">{{recommend.extProperty}}</view>
+				{{recommend.sku_name}}
 			</view>
-			<view class="goods-price">¥{{goods.price}}</view>
+			<view class="goods-price">¥{{recommend.sku_price}}</view>
 			<view class="stages">
 				<van-cell-group>
 				  <van-cell 
@@ -56,13 +56,13 @@
 			  @click-overlay="closeSelected">
 				<view class="popup-select">
 					<view class="info">
-						<image :src="select.img"></image>
+						<image :src="select.img || recommend.sku_thumbImg_url"></image>
 						<view class="infos">
 							<view class="price">
-								¥{{select.price || goods.price}}
+								¥{{select.price || recommend.sku_price}}
 							</view>
 							<view>
-								{{goods.count > 0 ? "有货":"无货"}}
+								{{recommend.stock > 0 ? "有货":"无货"}}
 							</view>
 						</view>
 					</view>
@@ -98,7 +98,6 @@
 		<!-- 送至 -->
 		<view class="goods-site">
 			<van-cell-group>
-				<!-- @click="isSite = true" -->
 			  <van-cell
 				is-link
 				@click="siteCompile"
@@ -123,11 +122,11 @@
 		
 		<!-- 门店 -->
 		<view class="good-shop" @click="goShop">
-			<image src="//gfs10.gomein.net.cn/T1kXb4BCZg1RCvBVdK.png"></image>
+			<image :src="recommend.shop_photo"></image>
 			<view class="info">
 				<view class="shop-name">
 					<view class="name">
-						国美体验店 (深圳观澜店)
+						{{recommend.shop_name}}
 					</view>
 					<view class="site">
 						<van-icon name="location-o" size="36rpx" color="#999A9C"/>
@@ -256,13 +255,7 @@
 			return {
 				cut:"product_desciption",
 				scrollTop:0,
-				goods:{
-					id:3,
-					title:"华硕(ASUS) Y5200FB 15.6英寸商务办公轻薄笔记本电脑(I5-8265 4G 512SSD MX110 2G独显)银",
-					price:2199,
-					tag:"自营",
-					count:1
-				},
+				goodsId:3,
 				isSelect:false,
 				select:{
 					number:1,
@@ -313,23 +306,24 @@
 			},
 			// 获取轮播图
 			async getGoodsLunbotu(){
-				let {message} = await getGoodsLunbotu(this.goods.id);
+				let {message} = await getGoodsLunbotu(this.goodsId);
 				if(message.length != 0){
 					this.lunbotu = message
 				}
 			},
 			// 获取评论
 			async getcomment(){
-				let {message} = await getcomment(this.goods.id);
+				let {message} = await getcomment(this.goodsId);
 				if(message.length != 0){
 					this.comment = message[0]
 				}
 			},
 			//获取商品详情
 			async getCommodityDetails(){
-				let {message} = await getCommodityDetails(this.goods.id);
+				let {message} = await getCommodityDetails(this.goodsId);
 				if(message.length != 0){
 					this.recommend = message[0]
+					console.log(this.recommend)
 					this.detailData.select = JSON.parse(message[0].specification);
 					this.sureSelect = Array.apply(null, Array(this.detailData.select.length)).map(() => 0)
 					this.goodsConfirm();
@@ -414,10 +408,10 @@
 				console.log('加入购物车')
 				let car = {
 					userId : 1,
-					comId : this.goods.id,
+					comId : this.goodsId,
 					comCount : this.select.number,
 					specification : this.select.confirm,
-					price : (this.select.price == 0 ? this.goods.price : this.goods.price),
+					price : (this.select.price == 0 ? this.recommend.sku_price : this.select.price),
 				}
 				console.log(car);
 				// await addShopCar(car);
@@ -457,7 +451,6 @@
 	}
 	.detail-container{
 		background-color: #F3F5F7;
-		height: 5000rpx;
 		// 轮播图
 		.swiper{
 			width: 100%;
@@ -573,16 +566,15 @@
 				.van-cell-text{
 					color:#999A9C;
 					margin-right: 20rpx;
-					// flex: 1;
 				}
 				.site{
-					flex: 1;
 					position: relative;
 					padding-left:40rpx;
+					flex: 1;
 					.van-icon{
 						position: absolute;
 						top: 0;
-						left: -6rpx;
+						left: -8rpx;
 					}
 					// display: flex;
 					// align-items: flex-end;
