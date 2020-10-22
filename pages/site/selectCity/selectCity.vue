@@ -75,8 +75,9 @@ import uniSearchBar from '@/components/uni-search-bar/uni-search-bar.vue';
 				// 定位地址
 				this.amapPlugin.getRegeo({  
 					success: (data) => {
-						this.currentCity = data[0].regeocodeData.addressComponent.city;//把"市"去掉
-						console.log("请求成功")
+						this.currentCity = data[0].regeocodeData.addressComponent.city.replace(/市/g,'');//把"市"去掉
+						this.$store.commit('setCurrentCity',this.currentCity)
+						console.log("请求成功,当前城市为："+this.currentCity)
 					},
 					fail:(data)=>{
 						console.log("请求失败：");
@@ -109,7 +110,13 @@ import uniSearchBar from '@/components/uni-search-bar/uni-search-bar.vue';
 				if(name==''){
 					return;
 				}
+				this.search = ''	
 				// 保存地址
+				this.$store.commit('setCurrentCity',name)
+				console.log(this.$store.getters.getCurrentCity)
+				uni.navigateBack({
+					delta:1
+				});
 			}
 		}
 	}

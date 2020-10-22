@@ -9,7 +9,7 @@
 			<navigator class="search" hover-class="none" url="../search/search">
 				<van-search class="van-search" value="" background="background:transparen(0)" disabled="true" shape="round" placeholder="请输入搜索关键词" />
 			</navigator>
-			<view class="scan-photo" @click="scanCode()" >
+			<view class="scan-photo" @click="scanCode()">
 				<image src="../../static/images/home/scan.png" mode=""></image>
 				<text class="text">扫一扫</text>
 				<!-- <button @click="show=true"></button> -->
@@ -76,7 +76,7 @@
 	// import gogei from '../../component/gongge/gogei.vue';
 	import goTop from '../../component/goTop/goTop.vue';
 	import seckill from "@/component/seckill/seckill.vue";
-	import {getLunbo,getguessLike,getSeckill,getGrid} from "../../api/homeApi.js";
+	import {getLunbotu,getguessLike,getSeckill,getGrid} from "../../api/common.js";
 	export default {
 		data() {
 			return {
@@ -97,7 +97,7 @@
 				this.getGridWay();
 			},
 			async getGridWay(){
-				var {message} = await getGrid();
+				var {message} = await getGrid("home");
 				console.log("gonge",message);
 				this.getGridData = message;
 			},
@@ -114,11 +114,12 @@
 				// this.getSeckillData = message;
 			},
 			async getguesslikeWay(){
-				var {message} = await getguessLike();
+				var {message} = await getguessLike(1);
+				console.log("aaa",message);
 				this.getguessLikeData = message;
 			},
 			async getLunboWay(){
-				var {message} = await getLunbo();
+				var {message} = await getLunbotu("home");
 				this.goLunboData = message;
 			},
 			scanCode(){
@@ -139,7 +140,7 @@
 			select(index){
 				console.log(index)
 				uni.navigateTo({
-					url:"/pages/goodsList/goodsList"
+					url:""
 				})
 			}
 		},
