@@ -2,8 +2,8 @@
 	<view class="phone">
 		<lb :pageid="pageid"></lb>
 		<gogei hang="4" :pageid="pageid"></gogei>
-		<scrollList title="换新推荐" :pageid="pageid"></scrollList>
-		<scrollList title="热卖榜单" :pageid="pageid"></scrollList>
+		<scrollList title="exchange" :pageid="pageid"></scrollList>
+		<scrollList title="hot" :pageid="pageid"></scrollList>
 		<everyone  :pageid="pageid"></everyone>
 	</view>
 </template>
@@ -16,7 +16,7 @@
 	export default {
 		data() {
 			return {
-				pageid:2
+				pageid:"mobileComputer"
 			};
 		},
 		components:{

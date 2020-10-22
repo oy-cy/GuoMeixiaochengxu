@@ -1,9 +1,24 @@
 <template>
 	<view class="mycar">
-		<view class="top">
+		
+		
+		<view class="nogood" v-if="goodList.length == 0">
+			<view class="noimg">
+				<image src="../../static/images/gongge/emptycar.png" style="width: 100%;height: 100%;"></image>
+			</view>
+			<view class="hint">
+				购物车还是空的
+			</view>
+			<navigator class="buttom" url="/pages/home/home">
+				
+				首页
+			</navigator>
+		</view>
+		<!-- 地址，编辑 -->
+		<view class="top" v-if="goodList.length != 0">
 			<view class="background">
-				<view class="left">
-					深圳市
+				<view class="left" @click="siteCompile">
+					<image src="../../static/images/tabbar/shop.png" style="width: 30rpx;height: 30rpx;margin-right: 20rpx;">{{getCurrentCity}}
 				</view>
 				<view class="right" @click="clickcompile">
 					{{compile==true?"编辑":"完成"}}
@@ -11,36 +26,43 @@
 			</view>
 			
 		</view>
+		
+		<!-- 内容 -->
 		<view class="box">
 			<view class="goodList">
 				<view class="goodbox">
-					<view class="good" v-for="(items,indexs) in goodList" :key="indexs">
+					<view class="good" v-for="(items,indexs) in goodList" :key="indexs" >
 						<van-checkbox
 						  :value="items.select"
 						  checked-color="#F20C59"
 						  @change="good(items.id)"
 						  class="choose"
 						></van-checkbox>
-						<image :src="items.image" style="width: 200rpx;height: 200rpx;"></image>
-						
-						<view class="message">
-							<view class="title">
-								<text><text></text>{{items.title}}</text>
-							</view>
-							<view class="price_num">
-								<text class="price">￥{{items.price}}</text>
-								<u-number-box 
-								:min="1" :max="100"
-								 size='18' 
-								 input-width="40" 
-								 v-model="items.num" 
-								 :index="items.id"
-								 @change="addSubtract"></u-number-box>
+						<view class="good" @click="details(items.id)">
+							<image :src="items.image" style="width: 200rpx;height: 200rpx;"></image>
+							
+							<view class="message">
+								<view class="title">
+									<text><text></text>{{items.title}}</text>
+								</view>
+								<view class="specificationsbox" v-if="items.specifications == undefined"  @click.stop="specifications(items.id,items.specifications)">
+									<text class="specifications">{{items.specification}}132123123</text> 
+								</view>
+								<view class="price_num">
+									<text class="price">￥{{items.price}}</text>
+									<u-number-box 
+									:min="1" :max="100"
+									 size='18' 
+									 input-width="40" 
+									 v-model="items.num" 
+									 :index="items.id"
+									 @change="addSubtract"></u-number-box>
+								</view>
 							</view>
 						</view>
+						
 					</view>
 				</view>
-				
 			</view>
 			
 			<view class="like">
@@ -70,7 +92,7 @@
 								
 							</view>
 							<view class="car" @click.stop="addcar(item.id)">
-								
+								<image src="../../static/images/gongge/nocar.png" style="width: 100%;height: 100%;"></image>
 							</view>
 						</view>
 					</view>
@@ -81,7 +103,9 @@
 			
 		</view>
 
-		<view class="end">
+
+		<!-- 全选 -->
+		<view class="end" v-if="goodList.length != 0">
 			<view class="sum">
 				<van-checkbox
 				  :value="all"
@@ -112,55 +136,75 @@
 				@click="deleteGood()"
 				>删除</van-button>
 		</view>
+	
+	
+		<!-- 格式 -->
+		<van-popup
+		 :show="isSelect"
+		  position="bottom"
+		  custom-style="height: 72%"
+		  closeable
+		  @close="closeSelected"
+		  @click-overlay="closeSelected">
+			<view class="popup-select">
+				<view class="info">
+					<image :src="select.img"></image>
+					<view class="infos">
+						<view class="price">
+							¥{{select.price || goods.price}}
+						</view>
+						<view>
+							{{goods.count > 0 ? "有货":"无货"}}
+						</view>
+					</view>
+				</view>
+				<view class="select" v-for="(item,index) in detailData.select" :key='index'>
+					<view class="select-item">
+						{{item.name}}
+					</view>
+					<view class="item-content">
+						<block v-for="(items,indexs) in item.list" :key="indexs">
+							<view class="default" @click="goodsSelect(index,indexs)" :class="[sureSelect[index] == indexs ? 'choose':'']" >
+								{{items.title}}
+							</view>
+						</block>
+					</view>
+				</view>
+				<view class="number">
+					
+					数量 <van-stepper :value="select.number" min="1" max="10"  @change='numberChange'/>
+				</view>
+				<view class="goods-button">
+					<van-button  size="large" color="linear-gradient(to right, #FFC71D, #FF8917)" @click="closeSelected">
+					  取消
+					</van-button>
+					<van-button  size="large" color="linear-gradient(to right, #FA1E8B, #FC1E58)">
+					  确定
+					</van-button>
+				</view>
+			</view>
+		  </van-popup>
+		  
+		  <site ref="show"></site>
+		 
 	</view>
+
+		
 </template>
 
 <script>
+	import site from "../../component/gongge/site.vue"
 	export default {
 		data() {
 			return {
 				all:false,
 				money:0.00,
 				compile:true,
+				isSelect:false,
 				
-				goodList:[
-						{id:1,
-						title:"FHD全高清屏，人工智能语音",
-						image:"//cdn.cnbj1.fds.api.mi-img.com/mi-mall/7cd59729b9a02407979848839c0e5343.jpg?thumb=1&w=344&h=280",
-						num:4,
-						select:false,
-						price:3000},
-						{id:2,
-						title:"2FHD全高清屏，人工智能语音",
-						image:"//cdn.cnbj1.fds.api.mi-img.com/mi-mall/7cd59729b9a02407979848839c0e5343.jpg?thumb=1&w=344&h=280",
-						num:6,
-						select:false,
-						price:3000},
-						{id:3,
-						title:"3FHD全高清屏，人工智能语音",
-						image:"//cdn.cnbj1.fds.api.mi-img.com/mi-mall/7cd59729b9a02407979848839c0e5343.jpg?thumb=1&w=344&h=280",
-						num:7,
-						select:false,
-						price:3000},
-						{id:4,
-						title:"FHD全高清屏，人工智能语音",
-						image:"//cdn.cnbj1.fds.api.mi-img.com/mi-mall/7cd59729b9a02407979848839c0e5343.jpg?thumb=1&w=344&h=280",
-						num:'1',
-						select:false,
-						price:3000},
-						{id:5,
-						title:"2FHD全高清屏，人工智能语音",
-						image:"//cdn.cnbj1.fds.api.mi-img.com/mi-mall/7cd59729b9a02407979848839c0e5343.jpg?thumb=1&w=344&h=280",
-						num:'1',
-						select:false,
-						price:3000},
-						{id:6,
-						title:"3FHD全高清屏，人工智能语音",
-						image:"//cdn.cnbj1.fds.api.mi-img.com/mi-mall/7cd59729b9a02407979848839c0e5343.jpg?thumb=1&w=344&h=280",
-						num:'1',
-						select:false,
-						price:3000},
-				],
+				siteShow:false,
+				
+				goodList:[],
 				
 				allgoodList:[
 					{id:1,
@@ -187,6 +231,9 @@
 				]
 			};
 		},
+		created() {
+			this.goodList = this.$store.getters.getCarList
+		},
 		methods:{
 			addcar(id){
 				console.log(id);
@@ -197,7 +244,6 @@
 				})
 				console.log(id)
 			},
-			
 			good(data){	
 				this.goodList.forEach(function(item,tempindex,arr){
 					if(item.id == data){
@@ -213,6 +259,7 @@
 				this.goodList.forEach(function(item,tempindex,arr){
 					item.select = _this.all
 				});
+				this.calculateMoney();
 			},
 			examineall(){
 				var temp = true;
@@ -256,8 +303,6 @@
 						item.select  = false;
 					})
 					
-				}else{
-					
 				}
 				this.examineall();
 				this.calculateMoney();
@@ -274,14 +319,32 @@
 				})
 				carId = carId.join(",")
 				console.log(carId)
-			}
+			},
 			
-		
+			
+			closeSelected(){
+				this.isSelect = false;
+			},
+			
+			
+			specifications(id,specifications){
+				this.isSelect = true;
+			},
+			siteCompile(){
+				this.$refs.show.show()
+				// this.siteShow = true;
+			},
+			
 			
 			
 		},
-		created() {
-			
+		computed: {
+			getCurrentCity(){
+				return this.$store.getters.getCurrentCity;
+			}
+		},
+		components:{
+			site
 		}
 	}
 </script>
@@ -290,6 +353,28 @@
 	.mycar{
 		padding:20rpx;
 		background-color: #F3F5F7;
+		
+		.nogood{
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			.noimg{
+				width: 200rpx;
+				height: 200rpx;
+			}
+			.hint{
+				color: #919599;
+				font-size: 30rpx;
+			}
+				.buttom{
+					margin-top: 20rpx;
+					font-size: 26rpx;
+					padding: 6rpx 20rpx;
+					border-radius: 30rpx;
+					border: 1rpx solid #ccc;
+				}
+		}
+		
 		.top{
 		
 			width: 100vw;
@@ -336,6 +421,15 @@
 								display: flex;
 								flex-direction: column;
 								justify-content: space-between;
+								
+								.specificationsbox{
+									// display: inline;
+									.specifications{
+										font-size: 20rpx;
+										// height: 20rpx;
+										background-color: #ccc;
+									}
+								}
 								.price_num{
 									display: flex;
 									justify-content: space-between;
@@ -395,10 +489,8 @@
 								}
 							}
 							.car{
-								width: 30rpx;
-								height: 30rpx;
-								background-color: red;
-								    margin: 20rpx 20rpx 0rpx 0rpx;
+								width: 60rpx;
+								height: 60rpx;
 							}
 						}
 					}
@@ -443,5 +535,71 @@
 			}
 			
 		}
+		
+		.popup-select{
+				.info{
+					padding: 20rpx 30rpx;
+					display: flex;
+					align-items: center;
+					border-bottom: 2rpx solid #ccc;
+					image{
+						border: 2rpx solid #DCDDDE;
+						width:190rpx;
+						height: 190rpx;
+					}
+					.infos{
+						margin-left: 30rpx;
+						color: #F20C59;
+						font-size: 40rpx;
+						.price{
+							margin-bottom: 10rpx;
+						}
+					}
+				}
+				.select{
+					.select-item{
+						padding: 30rpx;
+						font-size: 36rpx;
+					}
+					.item-content{
+						display: flex;
+						flex-wrap: wrap;
+						.default{
+							margin: 0  20rpx 30rpx;
+							padding: 20rpx 40rpx;
+							border: 2rpx solid #E0E0E0;
+						}
+						.choose{
+							border: 2rpx solid #F20C59;
+							color: #F20C59;
+						}
+					}
+				}
+				.number{
+					display: flex;
+					margin-bottom: 120rpx;
+					.van-stepper{
+						margin-left: 20rpx;
+					}
+				}
+				.goods-button{
+					position: fixed;
+					bottom: 0;
+					width: 100%;
+					display: flex;
+					van-button{
+						flex: 1;
+					}
+				}
+			}
+		
 	}
-</style>
+
+		/deep/ .level-container{
+			height: 680rpx;
+		}
+		
+		/deep/._h1{
+			display: none;
+		}
+ </style>

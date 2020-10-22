@@ -11,7 +11,7 @@
 			
 				
 		<view class="classifyGoods">
-			<view class="goods-item" v-for="(item,index) in goodlist" :key="index">
+			<view class="goods-item" v-for="(item,index) in goodlist" :key="index" @click="goodDetails(item.id)">
 				<view class="img-container">
 					<image class="img" src="../../static/images/shop/goods1.png"></image>
 				</view>
@@ -39,6 +39,8 @@
 </template>
 
 <script>
+	
+	import {getGoodsList} from "../../api/common.js"
 	export default {
 		props:["pageid"],
 		data(){
@@ -87,7 +89,7 @@
 			}
 		},
 		created() {
-			
+			this.getGoodsListData();
 		},
 		methods:{
 			change(obj){
@@ -99,6 +101,16 @@
 				// 	this.status = 'nomore'
 				// }
 				this.status = 'loading'
+			},
+			async getGoodsListData(){
+				var data = await getGoodsList(1,this.page);
+				this.page++;
+				console.log('ev',data);
+			},
+			goodDetails(id){
+				uni.navigateTo({
+					url:"/pages/goodsDetail/goodsDetail?id="+id
+				})
 			}
 		}
 	}

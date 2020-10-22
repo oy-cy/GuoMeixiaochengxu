@@ -12,6 +12,7 @@ const store = new Vuex.Store({
 	state: {
 		// 当前城市(格式：北京，默认北京)
 		currentCity:'北京',
+		carList:[],
 		historyArray:[]
 	},
 	// 存放获取数据的方法
@@ -19,6 +20,13 @@ const store = new Vuex.Store({
 		// 获取当前城市
 		getCurrentCity(state){
 			return state.currentCity;
+		},
+		
+		getCarList(state){
+			return state.carList;
+		},
+		getCarListCount(state){
+			return state.carList.length;
 		},
 		// 获取历史记录
 		getHistoryArray(state){
@@ -37,6 +45,30 @@ const store = new Vuex.Store({
 		setCurrentCity(state,city){
 			state.currentCity = city;
 		},
+		
+		setCarList(state,carList){
+			state.carList = carList;
+		},
+		
+		setaddcar(){
+			if(getApp().globalData.isLogin){
+				var boot = false
+				start.carList.forEach(v=>{
+					if(v.id == good.id){
+						v.num++;
+						boot=true;
+					}
+				})
+				if(boot == true){
+					start.carList.push(good)
+				}
+			}else{
+				uni.navigateTo({
+					url:"/pages/user/user.vue"
+				})
+			}
+		},
+
 		setHistoryArray(state,historyArray){
 			state.historyArray = historyArray;
 			
@@ -49,6 +81,7 @@ const store = new Vuex.Store({
 				
 			// })
 			// state.historyArray = keys;
+
 		}
 	},
 	//异步修改

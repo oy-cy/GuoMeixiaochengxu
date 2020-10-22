@@ -4,7 +4,7 @@
 		<view class="swiper">
 				<u-swiper 
 				class="u-swiper"
-				name="img"
+				name="url"
 				height="690" 
 				mode="number" 
 				:autoplay="false"
@@ -66,27 +66,29 @@
 							</view>
 						</view>
 					</view>
-					<view class="select" v-for="(item,index) in detailData.select" :key='index'>
-						<view class="select-item">
-							{{item.name}}
+					<scroll-view scroll-y='true' style="height: 550rpx;">
+						<view class="select" v-for="(item,index) in detailData.select" :key='index'>
+							<view class="select-item">
+								{{item.name}}
+							</view>
+							<view class="item-content">
+								<block v-for="(items,indexs) in item.list" :key="indexs">
+									<view class="default" @click="goodsSelect(index,indexs)" :class="[sureSelect[index] == indexs ? 'choose':'']" >
+										{{items.title}}
+									</view>
+								</block>
+							</view>
 						</view>
-						<view class="item-content">
-							<block v-for="(items,indexs) in item.list" :key="indexs">
-								<view class="default" @click="goodsSelect(index,indexs)" :class="[sureSelect[index] == indexs ? 'choose':'']" >
-									{{items.title}}
-								</view>
-							</block>
+					
+						<view class="number">
+							数量 <van-stepper :value="select.number" min="1" max="10"  @change='numberChange'/>
 						</view>
-					</view>
-					<view class="number">
-						
-						数量 <van-stepper :value="select.number" min="1" max="10"  @change='numberChange'/>
-					</view>
+					</scroll-view>
 					<view class="goods-button">
-						<van-button  size="large" color="linear-gradient(to right, #FFC71D, #FF8917)">
+						<van-button  size="large" color="linear-gradient(to right, #FFC71D, #FF8917)" @click="joinShopCart" >
 						  加入购物车
 						</van-button>
-						<van-button  size="large" color="linear-gradient(to right, #FA1E8B, #FC1E58)">
+						<van-button  size="large" color="linear-gradient(to right, #FA1E8B, #FC1E58)" @click="promptlyBuy">
 						  立即购买
 						</van-button>
 					</view>
@@ -99,7 +101,7 @@
 				<!-- @click="isSite = true" -->
 			  <van-cell
 				is-link
-				@click="isSite = true"
+				@click="siteCompile"
 				>
 				<view slot="title" class="site-title">
 					<text class="van-cell-text">送至</text>
@@ -110,7 +112,7 @@
 				</view>
 			  </van-cell>
 			</van-cell-group>
-			<!-- 弹出框 -->
+		<!-- 	弹出框
 			<van-popup
 			 :show="isSite"
 			  position="bottom"
@@ -121,7 +123,7 @@
 				<view class="">
 					联动选择地址//todo
 				</view>
-			</van-popup>
+			</van-popup> -->
 			  
 			<!-- 保证 -->
 			<view class="pledge">
@@ -192,18 +194,18 @@
 					好评度  <text>99%</text>  <van-icon name="arrow" color="#999A9C"/>
 				</view>
 			</view>
-			<view class="comment-info"  v-if="comment.title" >
-				<image :src="comment.img"></image>
-				{{comment.name}}
+			<view class="comment-info"  v-if="comment.remark" >
+				<image :src="comment.photo"></image>
+				{{comment.nickname}}
 				<van-rate 
-				:value="comment.star"
+				:value="comment.Star_rating"
 				  :disabled="true" 
 				  size='26rpx'
 				  gutter='2rpx'
 				  disabled-color="#FFD635" />
 			</view>
-			<view class="comment-title" v-if="comment.title">
-				{{comment.title}}
+			<view class="comment-title" v-if="comment.remark">
+				{{comment.remark}}
 			</view>
 			<view class="comment-title" v-else>
 				此商品还没有评论
@@ -214,15 +216,15 @@
 			 <view class="fond-title">
 				 猜你喜欢
 			 </view>
-			<swiper class="fond-swiper" :indicator-dots="true" :circular="true" indicator-color='#F20C59'>
+			<swiper class="fond-swiper" :indicator-dots="true" :circular="true" indicator-active-color='#F20C59'>
 				 <swiper-item class="fond-swiper-item" v-for="(item,index) in fondGoods" :key='index'>
 				    <view class="fond-item" v-for="(items,indexs) in item" :key="indexs">
-						<image :src="items.imgUrl" ></image>
-						<view class="fond-title">
-							{{items.name}}
+						<image :src="items.sku_thumbImg_url" ></image>
+						<view class="fond-titles">
+							{{items.sku_name}}
 						</view>
 						<view class="fond-price">
-							¥{{items.price}}
+							¥{{items.sku_price}}
 						</view>
 					</view>
 				 </swiper-item>
@@ -232,12 +234,11 @@
 		<view class="wrap">
 				<u-back-top :scroll-top="scrollTop" ><u-icon name="arrow-upward"></u-icon></u-back-top>
 		</view>
-		<!-- <u-parse :html="recommend.img" ></u-parse> -->
 		<!-- 商品介绍 -->
 		<view class="goods-recommend">
 			<view class="recommend-title">
-				<view class="img" @tap="onCut('img')" :class="[cut == 'img' ? 'cut':'']">商品介绍</view>
-				<view class="param" @tap="onCut('param')" :class="[cut == 'param' ? 'cut':'']">规格参数</view>
+				<view class="img" @tap="onCut('product_desciption')" :class="[cut == 'product_desciption' ? 'cut':'']">商品介绍</view>
+				<view class="param" @tap="onCut('specifications')" :class="[cut == 'specifications' ? 'cut':'']">规格参数</view>
 				<view class="packaging" @tap="onCut('packaging')" :class="[cut == 'packaging' ? 'cut':'']">包装售后</view>
 			</view>
 		<!-- 富文本解析 -->
@@ -252,19 +253,24 @@
 			  <van-goods-action-button size="large" text="立即购买" color="linear-gradient(to right, #FA1E8C, #FC1E58)" @click="promptlyBuy"/>
 			</van-goods-action>
 		</view>
-		
+		<site ref="show"></site>
+		<u-toast ref="uToast" />
 	</view>
 </template>
 
 <script>
 	import Dialog from '@/wxcomponents/dist/dialog/dialog';
-	import {obj} from '@/common/detailRichText.js';
+	// import {obj} from '@/common/detailRichText.js';
+	import {getGoodsLunbotu,getCommodityDetails,getcomment} from "@/api/goodsDetail.js";
+	import {getguessLike,addShopCar} from "@/api/common.js";
+	import site from "@/component/gongge/site.vue";
 	export default {
 		data() {
 			return {
-				cut:"img",
+				cut:"product_desciption",
 				scrollTop:0,
 				goods:{
+					id:3,
 					title:"华硕(ASUS) Y5200FB 15.6英寸商务办公轻薄笔记本电脑(I5-8265 4G 512SSD MX110 2G独显)银",
 					price:2199,
 					tag:"自营",
@@ -278,42 +284,12 @@
 					confirm:[],
 				},
 				isSite:false,
-				site:"深圳市龙华区观澜街道",
+				site:this.$store.getters.getCurrentCity,
 				lunbotu:[
-					{img:"//gfs17.gomein.net.cn/T14jD5B_xT1RCvBVdK_400.jpg?v=20170727"},
-					{img:"//gfs12.gomein.net.cn/T1PfV5BQAv1RCvBVdK_400.jpg?v=20170727"},
-					{img:"//gfs13.gomein.net.cn/T1J1E5BvDv1RCvBVdK_400.jpg?v=20170727"},
-					{img:"//gfs13.gomein.net.cn/T1Wr_5BCWT1RCvBVdK_400.jpg?v=20170727"},
-					{img:"//gfs11.gomein.net.cn/T1.QL5Bsdv1RCvBVdK_400.jpg?v=20170727"},
+					{url:"https://img.yzcdn.cn/vant/custom-empty-image.png"}
 				],
 				detailData:{
-					select:[
-						{
-							name:"颜色",
-							list:
-							[{
-								title:'白色',
-								img:"//gfs17.gomein.net.cn/T1T7h7B5WT1RCvBVdK_400.jpg?v=20170727",
-								
-								
-							}
-							,{
-								title:'黑色',
-								img:"//gfs17.gomein.net.cn/T14cC7B_Av1RCvBVdK_400.jpg?v=20170727",
-								
-							}],
-						},
-						{
-							name:"机身内存",
-							list:[{
-								title:'64G',
-								price:6000
-							}
-							,{
-								title:'128G',
-								price:6998
-							}],
-						}]
+					select:[]
 				},
 				sureSelect:[],
 				pledge:['7天无理由退换','正品保障','包邮'],
@@ -336,78 +312,61 @@
 						img:"//gfs12.gomein.net.cn/T1p5LmBKdv1RCvBVdK_60_60.jpg"
 					}
 				],
-				comment:{
-					name:"湖***卓",
-					img:"//gfs.gomein.net.cn/T19IxTBvD_1RCvBVdK.jpeg",
-					star:5,
-					title:"服务态度好，物美廉价，很美好的一次购物"
-				},
-				fondGoods:[
-					[{
-						name:'华为畅享10S 全网通 双卡双待 手机 8GB+128GB 天空之境',
-						price:1939.00,
-						imgUrl:'http://gfs17.gomein.net.cn/T1HMbmBXZv1RCvBVdK'
-					},
-					{
-						name:'华为 P40 5G 移动联通电信全网通 手机 6GB+128GB 冰霜银',
-						price:2939.00,
-						imgUrl:'http://gfs17.gomein.net.cn/T1HMbmBXZv1RCvBVdK'
-					},
-					{
-						name:'华为畅享Z 5G手机 全网通 双卡双待8GB+128GB深海蓝',
-						price:1959.00,
-						imgUrl:'http://gfs17.gomein.net.cn/T1oLLmBTVT1RCvBVdK'
-					},
-					{
-						name:'华为畅享10S 全网通 双卡双待 手机 8GB+128GB 天空之境',
-						price:1932.00,
-						imgUrl:'http://gfs17.gomein.net.cn/T1HMbmBXZv1RCvBVdK'
-					},
-					{
-						name:'华为畅享10S 全网通 双卡双待 手机 8GB+128GB 天空之境',
-						price:1239.00,
-						imgUrl:'http://gfs17.gomein.net.cn/T1HMbmBXZv1RCvBVdK'
-					},
-					{
-						name:'华为畅享10S 全网通 双卡双待 手机 8GB+128GB 天空之境',
-						price:1539.00,
-						imgUrl:'http://gfs17.gomein.net.cn/T1HMbmBXZv1RCvBVdK'
-					}],
-					[{
-						name:'华为畅享10S 全网通 双卡双待 手机 8GB+128GB 天空之境',
-						price:1339.00,
-						imgUrl:'http://gfs17.gomein.net.cn/T1HMbmBXZv1RCvBVdK'
-					},
-					{
-						name:'华为畅享10S 全网通 双卡双待 手机 8GB+128GB 天空之境',
-						price:1349.00,
-						imgUrl:'http://gfs17.gomein.net.cn/T1HMbmBXZv1RCvBVdK'
-					},
-					{
-						name:'华为畅享10S 全网通 双卡双待 手机 8GB+128GB 天空之境',
-						price:3419.00,
-						imgUrl:'http://gfs17.gomein.net.cn/T1HMbmBXZv1RCvBVdK'
-					},
-					{
-						name:'华为畅享10S 全网通 双卡双待 手机 8GB+128GB 天空之境',
-						price:3419.00,
-						imgUrl:'http://gfs17.gomein.net.cn/T1HMbmBXZv1RCvBVdK'
-					},
-					{
-						name:'华为畅享10S 全网通 双卡双待 手机 8GB+128GB 天空之境',
-						price:3419.00,
-						imgUrl:'http://gfs17.gomein.net.cn/T1HMbmBXZv1RCvBVdK'
-					},
-					{
-						name:'华为畅享10S 全网通 双卡双待 手机 8GB+128GB 天空之境',
-						price:3419.00,
-						imgUrl:'http://gfs17.gomein.net.cn/T1HMbmBXZv1RCvBVdK'
-					}]
-				],
-				recommend:obj
+				comment:{},
+				fondGoods:[],
+				recommend:[]
 			};
 		},
 		methods:{
+			init(){
+				this.getGoodsLunbotu();
+				this.getCommodityDetails();
+				this.getcomment();
+				
+				
+			},
+			// 获取轮播图
+			async getGoodsLunbotu(){
+				let {message} = await getGoodsLunbotu(this.goods.id);
+				if(message.length != 0){
+					this.lunbotu = message
+				}
+			},
+			// 获取评论
+			async getcomment(){
+				let {message} = await getcomment(this.goods.id);
+				if(message.length != 0){
+					this.comment = message[0]
+				}
+			},
+			//获取商品详情
+			async getCommodityDetails(){
+				let {message} = await getCommodityDetails(this.goods.id);
+				if(message.length != 0){
+					this.recommend = message[0]
+					this.detailData.select = JSON.parse(message[0].specification);
+					this.sureSelect = Array.apply(null, Array(this.detailData.select.length)).map(() => 0)
+					this.goodsConfirm();
+					this.getguessLike();
+				}
+			},
+			// 获取猜你喜欢
+			async getguessLike(){
+				let {message} = await getguessLike(1);
+				
+				if(message.length != 0){
+					// this.fondGoods = message;
+					var arr = [];
+					this.fondGoods = []
+					message.forEach( v =>{
+						arr.push(v)
+						if(arr.length == 6){
+							this.fondGoods.push(arr);
+							arr = []
+						}
+					})
+				}
+			},
 			// 分期
 			onStages(){
 				Dialog.alert({
@@ -427,11 +386,13 @@
 			},
 			// 选择购买的规格
 			goodsConfirm(){
-				let confirm = [];
-				this.detailData.select.forEach((v,index) =>{
-					confirm.push(v.list[this.sureSelect[index]].title)
-				})
-				this.select.confirm = confirm
+				if(this.detailData.select.length != 0){
+					let confirm = [];
+					this.detailData.select.forEach((v,index) =>{
+						confirm.push(v.list[this.sureSelect[index]].title)
+					})
+					this.select.confirm = confirm
+				}
 			},
 			// 点击切换规格
 			goodsSelect(index,value){
@@ -451,7 +412,7 @@
 			},
 			// 回到顶部
 			onPageScroll(e) {
-					this.scrollTop = e.scrollTop;
+				this.scrollTop = e.scrollTop;
 			},
 			// 切换商品介绍
 			onCut(value){
@@ -459,25 +420,50 @@
 			},
 			// 跳转到购物车页面
 			goShopCart(){
-				console.log('跳转购物车')
+				uni.switchTab({
+					url:"/pages/mycar/mycar",
+				})
 			},
-			joinShopCart(){
+			async joinShopCart(){
 				console.log('加入购物车')
+				let car = {
+					userId : 1,
+					comId : this.goods.id,
+					comCount : this.select.number,
+					specification : this.select.confirm,
+					price : (this.select.price == 0 ? this.goods.price : this.goods.price),
+				}
+				console.log(car);
+				// await addShopCar(car);
+				this.$refs.uToast.show({
+					title: '加入购物车成功',
+					type: 'default',
+				})
+				
 			},
 			promptlyBuy(){
 				console.log('立即购买')
+			},
+			siteCompile(){
+				this.$refs.show.show()
+				// this.siteShow = true;
 			}
-			
-			
+		},
+		components:{
+			site
 		},
 		onLoad() {
-			this.sureSelect = Array.apply(null, Array(this.detailData.select.length)).map(() => 0)
-			this.goodsConfirm()
+			this.init();
 		}
 	}
 </script>
 
 <style lang="scss">
+	
+	.interlayer {
+		display: flex !important;
+		flex-direction: column !important;
+	}
 	.detail-container{
 		background-color: #F3F5F7;
 		height: 5000rpx;
@@ -569,7 +555,8 @@
 				}
 				.number{
 					display: flex;
-					margin-bottom: 120rpx;
+					margin: 30rpx 0 ;
+					align-items: center;
 					.van-stepper{
 						margin-left: 20rpx;
 					}
@@ -801,14 +788,15 @@
 		// 猜你喜欢
 		.goods-fond{
 			margin: 20rpx 0rpx;
-			padding: 30rpx;
+			padding: 30rpx 0;
 			background-color: #fff;
 			.fond-title{
+				padding: 0 0 30rpx 30rpx;
 				color: #333;
 				font-size: 34rpx;
 			}
 			.fond-swiper{
-				padding: 20rpx;
+				padding: 0rpx;
 				height: 800rpx;
 				.fond-swiper-item{
 					display: flex;
@@ -821,7 +809,7 @@
 							width: 100%;
 							height: 200rpx;
 						}
-						.fond-title{
+						.fond-titles{
 							margin: 20rpx 0;
 							margin-top: 6rpx;
 							font-size: 24rpx;

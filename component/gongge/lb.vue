@@ -3,7 +3,7 @@
 		<swiper class="swiper" :indicator-dots='true' indicator-color="rgba(255, 255, 255, .3)" indicator-active-color="#fff" :circular="true" :autoplay="true">  
 			<swiper-item class="imgbox" v-for="(item,index) in lbdata" :key="index">
 				<view class="img">
-					<image :src="item.img_url" style="width: 100%;height: 100%;"></image>
+					<image :src="item.s_img" style="width: 100%;height: 100%;"></image>
 				</view>
 			</swiper-item>
 		</swiper>
@@ -11,18 +11,24 @@
 </template>
 
 <script>
+	import {getLunbotu} from "../../api/common.js"
 		export default {
 			props:["pageid"],
 			data(){
 				return{
-					lbdata:[{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360'},
-						{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360'},
-						{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360'}],
+					lbdata:[],
 					
 				}
 			},
+			methods:{
+				async getLunboData(){
+					var {message} = await getLunbotu(this.pageid);
+					this.lbdata = message
+				}
+			},
 			created() {
-				console.log(this.pageid)
+				this.getLunboData();
+				
 			}
 		}
 </script>
