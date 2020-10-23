@@ -76,11 +76,9 @@
 				this.status = 'loading'
 			},
 			async getGoodsListData(id){
-				console.log(this.page)
 				var {message} = await getGoodsList(id,this.page);
 				this.page++;
-				this.goodlist = message
-				console.log('ev',message);
+				this.goodlist = message;
 			},
 			goodDetails(id){
 				uni.navigateTo({
