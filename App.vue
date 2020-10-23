@@ -16,7 +16,7 @@ export default {
 		this.$scope.globalData.isLogin = isLogin;
 		if(isLogin){
 			this.$scope.globalData.userInfo = uni.getStorageSync('userInfo');
-			this.getCarListData(1)
+			this.getCarListData(this.$scope.globalData.userInfo.userId)
 			// console.log(123)
 		}
 		// 定位城市
@@ -47,11 +47,11 @@ export default {
 	methods:{
 		async getCarListData(userId){
 			var {message} = await getCarList(userId)
-			// console.log("",data)
-			
+			message.forEach(v=>{
+				v.shop_specification = JSON.parse( v.shop_specification)
+			})
 			// 购物车初始化数据
 			this.$store.commit('setCarList',message);
-			console.log("hh",this.$store.getters.getCarList)
 		},
 	}
 };
