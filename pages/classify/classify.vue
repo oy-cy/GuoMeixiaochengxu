@@ -2,7 +2,7 @@
 	<view class="classify">
 		<scroll-view :scroll-y="true" class="left">
 			<view class="title" v-for="(item,index) in titleData" :key="index" :class="item.id == titleSelectId?'titleSelect':''" @click="change(item.id)">
-				{{item.cat_name}}
+				{{item.name}}
 				<view class="buttom"></view>
 			</view>
 		</scroll-view>
@@ -49,21 +49,23 @@
 		
 		methods:{
 			change(selectid){
+				console.log(selectid)
 				this.titleSelectId = selectid;
 				this.getClassifyGood();
 			},
 			async getClassifyTitle(){
 				var {message} =  await getClassifyTitleData();
+				console.log("adsfasdfsdafsdafsdfdsafsd",message)
 				this.titleData = message;
+				
 				this.titleSelectId = message[0].id;
 			},
 			async getClassifyGood(){
 				var {message} = await getClassifyGoodData(this.titleSelectId);
 				
 				var data = JSON.parse(message[0].name)
-				
+				// console.log("asdfasdfsdfsd",message[0].name)
 				this.goodlist = data;
-				console.log(this.goodlist)
 			}
 		},
 		created() {
