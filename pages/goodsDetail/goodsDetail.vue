@@ -172,7 +172,7 @@
 			 </view>
 		</view>
 		<!-- 评论 -->
-		<view class="goods-comment">
+		<view class="goods-comment" @click="onComment">
 			<view class="nav">
 				<view class="comment">
 					评论
@@ -342,8 +342,6 @@
 						v.good_at_brand = JSON.parse(message[index].good_at_brand);
 						v.g_category = JSON.parse(message[index].goods_category);
 					})
-					
-					console.log(this.guide)
 				}
 			}
 			,
@@ -351,6 +349,13 @@
 			onStages(){
 				Dialog.alert({
 				  message: '请下载国美APP，使用国美APP分期购买',
+				}).then(() => {
+				  // on close
+				});
+			},
+			onComment(){
+				Dialog.alert({
+				  message: '请下载国美APP，查看更多商品评论',
 				}).then(() => {
 				  // on close
 				});
@@ -412,15 +417,12 @@
 				let index = -1;
 				console.log("arrss",arr)
 				arr.map((v,indexs) =>{
-					console.log("v",v)
-					console.log(v.user_id , this.userInfo.userId,v.com_id ,this.goodsId);
 					
 					if(v.user_id == this.userInfo.userId && v.com_id == this.goodsId){
 						v.com_count += this.select.number
 						index = indexs;
 					}
 				})
-				console.log(index)
 				
 				if(index == -1){
 					let car = {
@@ -430,15 +432,10 @@
 						specification : this.select.confirm,
 						price : (this.select.price == 0 ? this.recommend.sku_price : this.select.price),
 					}
-					 // arr.push(car)
-					// console.log(car);
 					await addShopCar(car);
-					console.log(1233333333333333)
 					var {message} = await queryShopCar(this.userInfo.userId)
-					console.log("temp",message)
 					this.$store.commit('setCarList',message)
 				}else{
-					console.log("arr",arr[index])
 					await updateShopCar(arr[index]);
 					this.$store.commit('setCarList',arr)
 				}
