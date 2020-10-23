@@ -16,7 +16,7 @@
 	export default {
 		data() {
 			return {
-				pageid:2
+				pageid:"homeDecoration"
 			};
 		},
 		components:{

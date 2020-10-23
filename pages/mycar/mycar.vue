@@ -41,14 +41,14 @@
 						  class="choose"
 						></van-checkbox>
 						<view class="good" @click="details(items.id)">
-							<image :src="items.image" style="width: 200rpx;height: 200rpx;"></image>
+							<image :src="items.sku_thumbImg_url" style="width: 300rpx;height: 150rpx;"></image>
 							
 							<view class="message">
 								<view class="title">
-									<text><text></text>{{items.title}}</text>
+									<text><text></text>{{items.sku_name}}</text>
 								</view>
-								<view class="specificationsbox" v-if="items.specifications == undefined"  @click.stop="specifications(items.id,items.specifications)">
-									<text class="specifications">{{items.specification}}132123123</text> 
+								<view class="specificationsbox" v-if="items.shop_specification.length != 0"  @click.stop="specifications(items.id,items.specifications)">
+									<text class="specifications">{{items.shop_specification}}</text> 
 								</view>
 								<view class="price_num">
 									<text class="price">￥{{items.price}}</text>
@@ -56,9 +56,9 @@
 									:min="1" :max="100"
 									 size='18' 
 									 input-width="40" 
-									 v-model="items.num" 
-									 :index="items.id"
-									 @change="addSubtract"></u-number-box>
+									 v-model="items.com_count" 
+									 :index="items"
+									@change="addSubtract"></u-number-box>
 								</view>
 							</view>
 						</view>
@@ -75,7 +75,7 @@
 				<van-grid column-num="2" gutter="4">
 				  <van-grid-item use-slot v-for="(item,index) in allgoodList" :key="index" class="goodlist" @click="details(item.id)">
 					<image
-					  style="width: 100%; height: 400rpx;"
+					  style="width: 100%; height: 330rpx;"
 					  :src="item.sku_thumbImg_url"
 					/>
 					<view class="goodmessage">
@@ -200,9 +200,9 @@
 <script>
 	import site from "../../component/gongge/site.vue"
 	import goTop from "../../component/goTop/goTop.vue"
-	import {getCarList} from "@/api/car.js"
+	import {deleteShopCar,updateShopCar} from "@/api/car.js"
 	
-	import {getguessLike} from "@/api/common.js"
+	import {getSellingList} from "@/api/common.js"
 	export default {
 		data() {
 			return {
@@ -220,19 +220,16 @@
 		},
 		created() {
 			// this.goodList = this.$store.getters.getCarList
-			this.getCarListData(1)
+			// this.getCarListData(1)
+			this.goodList = this.$store.getters.getCarList;
+			console.log(this.goodList)
 			this.getguessLikeData();
 		},
 		methods:{
 			
-			async getCarListData(userId){
-				var {message} = await getCarList(userId);
-				console.log("12213112313",message);
-				// this.$store.commit('setCarList',currentCity	);
-			},
 			
 			async getguessLikeData(){
-				var {message} = await getguessLike(1);
+				var {message} = await getSellingList(1);
 				console.log('gwc',message)
 				this.allgoodList = message
 			},
@@ -277,22 +274,27 @@
 				
 			},
 		
-			addSubtract(obj){
+			async addSubtract(obj){
+				console.log(obj.index)
 				this.goodList.forEach((items,indexs)=>{
-					if(items.id == obj.index){
-						items.num = obj.value;
+					if(items.id == obj.index.id){
+						items.com_count = obj.value;
 					}
 				})
-				this.calculateMoney();
+				
+				// var info = {id:obj.index.id,comId:obj.index.com_id,count:obj.index.com_count,specification:obj.index.specification,price:obj.index.price}
+				// await updateShopCar(info);
+				// this.$store.commit('setCarList',this.goodList);
+				// this.calculateMoney();
 			},
 			
 			calculateMoney(){
 				var _this = this;
-				this.money = 0
+				this.money = 0;
 				
 				this.goodList.forEach((items,indexs)=>{
 					if(items.select == true){
-						_this.money += items.price*items.num;
+						_this.money += parseInt(items.price)*parseInt(items.com_count);
 					}
 				})
 			},
@@ -310,17 +312,22 @@
 				this.calculateMoney();
 			},
 			
-			deleteGood(){
-				var carId = []
-				this.goodList.map((item,index)=>{
-					item.goodList.map((items,indexs)=>{
-						if(items.select == true){
-							carId.push(items.id)
-						}
-					})
+			async deleteGood(){
+				var carId = [];
+				var tempList = []
+				this.goodList.map((items,indexs)=>{
+					if(items.select == true){
+						carId.push(items.id);
+						Listindex.push(indexs)
+					}else{
+						tempList.push(items)
+					}
 				})
-				carId = carId.join(",")
-				console.log(carId)
+				this.goodList = tempList
+				carId = carId.join(",");
+				await deleteShopCar(carId);
+				this.$store.commit('setCarList',this.goodList);
+				
 			},
 			
 			
@@ -342,7 +349,7 @@
 		computed: {
 			getCurrentCity(){
 				return this.$store.getters.getCurrentCity;
-			}
+			},
 		},
 		components:{
 			site,
@@ -424,13 +431,19 @@
 								display: flex;
 								flex-direction: column;
 								justify-content: space-between;
-								
+								.title{
+									display: -webkit-box;
+									-webkit-box-orient: vertical;
+									-webkit-line-clamp: 2;
+									overflow: hidden;
+									font-size: 28rpx;
+								}
 								.specificationsbox{
-									// display: inline;
 									.specifications{
 										font-size: 20rpx;
-										// height: 20rpx;
-										background-color: #ccc;
+										color: #5A6066;
+										background-color: #F3F5F7;
+										padding: 4rpx;
 									}
 								}
 								.price_num{
@@ -448,7 +461,6 @@
 			}
 			
 			.like{
-				// margin-bottom:150rpx;
 				
 				.img{
 					display: flex;
@@ -464,6 +476,11 @@
 						padding: 10rpx;
 						
 						.title{
+							display: -webkit-box;
+							-webkit-box-orient: vertical;
+							-webkit-line-clamp: 2;
+							overflow: hidden;
+							font-size: 28rpx;
 							.mie{
 								    background-color: #F30E5D;
 								    color: #fff;
@@ -472,11 +489,6 @@
 								    border-radius: 6rpx;
 									    margin-right: 10rpx;
 							}
-							display: -webkit-box;
-							-webkit-box-orient: vertical;
-							-webkit-line-clamp: 2;
-							overflow: hidden;
-							font-size: 28rpx;
 						}
 						
 						.price_car{

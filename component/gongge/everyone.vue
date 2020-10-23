@@ -13,18 +13,18 @@
 		<view class="classifyGoods">
 			<view class="goods-item" v-for="(item,index) in goodlist" :key="index" @click="goodDetails(item.id)">
 				<view class="img-container">
-					<image class="img" src="../../static/images/shop/goods1.png"></image>
+					<image class="img" :src="item.sku_thumbImg_url"></image>
 				</view>
 				<view class="info">
 					<view class="text">
-						<text class="title_tag">国美超市</text>
-						<text class="title">洋河蓝色经典天之蓝52度白酒520ml*6 旗舰版口感绵柔浓香型</text>
+						<text class="title_tag">{{item.extProperty}}</text>
+						<text class="title">{{item.sku_name}}</text>
 					</view>
 					<view class="goods-tag-list">易卡分期</view>
 					<view class="price">
 						<view class="content">
 							<text class="symbol">￥</text>
-							<text class="money">2587</text>
+							<text class="money">{{item.sku_price}}</text>
 						</view>
 						<view class="car-logo">
 							<image class="img" src="../../static/images/shop/car-tag.png" mode=""></image>
@@ -40,7 +40,7 @@
 
 <script>
 	
-	import {getGoodsList} from "../../api/common.js"
+	import {getGoodsList,getCategory} from "../../api/common.js"
 	export default {
 		props:["pageid"],
 		data(){
@@ -54,46 +54,19 @@
 				},
 				page:1,
 				currentTitle:1,
-				tabsList: [
-					{
-						name: '全部',
-						id: 10,
-					}, {
-						name: '国美超市',
-						id: 11
-					}, {
-						name: '空调',
-						id: 12
-					},
-					{
-						name: '彩电',
-						id: 13
-					},{
-						name: '冰箱',
-						id: 14
-					},{
-						name: '洗衣机',
-						id: 15
-					},{
-						name: '手机',
-						id: 16
-					}
-				],
-				goodlist:[
-					{id:1,shop:"国美超市",introduce:"洋河蓝色经典天之蓝52度白酒520ml*6 旗舰版口感绵柔浓香型",minute:"易卡分期",price:"2587",img:"//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360"},
-					{id:1,shop:"国美超市",introduce:"洋河蓝色经典天之蓝52度白酒520ml*6 旗舰版口感绵柔浓香型",minute:"易卡分期",price:"2587",img:"//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360"},
-					{id:1,shop:"国美超市",introduce:"洋河蓝色经典天之蓝52度白酒520ml*6 旗舰版口感绵柔浓香型",minute:"易卡分期",price:"2587",img:"//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360"},
-					{id:1,shop:"国美超市",introduce:"洋河蓝色经典天之蓝52度白酒520ml*6 旗舰版口感绵柔浓香型",minute:"易卡分期",price:"2587",img:"//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360"},
-					{id:1,shop:"国美超市",introduce:"洋河蓝色经典天之蓝52度白酒520ml*6 旗舰版口感绵柔浓香型",minute:"易卡分期",price:"2587",img:"//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360"}
-				]
+				tabsList: [],
+				goodlist:[]
 			}
 		},
 		created() {
-			this.getGoodsListData();
+			this.getGoodsListData(1);
+			this.getCategoryData();
 		},
 		methods:{
 			change(obj){
-				this.currentTitle = obj.index
+				this.currentTitle = obj.index;
+				this.page = 1;
+				this.getGoodsListData(obj.id)
 				console.log(obj)
 			},
 			loadmore(obj){
@@ -102,15 +75,23 @@
 				// }
 				this.status = 'loading'
 			},
-			async getGoodsListData(){
-				var data = await getGoodsList(1,this.page);
+			async getGoodsListData(id){
+				console.log(this.page)
+				var {message} = await getGoodsList(id,this.page);
 				this.page++;
-				console.log('ev',data);
+				this.goodlist = message
+				console.log('ev',message);
 			},
 			goodDetails(id){
 				uni.navigateTo({
 					url:"/pages/goodsDetail/goodsDetail?id="+id
 				})
+			},
+			
+			async getCategoryData(){
+				var {message} = await getCategory("shop")
+				console.log("sadfasdfsafsdf",message);
+				this.tabsList = message;
 			}
 		}
 	}
