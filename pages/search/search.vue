@@ -19,7 +19,9 @@
 					<text>热门搜索</text>
 				</view>
 				<view class="keyword">
-					<view class="word" v-for="(item,index) in hotSearchData" :key="index">{{item}}</view>
+					<!-- <navigator url="../goodsList/goodsList"> -->
+						<navigator :url="'../goodsList/goodsList?item='+item" class="word"  v-for="(item,index) in hotSearchData" :key="index">{{item}}</navigator>
+					<!-- </navigator> -->
 				</view>
 			</view>
 			<!-- 搜索历史 -->
@@ -36,7 +38,7 @@
 		</view>
 		<view class="dimQuery" v-else>
 			<view class="dim">
-				<view class="text" v-for="item in fuzzyQueryData">{{item.sku_name}}</view>
+				<navigator :url="'../goodsList/goodsList?item='+item" class="text" v-for="item in fuzzyQueryData">{{item.sku_name}}</navigator>
 			</view>
 		</view>
 		
@@ -67,8 +69,10 @@
 		methods:{
 			//搜索框点回车时拿到输入的数据保存起来
 			//拿到点击热门搜索与历史记录中的数据保存起来
-			//把拿到的数据发送给
-			
+			//把拿到的数据发送对接
+			hotClick(item){
+				console.log(item)
+			},
 			
 			// 清空历史记录
 			//如果没有数据 就把清空记录按钮隐藏掉
@@ -90,6 +94,9 @@
 				this.historyArray.push(getValue);
 				this.isShow = true;
 				this.value = "";
+				uni.reLaunch({
+					url:'../goodsList/goodsList'
+				})
 				this.$store.commit('setHistoryArray',this.historyArray)
 			},
 			
