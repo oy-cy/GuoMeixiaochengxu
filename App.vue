@@ -16,7 +16,7 @@ export default {
 		this.$scope.globalData.isLogin = isLogin;
 		if(isLogin){
 			this.$scope.globalData.userInfo = uni.getStorageSync('userInfo');
-			this.getCarListData(1)
+			this.getCarListData(this.$scope.globalData.userInfo.userId)
 			// console.log(123)
 		}
 		// 定位城市
