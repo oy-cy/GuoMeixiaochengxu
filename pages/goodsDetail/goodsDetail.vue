@@ -56,6 +56,7 @@
 			  @click-overlay="closeSelected">
 				<view class="popup-select">
 					<view class="info">
+						 
 						<image :src="select.img || recommend.sku_thumbImg_url"></image>
 						<view class="infos">
 							<view class="price">
@@ -144,18 +145,18 @@
 			 <view class="course">
 			 	全程导购
 			 </view>
-			 <view class="item" v-for="(item,index) in guide" :key="index">
+			 <view class="item" v-for="(item,index) in guide" :key="index" @click="goGuide(item)">
 				<view class="left">
 					<view class="img-container">
-						<image :src="item.img"></image>
+						<image :src="item.imgUrl"></image>
 					</view>
 					<view class="info">
 						<view class="content">
 							<text class="tip"></text>
-							<text class="nickname">{{item.name}}</text>
+							<text class="nickname">{{item.sales_assistant_name}}</text>
 						</view>
 						<view class="flag">{{item.flag}}</view>
-						<view class="serve">已服务 {{item.serve}} 单</view>
+						<view class="serve">已服务 {{item.number_of_people_served}} 单</view>
 					</view>
 				</view>
 				<view class="right">
@@ -234,7 +235,7 @@
 		<view class="goods-action">
 			<van-goods-action>
 			  <van-goods-action-icon icon="shop-o" text="门店" @click="goShop"/>
-			  <van-goods-action-icon icon="cart-o" text="购物车" info="5" @click="goShopCart"/>
+			  <van-goods-action-icon icon="cart-o" text="购物车" :info="getCarListCount" @click="goShopCart"/>
 			  <van-goods-action-button size="large" text="加入购物车" color="linear-gradient(to right, #FFC71D, #FF8917)" @click="joinShopCart" />
 			  <van-goods-action-button size="large" text="立即购买" color="linear-gradient(to right, #FA1E8C, #FC1E58)" @click="promptlyBuy"/>
 			</van-goods-action>
@@ -247,8 +248,8 @@
 <script>
 	import Dialog from '@/wxcomponents/dist/dialog/dialog';
 	// import {obj} from '@/common/detailRichText.js';
-	import {getGoodsLunbotu,getCommodityDetails,getcomment} from "@/api/goodsDetail.js";
-	import {getguessLike,addShopCar} from "@/api/common.js";
+	import {getGoodsLunbotu,getCommodityDetails,getcomment,updateShopCar,queryShopCar} from "@/api/goodsDetail.js";
+	import {getguessLike,addShopCar,getShoppingGuide} from "@/api/common.js";
 	import site from "@/component/gongge/site.vue";
 	export default {
 		data() {
@@ -259,7 +260,7 @@
 				isSelect:false,
 				select:{
 					number:1,
-					img:"//gfs17.gomein.net.cn/T1R0JKBjxT1RCvBVdK_160.jpg?v=20170727",
+					img:"",
 					price:0,
 					confirm:[],
 				},
@@ -272,37 +273,20 @@
 				},
 				sureSelect:[],
 				pledge:['7天无理由退换','正品保障','包邮'],
-				guide:[{
-						name:"周田武",
-						flag:"资深顾问",
-						serve:23,
-						img:"//gfs11.gomein.net.cn/T1o2xmBbAT1RCvBVdK_60_60.jpg"
-					},
-					{
-						name:"卢路",
-						flag:"资深顾问",
-						serve:131,
-						img:"//gfs12.gomein.net.cn/T19FxmB4Dv1RCvBVdK_60_60.jpg"
-					},
-					{
-						name:"李莉",
-						flag:"专业顾问",
-						serve:60,
-						img:"//gfs12.gomein.net.cn/T1p5LmBKdv1RCvBVdK_60_60.jpg"
-					}
-				],
+				guide:[],
 				comment:{},
 				fondGoods:[],
-				recommend:[]
+				recommend:[],
+				userInfo:{}
 			};
 		},
 		methods:{
+			// 初始化数据
 			init(){
 				this.getGoodsLunbotu();
 				this.getCommodityDetails();
 				this.getcomment();
-				
-				
+				this.getShoppingGuide()
 			},
 			// 获取轮播图
 			async getGoodsLunbotu(){
@@ -347,6 +331,22 @@
 					})
 				}
 			},
+			// 获取导师信息
+			async getShoppingGuide(){
+				
+				let {message} = await getShoppingGuide();
+				if(message.length != 0){
+					message.length = 3;
+					this.guide = message;
+					this.guide.forEach((v,index) =>{
+						v.good_at_brand = JSON.parse(message[index].good_at_brand);
+						v.g_category = JSON.parse(message[index].goods_category);
+					})
+					
+					console.log(this.guide)
+				}
+			}
+			,
 			// 分期
 			onStages(){
 				Dialog.alert({
@@ -404,29 +404,77 @@
 					url:"/pages/mycar/mycar",
 				})
 			},
+			// 加入购物车
 			async joinShopCart(){
-				console.log('加入购物车')
-				let car = {
-					userId : 1,
-					comId : this.goodsId,
-					comCount : this.select.number,
-					specification : this.select.confirm,
-					price : (this.select.price == 0 ? this.recommend.sku_price : this.select.price),
+				
+				this.isLogin();
+				let arr = this.$store.getters.getCarList;
+				let index = -1;
+				console.log("arrss",arr)
+				arr.map((v,indexs) =>{
+					console.log("v",v)
+					console.log(v.user_id , this.userInfo.userId,v.com_id ,this.goodsId);
+					
+					if(v.user_id == this.userInfo.userId && v.com_id == this.goodsId){
+						v.com_count += this.select.number
+						index = indexs;
+					}
+				})
+				console.log(index)
+				
+				if(index == -1){
+					let car = {
+						userId :this.userInfo.userId,
+						comId : this.goodsId,
+						comCount : this.select.number,
+						specification : this.select.confirm,
+						price : (this.select.price == 0 ? this.recommend.sku_price : this.select.price),
+					}
+					 // arr.push(car)
+					// console.log(car);
+					await addShopCar(car);
+					console.log(1233333333333333)
+					var {message} = await queryShopCar(this.userInfo.userId)
+					console.log("temp",message)
+					this.$store.commit('setCarList',message)
+				}else{
+					console.log("arr",arr[index])
+					await updateShopCar(arr[index]);
+					this.$store.commit('setCarList',arr)
 				}
-				console.log(car);
-				// await addShopCar(car);
+				
 				this.$refs.uToast.show({
 					title: '加入购物车成功',
 					type: 'default',
 				})
 				
 			},
+			// 购买商品
 			promptlyBuy(){
 				console.log('立即购买')
 			},
+			// 地址组件方法
 			siteCompile(){
 				this.$refs.show.show()
 				// this.siteShow = true;
+			},
+			// 查看导师信息
+			goGuide(item){
+				var data = JSON.stringify(item)
+				uni.navigateTo({
+					url: "/pages/guideIntroduce/guideIntroduce?Introduce="+ data
+				})
+			},
+			// 判断是否登录
+			isLogin(){
+				if(!this.userInfo.userId){
+					this.$refs.uToast.show({
+						title: '请先进行登录',
+						type: 'default',
+						url:"/pages/user/user",
+						isTab:true,
+					})
+				}
 			}
 		},
 		components:{
@@ -435,11 +483,21 @@
 		onLoad(e) {
 			this.goodsId = e.goodsId;
 			this.init();
+			this.userInfo= getApp().globalData.userInfo;
 		},
 		computed: {
+			// 获取地址
 			getDefaultSite(){
 				return this.$store.getters.getDefaultSite;
-			}
+			},
+			// 获取购物车的数量
+			getCarListCount(){
+				return this.$store.getters.getCarListCount;
+			},
+			// // 获取购物车
+			// getCarList(){
+			// 	return ;
+			// }
 		},
 	}
 </script>

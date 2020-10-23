@@ -18,7 +18,6 @@
 			</view>
 			<view class="goodbox">
 				<van-grid column-num="3" class="gogei" gutter="3">
-					<!-- <van-grid-item v-for="(item,index) in gogeidata" :icon="item.img_url" :text="item.name" @click="select(index)"/> -->
 					 <van-grid-item use-slot  v-for="(item,index) in goodlist" :key="index" class="gridItem">
 						 
 					    <image
@@ -70,102 +69,15 @@
 <script>
 	import {getLunbotu} from "../../../api/common.js"
 	import {getGrid} from "../../../api/common.js"
-	import {getSeckill} from "../../../api/common.js"
+	import {getSeckill,getCategory} from "../../../api/common.js"
 	export default {
 		data() {
 			return {
 				currentTitle:1,
-				tabsList: [
-					{
-						name: '全部',
-						id: 10,
-					}, {
-						name: '国美超市',
-						id: 11
-					}, {
-						name: '空调',
-						id: 12
-					},
-					{
-						name: '彩电',
-						id: 13
-					},{
-						name: '冰箱',
-						id: 14
-					},{
-						name: '洗衣机',
-						id: 15
-					},{
-						name: '手机',
-						id: 16
-					}
-				],
-				lbdata:[{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360'}],
-				gogeidata:[{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-				],
-				goodlist:[
-					{listid:1,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"599"},
-					{listid:1,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"599"},	
-					{listid:1,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"599"},
-					{listid:1,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"599"},
-					{listid:2,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"699"},
-					{listid:2,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"699"},
-					{listid:2,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"699"},
-					{listid:2,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"699"},
-					{listid:2,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"699"},
-					{listid:2,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"699"},
-					{listid:3,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"799"},
-					{listid:3,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"799"},
-					{listid:3,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"799"},
-					{listid:3,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"799"}
-				]
+				tabsList: [],
+				lbdata:[],
+				gogeidata:[],
+				goodlist:[]
 			}
 		},
 		methods:{
@@ -187,12 +99,22 @@
 			async getSeckillData(){
 				var {message} = await getSeckill(1);
 				this.goodlist = message
+			},
+			async getCategoryData(data){
+				var {message} = await getCategory(data);
+				this.tabsList = message;
+			},
+			
+			change(obj){
+				this.currentTitle = obj.index;
+				this.getSeckillData()
 			}
 		},
 		created() {
 			this.getLunboData();
 			this.getGridData();
 			this.getSeckillData();
+			this.getCategoryData('shop')
 		}
 	}
 </script>

@@ -110,7 +110,13 @@
 			</view>
 			<view class="goodsList" v-if="current === 0">
 				<u-tabs :list="tabsList" :is-scroll="true" active-color="#f20c59" :current="currentTitle" @change="change"></u-tabs>
-				<commodityTemplate :goodsList="goodsList"></commodityTemplate>
+				
+				<k-scroll-view ref="k-scroll-view" :loadTip="loadTip" :loadingTip="loadingTip"
+				 :emptyTip="emptyTip" :touchHeight="touchHeight" :height="height" :bottom="bottom" :autoPullUp="autoPullUp"
+				 :stopPullDown="stopPullDown" @onPullDown="handlePullDown" @onPullUp="handleLoadMore">
+					<!-- 数据列表 -->
+					<commodityTemplate :goodsList="goodsList"></commodityTemplate>
+				</k-scroll-view>
 			</view>
 			<view class="" v-else-if="current === 1">
 				<guideList :guideData="guideData"></guideList>
@@ -164,8 +170,18 @@
 				tabsList: [],
 				goodsList: [],
 				guideData: [],
+				goodsId: '',
 				page: 1,
 				shop: 'shop',
+				hasData: true,
+				loadTip: '获取更多数据',
+				loadingTip: '正在加载中...',
+				emptyTip: '',
+				touchHeight: 50,
+				height: 0,
+				bottom: 50,
+				autoPullUp: true,
+				stopPullDown: false, // 如果为 false 则不使用下拉刷新，只进行上拉加载
 			};
 		},
 		methods: {
@@ -189,13 +205,22 @@
 				// console.log('当前选中的项：' + index)
 				this.current = index;
 				if(index == 0){
-					
+					this.getCategoryData();
 				}else {
 					this.getShoppingGuideData();
 				}
 			},
+			// 切换 tabs
 			change(obj) {
-				// console.log("分类changeid",obj);
+				console.log("分类changeid",obj);
+				// 当每次切换点击时,把page赋为1，不然每次请求的就以page的最后数值去发送请求
+				this.page = 1;
+				// 点击切换的时候，把hasData设为true，用于发送请求
+				this.hasData = true;
+				// 每次点击把emptyTip赋空 ，不然每次点击都会显示
+				this.emptyTip = '', 
+				// 把点击的分类id赋值给goodsId，用于发送请求
+				this.goodsId = obj.id
 				this.currentTitle = obj.index;
 				this.getGoodsListData(obj.id);
 			},
@@ -240,9 +265,11 @@
 				 // console.log("分类",message);
 				 // 保存分类的第一个id
 				 var firstId = message[0].cat_id;
+				 this.goodsId = message[0].cat_id;
 				 this.tabsList = message;
 				 this.getGoodsListData(firstId)
 			 },
+			 // 获取商品数据
 			 async getGoodsListData(id){
 				 var { message } = await getGoodsList(id,this.page);
 				 message.forEach(v => {
@@ -258,7 +285,6 @@
 			 },
 			 // 跳转到对应的专场页
 			 gobrandSpecial(id){
-				console.log("专场",id);
 				switch(id){
 					case 1:
 						uni.navigateTo({
@@ -276,7 +302,31 @@
 						})
 						break;
 				}
-			 }
+			 },
+			 // 上拉刷新
+			 async handleLoadMore(stopLoad) {
+				 // 判断hasData是否等false，等于false就不让再发送请求
+				 if(this.hasData == false){
+					 return;
+				 }
+				 this.page++;
+				 var { message } = await getGoodsList(this.goodsId,this.page);
+				 stopLoad ? stopLoad() : '';
+			 	if (message.length == 0) {
+					// message.length等于0的时候，把hasData设为false；用于后续的判断；
+					this.hasData = false;
+					this.emptyTip = "客官没有更多了哦~";
+			 		stopLoad ? stopLoad({
+			 			isEnd: true
+			 		}) : '';
+					return;
+			 	} 
+				message.forEach(v => {
+					v.tagList = JSON.parse(v.tagList);
+				})
+				// 把之前的数据拼接到一起
+				this.goodsList = this.goodsList.concat(message);
+			 },
 		},
 		// 监听当前页面的滚动
 		onPageScroll: function(event) {

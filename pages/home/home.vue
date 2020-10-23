@@ -107,15 +107,15 @@
 			},
 			async getSeckillWay(){
 				var {message} = await getSeckill();
-				console.log(message)
-				message.map(v=>{
-					this.getSeckillData.push({
-						"img": v.sku_thumbImg_url,
-						"goodsPrice": v.sku_price,
-						"goodsName": v.sku_name
-					})
-				})
-				// this.getSeckillData = message;
+				// console.log(message)
+				// message.map(v=>{
+				// 	this.getSeckillData.push({
+				// 		"img": v.sku_thumbImg_url,
+				// 		"goodsPrice": v.sku_price,
+				// 		"goodsName": v.sku_name
+				// 	})
+				// })
+				this.getSeckillData = message;
 			},
 			async getguesslikeWay(){
 				var {message} = await getguessLike(1);
