@@ -122,10 +122,12 @@
 				<guideList :guideData="guideData"></guideList>
 			</view>
 		</view>
+		<goTop v-if="isShowLogo"></goTop>
 	</view>
 </template>
 
 <script>
+	import goTop from '@/component/goTop/goTop.vue';
 	import seckill from "@/component/seckill/seckill.vue"
 	import guideList from"@/component/guideList/guideList.vue";
 	import commodityTemplate from "@/component/commodityTemplate/commodityTemplate.vue"
@@ -355,7 +357,8 @@
 		components: {
 			seckill,
 			guideList,
-			commodityTemplate
+			commodityTemplate,
+			goTop
 		}
 	}
 </script>
