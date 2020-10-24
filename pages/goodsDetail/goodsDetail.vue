@@ -415,15 +415,12 @@
 				this.isLogin();
 				let arr = this.$store.getters.getCarList;
 				let index = -1;
-				console.log("arrss",arr)
 				arr.map((v,indexs) =>{
-					
 					if(v.user_id == this.userInfo.userId && v.com_id == this.goodsId){
 						v.com_count += this.select.number
 						index = indexs;
 					}
 				})
-				
 				if(index == -1){
 					let car = {
 						userId :this.userInfo.userId,
@@ -453,7 +450,6 @@
 			// 地址组件方法
 			siteCompile(){
 				this.$refs.show.show()
-				// this.siteShow = true;
 			},
 			// 查看导师信息
 			goGuide(item){

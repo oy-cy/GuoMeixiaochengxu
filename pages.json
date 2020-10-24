@@ -256,7 +256,8 @@
 			"van-checkbox-group": "/wxcomponents/dist/checkbox-group/index",
 			"van-goods-action": "/wxcomponents/dist/goods-action/index",
 			"van-goods-action-icon": "/wxcomponents/dist/goods-action-icon/index",
-			"van-goods-action-button": "/wxcomponents/dist/goods-action-button/index"
+			"van-goods-action-button": "/wxcomponents/dist/goods-action-button/index",
+			"van-field": "/wxcomponents/dist/field/index"
 		}
 	},
 	"tabBar": {
