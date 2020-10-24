@@ -26,7 +26,7 @@
 							<text class="symbol">￥</text>
 							<text class="money">{{item.sku_price}}</text>
 						</view>
-						<view class="car-logo">
+						<view class="car-logo" @click.stop="addcar(item)">
 							<image class="img" src="../../static/images/shop/car-tag.png" mode=""></image>
 						</view>
 					</view>
@@ -55,25 +55,29 @@
 				page:1,
 				currentTitle:1,
 				tabsList: [],
-				goodlist:[]
+				goodlist:[],
+				catId:1
 			}
 		},
 		created() {
-			this.getGoodsListData(1);
+			this.getGoodsListData(this.catId);
 			this.getCategoryData();
 		},
 		methods:{
+			addcar(data){
+				this.$store.commit('setaddcar',data);
+			},
+			
 			change(obj){
 				this.currentTitle = obj.index;
 				this.page = 1;
+				this.catId = obj.id
 				this.getGoodsListData(obj.id)
-				console.log(obj)
 			},
 			loadmore(obj){
-				// if(data == null){
-				// 	this.status = 'nomore'
-				// }
 				this.status = 'loading'
+				this.getGoodsListData(this.catId);
+				this.status = 'loadmore'
 			},
 			async getGoodsListData(id){
 				var {message} = await getGoodsList(id,this.page);
@@ -82,7 +86,7 @@
 			},
 			goodDetails(id){
 				uni.navigateTo({
-					url:"/pages/goodsDetail/goodsDetail?id="+id
+					url:"/pages/goodsDetail/goodsDetail?goodsId="+id
 				})
 			},
 			

@@ -32,7 +32,7 @@
 import ehPicker from '@/component/site/erha-picker/erha-picker.vue'; 
 import { insertAddr,updateAddr,getAddr } from '@/api/user.js';
 	export default {
-		props:['isEdit','addrId'],
+		props:['isEdit','addrId',"car"],
 		data() {
 			return {
 				// 地址是否默认
@@ -87,6 +87,10 @@ import { insertAddr,updateAddr,getAddr } from '@/api/user.js';
 					this.strName = tempAddr[3];
 					this.isReq = true;
 				}
+			},
+			getCar(){
+				console.log(this.car)
+				return this.car;
 			}
 		},
 		methods: {
@@ -141,6 +145,12 @@ import { insertAddr,updateAddr,getAddr } from '@/api/user.js';
 					var data = updateAddr(JSON.stringify(addr));
 				}else {
 					var data = await insertAddr(JSON.stringify(addr));
+				}
+				if(this.car == true || this.car == 'true'){
+					uni.navigateBack({
+						delta:2
+					})
+					return;
 				}
 				uni.switchTab({
 				    url: '/pages/home/home'

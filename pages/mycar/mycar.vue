@@ -9,7 +9,7 @@
 				<view class="left" @click="siteCompile">
 					<image src="../../static/images/tabbar/shop.png" style="width: 30rpx;height: 30rpx;margin-right: 20rpx;">{{getCurrentCity}}
 				</view>
-				<view class="right" @click="clickcompile" v-if="goodList.length != 0">
+				<view class="right" @click="clickcompile" v-if="getCarListData.length != 0">
 					{{compile==true?"编辑":"完成"}}
 				</view>
 			</view>
@@ -19,7 +19,7 @@
 		<!-- 内容 -->
 		<view class="box">
 			
-			<view class="nogood" v-if="goodList.length == 0">
+			<view class="nogood" v-if="getCarListData.length == 0">
 				<view class="noimg">
 					<image src="../../static/images/gongge/emptycar.png" style="width: 100%;height: 100%;"></image>
 				</view>
@@ -31,33 +31,33 @@
 				</navigator>
 			</view>
 			
-			<view class="goodList" v-if="goodList.length != 0">
+			<view class="goodList" v-if="getCarListData.length != 0">
 				<view class="goodbox">
-					<view class="good" v-for="(items,indexs) in goodList" :key="indexs" >
+					<view class="good" v-for="(items,indexs) in getCarListData" :key="indexs" >
 						<van-checkbox
 						  :value="items.select"
 						  checked-color="#F20C59"
 						  @change="good(items.id)"
 						  class="choose"
 						></van-checkbox>
-						<view class="good" @click="details(items.id)">
+						<view class="good" @click="details(items.com_id)">
 							<image :src="items.sku_thumbImg_url" style="width: 300rpx;height: 150rpx;"></image>
 							
 							<view class="message">
 								<view class="title">
 									<text><text></text>{{items.sku_name}}</text>
 								</view>
-								<view class="specificationsbox" v-if="items.shop_specification.length != 0"  @click.stop="specifications(items.id,items.specifications)">
-									<text class="specifications">{{items.shop_specification}}</text> 
+								<view class="specificationsbox" v-if="items.shop_specification.length != 0"  @click.stop="specifications(items)">
+									<text class="specifications" v-for="(item,index) in items.shop_specification" :key="index">{{item.title}}<text v-if="items.shop_specification.length-1!=index">,</text></text> 
 								</view>
 								<view class="price_num">
-									<text class="price">￥{{items.price}}</text>
+									<text class="price">￥{{items.price*items.com_count}}</text>
 									<u-number-box 
 									:min="1" :max="100"
 									 size='18' 
 									 input-width="40" 
 									 v-model="items.com_count" 
-									 :index="items"
+									 :index="items.id"
 									@change="addSubtract"></u-number-box>
 								</view>
 							</view>
@@ -67,7 +67,7 @@
 				</view>
 			</view>
 			
-			<view class="like" :style="{'margin-bottom':goodList.length != 0?'150rpx;':'0rpx'}">
+			<view class="like" :style="{'margin-bottom':getCarListData.length != 0?'150rpx;':'0rpx'}">
 				<view class="img">
 					<image src="../../static/images/gongge/weni.jpg" style="width: 300rpx;height: 70rpx;"></image>
 				</view>
@@ -94,7 +94,7 @@
 								<text class="min">.00</text>
 								
 							</view>
-							<view class="car" @click.stop="addcar(item.id)">
+							<view class="car" @click.stop="addcar(item)">
 								<image src="../../static/images/gongge/nocar.png" style="width: 100%;height: 100%;"></image>
 							</view>
 						</view>
@@ -108,7 +108,7 @@
 
 
 		<!-- 全选 -->
-		<view class="end" v-if="goodList.length != 0">
+		<view class="end" v-if="getCarListData.length != 0">
 			<view class="sum">
 				<van-checkbox
 				  :value="all"
@@ -151,37 +151,43 @@
 		  @click-overlay="closeSelected">
 			<view class="popup-select">
 				<view class="info">
-					<image :src="select.img"></image>
+					<image :src="specification.img"></image>
 					<view class="infos">
 						<view class="price">
-							¥{{select.price || goods.price}}
-						</view>
-						<view>
-							{{goods.count > 0 ? "有货":"无货"}}
+							¥{{specification.price}}
 						</view>
 					</view>
 				</view>
-				<view class="select" v-for="(item,index) in detailData.select" :key='index'>
-					<view class="select-item">
-						{{item.name}}
+				<scroll-view scroll-y="true" style="height: 450rpx;">
+					<view class="select" v-for="(item,index) in specification.spec" :key='index'>
+						<view class="select-item">
+							{{item.name}}
+						</view>
+						<view class="item-content">
+							<block v-for="(items,indexs) in item.list" :key="indexs">
+								<view class="default" @click="goodsSelect(index,indexs)" :class="item.index == indexs ? 'choose':''" >
+									{{items.title}}
+								</view>
+							</block>
+						</view>
+						
+						
 					</view>
-					<view class="item-content">
-						<block v-for="(items,indexs) in item.list" :key="indexs">
-							<view class="default" @click="goodsSelect(index,indexs)" :class="[sureSelect[index] == indexs ? 'choose':'']" >
-								{{items.title}}
-							</view>
-						</block>
-					</view>
-				</view>
-				<view class="number">
-					
-					数量 <van-stepper :value="select.number" min="1" max="10"  @change='numberChange'/>
-				</view>
+					<u-number-box
+					:min="1" :max="100"
+					 size='18' 
+					 input-width="40" 
+					 style="margin: 30rpx;"
+					 v-model="specification.count" 
+					 :index="specification.id"
+					@change="updateCount"></u-number-box>
+				</scroll-view>
+				
 				<view class="goods-button">
 					<van-button  size="large" color="linear-gradient(to right, #FFC71D, #FF8917)" @click="closeSelected">
 					  取消
 					</van-button>
-					<van-button  size="large" color="linear-gradient(to right, #FA1E8B, #FC1E58)">
+					<van-button  size="large" color="linear-gradient(to right, #FA1E8B, #FC1E58)" @click="affirm">
 					  确定
 					</van-button>
 				</view>
@@ -192,6 +198,8 @@
 		 
 		 
 		 <goTop></goTop>
+		 
+		 <u-toast ref="uToast" />
 	</view>
 
 		
@@ -215,36 +223,31 @@
 				
 				goodList:[],
 				
-				allgoodList:[]
+				allgoodList:[],
+				
+				specification:{}
 			};
 		},
 		created() {
-			// this.goodList = this.$store.getters.getCarList
-			// this.getCarListData(1)
-			this.goodList = this.$store.getters.getCarList;
-			console.log(this.goodList)
 			this.getguessLikeData();
 		},
 		methods:{
-			
-			
 			async getguessLikeData(){
 				var {message} = await getSellingList(1);
 				console.log('gwc',message)
 				this.allgoodList = message
 			},
 			
-			addcar(id){
-				console.log(id);
+			addcar(data){
+				this.$store.commit('setaddcar',data);
 			},
 			details(id){
 				uni.navigateTo({
-					url:"/pages/goodsDetail/goodsDetail?id="+id
+					url:"/pages/goodsDetail/goodsDetail?goodsId="+id
 				})
-				console.log(id)
 			},
 			good(data){	
-				this.goodList.forEach(function(item,tempindex,arr){
+				this.getCarListData.forEach(function(item,tempindex,arr){
 					if(item.id == data){
 						item.select = !item.select
 					}
@@ -255,14 +258,14 @@
 			allgood(){
 				var _this = this;
 				this.all = !this.all
-				this.goodList.forEach(function(item,tempindex,arr){
+				this.getCarListData.forEach(function(item,tempindex,arr){
 					item.select = _this.all
 				});
 				this.calculateMoney();
 			},
 			examineall(){
 				var temp = true;
-				this.goodList.forEach(function(item,tempindex,arr){
+				this.getCarListData.forEach(function(item,tempindex,arr){
 					if(item.select == true){
 						
 					}else{
@@ -275,24 +278,33 @@
 			},
 		
 			async addSubtract(obj){
-				console.log(obj.index)
-				this.goodList.forEach((items,indexs)=>{
-					if(items.id == obj.index.id){
+				var index = -1;
+				this.getCarListData.forEach((items,indexs)=>{
+					if(items.id == obj.index){
+						console.log()
+						index = indexs;
 						items.com_count = obj.value;
 					}
 				})
 				
-				// var info = {id:obj.index.id,comId:obj.index.com_id,count:obj.index.com_count,specification:obj.index.specification,price:obj.index.price}
-				// await updateShopCar(info);
-				// this.$store.commit('setCarList',this.goodList);
-				// this.calculateMoney();
+				if(index != -1){
+					var specification = this.getCarListData[index].shop_specification
+					var info = {id:obj.index,
+								com_id:this.getCarListData[index].com_id,
+								com_count:obj.value,
+								specification:specification.length == 0?"[]":JSON.stringify(specification),
+								price:this.getCarListData[index].price}
+					await updateShopCar(info);
+				}
+				
+				this.calculateMoney();
 			},
 			
 			calculateMoney(){
 				var _this = this;
 				this.money = 0;
 				
-				this.goodList.forEach((items,indexs)=>{
+				this.getCarListData.forEach((items,indexs)=>{
 					if(items.select == true){
 						_this.money += parseInt(items.price)*parseInt(items.com_count);
 					}
@@ -302,8 +314,8 @@
 			clickcompile(){
 				this.compile = !this.compile;
 				if(this.compile == false){
-					this.tempgooList = JSON.parse(JSON.stringify(this.goodList));
-					this.goodList.forEach((item,index)=>{
+					this.tempgooList = JSON.parse(JSON.stringify(this.getCarListData));
+					this.getCarListData.forEach((item,index)=>{
 						item.select  = false;
 					})
 					
@@ -315,18 +327,16 @@
 			async deleteGood(){
 				var carId = [];
 				var tempList = []
-				this.goodList.map((items,indexs)=>{
+				this.getCarListData.map((items,indexs)=>{
 					if(items.select == true){
 						carId.push(items.id);
-						Listindex.push(indexs)
 					}else{
 						tempList.push(items)
 					}
 				})
-				this.goodList = tempList
 				carId = carId.join(",");
 				await deleteShopCar(carId);
-				this.$store.commit('setCarList',this.goodList);
+				this.$store.commit('setCarList',tempList);
 				
 			},
 			
@@ -336,20 +346,79 @@
 			},
 			
 			
-			specifications(id,specifications){
+			specifications(data){
 				this.isSelect = true;
+				this.specification = {
+					id:data.id,
+					img:data.sku_thumbImg_url,
+					spec:JSON.parse(data.specification),
+					com:data.com_id,
+					count:data.com_count,
+					price:data.price
+				}
+				
+				this.specification.spec.forEach(v=>{
+					v.index = -1;
+					v.list.forEach((j,indexs)=>{
+						data.shop_specification.map((z)=>{
+							if(j.title == z.title){
+								v.index = indexs;
+								
+							}
+						})
+					})
+				})
+				
 			},
 			siteCompile(){
 				this.$refs.show.show()
 			},
 			
+			goodsSelect(index,indexs){
+				this.specification.spec[index].index = indexs
+				this.specification.spec.splice(index,1,this.specification.spec[index])
+			},
 			
+			async affirm(){
+				// this.isSelect = false;
+				var data = this.specification;
+				console.log(data)
+				// // .spec[0].list[this.sureSelect].title
+				
+				var temp = [];
+				data.spec.map(v=>{
+					v.list.map((j,indexs)=>{
+						if(v.index == indexs){
+							temp.push(j)
+						}
+					})
+				})
+				
+				
+				var info = {id:data.id,
+							com_id:data.com,
+							com_count:data.count,
+							specification:JSON.stringify(temp),
+							price:data.price}
+				await updateShopCar(info);
+			},
+			
+			
+			
+			updateCount(obj){
+				this.specification.count = obj.value
+				console.log(obj)
+			}
 			
 		},
 		computed: {
 			getCurrentCity(){
 				return this.$store.getters.getCurrentCity;
 			},
+			getCarListData(){
+				console.log("asdfasdfsdafsdfs",this.$store.getters.getCarList)
+				return this.$store.getters.getCarList
+			}
 		},
 		components:{
 			site,
@@ -439,12 +508,16 @@
 									font-size: 28rpx;
 								}
 								.specificationsbox{
-									.specifications{
-										font-size: 20rpx;
-										color: #5A6066;
-										background-color: #F3F5F7;
-										padding: 4rpx;
-									}
+									width: 250rpx;
+									font-size: 20rpx;
+									color: #5A6066;
+									background-color: #F3F5F7;
+									padding: 4rpx;
+									
+									display: -webkit-box;
+									-webkit-box-orient: vertical;
+									-webkit-line-clamp: 1;
+									overflow: hidden;
 								}
 								.price_num{
 									display: flex;

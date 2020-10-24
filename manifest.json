@@ -42,7 +42,7 @@
     },
     "quickapp" : {},
     "mp-weixin" : {
-        "appid" : "wx70a839d650abc5b7",
+        "appid" : "wx032c9250975ff3ab",
         "setting" : {
             "urlCheck" : true,
             "postcss" : true,
@@ -50,7 +50,7 @@
         },
         "permission" : {
             "scope.userLocation" : {
-                "desc" : "你的位置信息将用于小程序位置接口"
+                "desc" : ""
             }
         }
     }
