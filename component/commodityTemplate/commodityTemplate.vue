@@ -1,7 +1,7 @@
 <template>
 	<view class="goods-container">
 		<view class="classifyGoods">
-			<view class="goods-item" v-for="item in goodsList" :key="item.id" @tap="goGoodsDetail(item.id)">
+			<view class="goods-item" v-for="item in goodsList" :key="item.id" @tap.stop="goGoodsDetail(item.id)">
 				<view class="img-container">
 					<image class="img" :src="item.sku_thumbImg_url"></image>
 				</view>
@@ -16,7 +16,7 @@
 							<text class="symbol">￥</text>
 							<text class="money">{{ item.sku_price }}</text>
 						</view>
-						<view class="car-logo">
+						<view class="car-logo"  @tap.stop="addcar(item)">
 							<image class="img" src="../../static/images/shop/car-tag.png" mode=""></image>
 						</view>
 					</view>
@@ -40,6 +40,13 @@
 				uni.navigateTo({
 					url: "/pages/goodsDetail/goodsDetail?goodsId="+ id
 				})
+			},
+			addcar(data){
+				uni.showToast({
+					title:"成功加入购物车",
+					icon:"none"
+				})
+				this.$store.commit('setaddcar',data);
 			}
 		}
 	}
