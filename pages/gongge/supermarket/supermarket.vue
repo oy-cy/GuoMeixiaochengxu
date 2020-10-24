@@ -18,7 +18,7 @@
 			</view>
 			<view class="goodbox">
 				<van-grid column-num="3" class="gogei" gutter="3">
-					 <van-grid-item use-slot  v-for="(item,index) in goodlist" :key="index" class="gridItem">
+					 <van-grid-item use-slot  v-for="(item,index) in goodlist" :key="index" class="gridItem" @click="goodDetail(item.id)">
 						 
 					    <image
 					      style="width: 100%; height: 280rpx;"
@@ -43,7 +43,7 @@
 			<u-tabs :list="tabsList" :is-scroll="true" active-color="#f20c59" :current="currentTitle" @change="change"></u-tabs>
 		</view>
 	
-			<view class="goodbox" v-for="(item,index) in goodlist">
+			<view class="goodbox" v-for="(item,index) in goodlist" @click="goodDetail(item.id)">
 				<image :src="item.sku_thumbImg_url" style="width: 200rpx;height: 200rpx;"></image>
 				<view class="describe">
 					<view class="title">
@@ -108,6 +108,13 @@
 			change(obj){
 				this.currentTitle = obj.index;
 				this.getSeckillData()
+			},
+			
+			
+			goodDetail(id){
+				uni.navigateTo({
+					url:"/pages/goodsDetail/goodsDetail?goods="+id
+				})
 			}
 		},
 		created() {
