@@ -47,11 +47,19 @@
 						<view class="total">
 							共<text class="count">{{item.count}}</text>件商品，实付:<text class="total_price">&yen;{{getTotalPrice(item.buyGoods)}}</text>
 						</view>
-						<view class="manipulate">
-							<view class="">
-								
-							</view>
+					</view>
+				</view>
+				<!-- 订单对应操作 -->
+				<view class="order_crud">
+					<view class="order_no_pay" v-if="getTime(item)">
+						<view class="time">
+							剩余支付时间：
+							<text>{{getHour(item.create_time)}}</text>：
+							<text>{{getMinute(item.create_time)}}</text>：
+							<text>{{getSecond(item.create_time)}}</text>
 						</view>
+						<view class="cancel" @click="cancelOrder(item.id)">取消订单</view>
+						<view class="to_pay">立刻支付</view>
 					</view>
 				</view>
 			</block>
@@ -103,14 +111,22 @@
 		methods: {
 			setActive(active){
 				this.active = active;
+			},
+			// 取消订单
+			cancelOrder(){
+				// todo 将订单转为已取消
+			},
+			// 立刻支付
+			payOrder(){
+				// todo 将订单转为未收货
 			}
-			// 调用接口返回对应的状态订单(todo)
 		},
 		onLoad(option) {
 			var status = option.status;
 			if(status){
 				this.active = status;
 			}
+			// 调用接口返回对应的状态订单(todo)
 		},
 		computed: {
 			// 根据订单状态返回文字
@@ -142,6 +158,44 @@
 					return (sum/1000);
 				}
 			},
+			// 判断未付款订单是否已到时间(过期：转为已取消并返回false，未过期返回true)
+			getTime(){
+				return function(item){
+					// 将当前时间戳-生成时间戳
+					var timestamp = (new Date()).getTime();
+					timestamp -= item.create_time;
+					if(item.status == 0 && (timestamp > (60*60*24))){
+						// todo 将订单转为已取消状态
+						return false;
+					}else {
+						return true;
+					}
+				}
+			},
+			// 返回剩余小时
+			getHour(){
+				return function(timestamp){
+					var currentTimestamp = (new Date()).getTime();
+					currentTimestamp -= timestamp;
+					return currentTimestamp/60/60%24;
+				}
+			},
+			// 返回剩余分钟
+			getMinute(){
+				return function(timestamp){
+					var currentTimestamp = (new Date()).getTime();
+					currentTimestamp -= timestamp;
+					return currentTimestamp/60%24;
+				}
+			},
+			// 返回剩余秒
+			getSecond(){
+				return function(timestamp){
+					var currentTimestamp = (new Date()).getTime();
+					currentTimestamp -= timestamp;
+					return currentTimestamp%60;
+				}
+			}
 		}
 	}
 </script>
@@ -274,6 +328,39 @@
 						color: #111;
 						font-size: 38rpx;
 						padding-left: 12rpx;
+					}
+				}
+			}
+		}
+		.order_crud {
+			background-color: #fff;
+			padding: 14rpx 0;
+			.order_no_pay {
+				display: flex;
+				font-size: 24rpx;
+				justify-content: flex-end;
+				align-items: center;
+				view {
+					margin: 0 10rpx;
+				}
+				.cancel {
+					color: #555;
+					border: 2rpx solid #555;
+					padding: 6rpx 12rpx;
+					border-radius: 40rpx;
+				}
+				.to_pay {
+					color: #F20C59;
+					border: 2rpx solid #F20C59;
+					padding: 6rpx 12rpx;
+					border-radius: 40rpx;
+				}
+				.time {
+					font-size: 28rpx;
+					text {
+						background-color: #000;
+						color: #fff;
+						padding: 4rpx;
 					}
 				}
 			}
