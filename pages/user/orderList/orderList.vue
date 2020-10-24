@@ -21,27 +21,31 @@
 				<view class="item">
 					<view class="top">
 						<view class="shop-info">
-							<view class="shop-img"><image src="/static/images/shop/guomeiBgc.jpg" mode=""></image></view>
-							<view class="shop-name">{{item.shopName}}</view>
+							<view class="img"><image src="/static/images/order/order-img.png" mode=""></image></view>
+							<view class="shop-name">国美</view>
 						</view>
 						<view class="order-status">
-							<view class="status">{{item.status}}</view>
+							<view class="status">{{getOrderStatus(item.status)}}</view>
 							<view class="cancel"><image src="/static/images/user/delete.png" mode=""></image></view>
 						</view>
 					</view>
 					<view class="content-box">
-						<view class="good-img"><image :src="item.goodImg" mode=""></image></view>
-						<view class="info">
-							<view class="good-name">{{item.goodName}}</view>
-							<view class="price-box">
-								<view class="price">&yen;{{item.goodPrice}}</view>
-								<view class="count">x{{item.count}}</view>
+						<block v-for="good in item.buyGoods" :key="good.id">
+							<view class="good-item">
+								<view class="good-img"><image :src="good.goodImg" mode=""></image></view>
+								<view class="info">
+									<view class="good-name">{{good.goodName}}</view>
+									<view class="price-box">
+										<view class="price">&yen;{{good.price}}</view>
+										<view class="count">x{{good.count}}</view>
+									</view>
+								</view>
 							</view>
-						</view>
+						</block>
 					</view>
 					<view class="bottom">
 						<view class="total">
-							共<text class="count">{{item.count}}</text>件商品，实付:<text class="total_price">&yen;{{item.totalPrice}}</text>
+							共<text class="count">{{item.count}}</text>件商品，实付:<text class="total_price">&yen;{{getTotalPrice(item.buyGoods)}}</text>
 						</view>
 						<view class="manipulate">
 							<view class="">
@@ -63,24 +67,36 @@
 				active: 0,
 				// 订单数据
 				orderList:[
-					// {
-					// 	shopName:'深圳观澜店',
-					// 	status:'已完成',
-					// 	goodImg:'http://gfs17.gomein.net.cn/T17OD5BKAT1RCvBVdK_80.jpg?v=2?v=2',
-					// 	goodName:'七河源大米25kg 长粒粳米 东北大米 长粒香米',
-					// 	goodPrice:20,
-					// 	count:4,
-					// 	totalPrice:80
-					// },
-					// {
-					// 	shopName:'深圳观澜店',
-					// 	status:'已完成',
-					// 	goodImg:'http://gfs17.gomein.net.cn/T17OD5BKAT1RCvBVdK_80.jpg?v=2?v=2',
-					// 	goodName:'七河源大米25kg 长粒粳米 东北大米 长粒香米',
-					// 	goodPrice:20,
-					// 	count:4,
-					// 	totalPrice:80
-					// }
+					{
+						shopName:'深圳观澜店',
+						buyGoods:[
+							{
+								goodName:'七河源大米25kg 长粒粳米 东北大米 长粒香米',
+								price:20,
+								count:4,
+								goodImg:'http://gfs17.gomein.net.cn/T17OD5BKAT1RCvBVdK_80.jpg?v=2?v=2'
+							}
+						],
+						status:0
+					},
+					{
+						shopName:'深圳观澜店',
+						buyGoods:[
+							{
+								goodName:'七河源大米25kg 长粒粳米 东北大米 长粒香米',
+								price:20,
+								count:4,
+								goodImg:'http://gfs17.gomein.net.cn/T17OD5BKAT1RCvBVdK_80.jpg?v=2?v=2'
+							},
+							{
+								goodName:'七河源大米25kg 长粒粳米 东北大米 长粒香米',
+								price:20,
+								count:4,
+								goodImg:'http://gfs17.gomein.net.cn/T17OD5BKAT1RCvBVdK_80.jpg?v=2?v=2'
+							}
+						],
+						status:0
+					}
 				]
 			}
 		},
@@ -95,6 +111,37 @@
 			if(status){
 				this.active = status;
 			}
+		},
+		computed: {
+			// 根据订单状态返回文字
+			getOrderStatus(){
+				return function(status) {
+					switch (status){
+						case 0:
+							return '等待付款';
+						case 1:
+							return '待收货';
+						case 2:
+							return '已完成';
+						case 3:
+							return '已取消';
+						default:
+							break;
+					}
+				}
+			},
+			// 计算订单总金额
+			getTotalPrice(){
+				return function(buyGoods){
+					var sum = 0;
+					buyGoods.map(v => {
+						var price = (v.price * 1000);
+						var total = price * v.count;
+						sum += total;
+					})
+					return (sum/1000);
+				}
+			},
 		}
 	}
 </script>
@@ -149,10 +196,10 @@
 				padding: 20rpx 0;
 				.shop-info {
 					display: flex;
-					.shop-img {
+					.img {
 						image {
-							width: 60rpx;
-							height: 40rpx;
+							width: 74rpx;
+							height: 34rpx;
 							vertical-align: text-bottom;
 						}
 					}
@@ -178,28 +225,33 @@
 			.content-box {
 				display: flex;
 				margin: 16rpx;
-				font-size: 26rpx;
-				.good-img {
-					image {
-						width: 150rpx;
-						height: 150rpx;
-					}
-				}
-				.info {
+				flex-direction: column;
+				font-size: 30rpx;
+				.good-item {
 					display: flex;
-					.good-name {
-						flex: 1;
-						padding: 0 10rpx;
+					padding: 20rpx 0;
+					.good-img {
+						image {
+							width: 150rpx;
+							height: 150rpx;
+						}
 					}
-					.price-box {
+					.info {
 						display: flex;
-						flex-direction: column;
-						align-items: flex-end;
-						width: 110rpx;
-						font-size: 28rpx;
-						.count {
-							padding-top: 40rpx;
-							color: #999;
+						.good-name {
+							flex: 1;
+							padding: 0 10rpx;
+						}
+						.price-box {
+							display: flex;
+							flex-direction: column;
+							align-items: flex-end;
+							width: 110rpx;
+							font-size: 28rpx;
+							.count {
+								padding-top: 40rpx;
+								color: #999;
+							}
 						}
 					}
 				}
