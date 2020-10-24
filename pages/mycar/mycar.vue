@@ -154,22 +154,35 @@
 					<image :src="specification.img"></image>
 					<view class="infos">
 						<view class="price">
-							¥{{specification.price || goods.price}}
+							¥{{specification.price}}
 						</view>
 					</view>
 				</view>
-				<view class="select" v-for="(item,index) in specification.spec" :key='index'>
-					<view class="select-item">
-						{{item.name}}
+				<scroll-view scroll-y="true" style="height: 450rpx;">
+					<view class="select" v-for="(item,index) in specification.spec" :key='index'>
+						<view class="select-item">
+							{{item.name}}
+						</view>
+						<view class="item-content">
+							<block v-for="(items,indexs) in item.list" :key="indexs">
+								<view class="default" @click="goodsSelect(index,indexs)" :class="item.index == indexs ? 'choose':''" >
+									{{items.title}}
+								</view>
+							</block>
+						</view>
+						
+						
 					</view>
-					<view class="item-content">
-						<block v-for="(items,indexs) in item.list" :key="indexs">
-							<view class="default" @click="goodsSelect(indexs)" :class="[sureSelect == indexs ? 'choose':'']" >
-								{{items.title}}
-							</view>
-						</block>
-					</view>
-				</view>
+					<u-number-box
+					:min="1" :max="100"
+					 size='18' 
+					 input-width="40" 
+					 style="margin: 30rpx;"
+					 v-model="specification.count" 
+					 :index="specification.id"
+					@change="updateCount"></u-number-box>
+				</scroll-view>
+				
 				<view class="goods-button">
 					<van-button  size="large" color="linear-gradient(to right, #FFC71D, #FF8917)" @click="closeSelected">
 					  取消
@@ -212,16 +225,13 @@
 				
 				allgoodList:[],
 				
-				specification:null,
-				sureSelect:0
+				specification:{}
 			};
 		},
 		created() {
 			this.getguessLikeData();
 		},
 		methods:{
-			
-			
 			async getguessLikeData(){
 				var {message} = await getSellingList(1);
 				console.log('gwc',message)
@@ -268,19 +278,25 @@
 			},
 		
 			async addSubtract(obj){
-				var index = 0;
+				var index = -1;
 				this.getCarListData.forEach((items,indexs)=>{
 					if(items.id == obj.index){
+						console.log()
 						index = indexs;
 						items.com_count = obj.value;
 					}
 				})
-				var info = {id:obj.index,
-							com_id:this.getCarListData[index].com_id,
-							com_count:obj.value,
-							specification:this.getCarListData[index].specification,
-							price:this.getCarListData[index].price}
-				await updateShopCar(info);
+				
+				if(index != -1){
+					var specification = this.getCarListData[index].shop_specification
+					var info = {id:obj.index,
+								com_id:this.getCarListData[index].com_id,
+								com_count:obj.value,
+								specification:specification.length == 0?"[]":JSON.stringify(specification),
+								price:this.getCarListData[index].price}
+					await updateShopCar(info);
+				}
+				
 				this.calculateMoney();
 			},
 			
@@ -337,36 +353,61 @@
 					img:data.sku_thumbImg_url,
 					spec:JSON.parse(data.specification),
 					com:data.com_id,
-					count:data.com_count
+					count:data.com_count,
+					price:data.price
 				}
 				
 				this.specification.spec.forEach(v=>{
-					v.list.forEach(j=>{
-						if(j.name){
-							
-						}
-						j.select = true
+					v.index = -1;
+					v.list.forEach((j,indexs)=>{
+						data.shop_specification.map((z)=>{
+							if(j.title == z.title){
+								v.index = indexs;
+								
+							}
+						})
 					})
 				})
+				
 			},
 			siteCompile(){
 				this.$refs.show.show()
 			},
 			
-			goodsSelect(index){
-				this.sureSelect = index
+			goodsSelect(index,indexs){
+				this.specification.spec[index].index = indexs
+				this.specification.spec.splice(index,1,this.specification.spec[index])
 			},
 			
-			affirm(){
-				this.isSelect = false;
+			async affirm(){
+				// this.isSelect = false;
 				var data = this.specification;
-				// .spec[0].list[this.sureSelect].title
+				console.log(data)
+				// // .spec[0].list[this.sureSelect].title
+				
+				var temp = [];
+				data.spec.map(v=>{
+					v.list.map((j,indexs)=>{
+						if(v.index == indexs){
+							temp.push(j)
+						}
+					})
+				})
+				
+				
 				var info = {id:data.id,
 							com_id:data.com,
-							com_count:obj.value,
-							specification:this.getCarListData[index].specification,
-							price:this.getCarListData[index].price}
-				console.log("adsfasdfsdafsdafsdafsdaf",data)
+							com_count:data.count,
+							specification:JSON.stringify(temp),
+							price:data.price}
+				await updateShopCar(info);
+			},
+			
+			
+			
+			updateCount(obj){
+				this.specification.count = obj.value
+				console.log(obj)
 			}
 			
 		},
@@ -375,7 +416,7 @@
 				return this.$store.getters.getCurrentCity;
 			},
 			getCarListData(){
-				console.log("12312312312312312",this.$store.getters.getCarList)
+				console.log("asdfasdfsdafsdfs",this.$store.getters.getCarList)
 				return this.$store.getters.getCarList
 			}
 		},
