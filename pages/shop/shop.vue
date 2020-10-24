@@ -308,16 +308,19 @@
 			 // 上拉刷新
 			 async handleLoadMore(stopLoad) {
 				 // 判断hasData是否等false，等于false就不让再发送请求
-				 if(this.hasData == false){
+				 /* if(this.hasData == false){
 					 return;
-				 }
+				 } */
 				 this.page++;
 				 var { message } = await getGoodsList(this.goodsId,this.page);
 				 stopLoad ? stopLoad() : '';
+				 // message.length等于0的时候，把hasData设为false；用于后续的判断；
 			 	if (message.length == 0) {
-					// message.length等于0的时候，把hasData设为false；用于后续的判断；
-					this.hasData = false;
-					this.emptyTip = "客官没有更多了哦~";
+					// this.hasData = false;
+					uni.showToast({
+						title:"客官已到底了哦~",
+						icon: "none"
+					})
 			 		stopLoad ? stopLoad({
 			 			isEnd: true
 			 		}) : '';
@@ -351,7 +354,7 @@
 				this.imgData.classify = this.imgData.classifyOne;
 			}
 		},
-		onLoad(){
+		onLoad(options){
 			this.init();
 		},
 		components: {
