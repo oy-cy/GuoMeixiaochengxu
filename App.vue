@@ -46,9 +46,11 @@ export default {
 	},
 	methods:{
 		async getCarListData(userId){
-			var {message} = await getCarList(userId)
+			var {message} = await getCarList(userId);
+			
 			message.forEach(v=>{
-				v.shop_specification = JSON.parse( v.shop_specification)
+				v.shop_specification = JSON.parse( v.shop_specification);
+				v.price = parseFloat(v.price).toFixed(2);
 			})
 			// 购物车初始化数据
 			this.$store.commit('setCarList',message);

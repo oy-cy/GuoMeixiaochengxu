@@ -8,59 +8,70 @@
 			<u-tabs :list="tabsList" :is-scroll="true" active-color="#f20c59" :current="currentTitle" bg-color="#F2F2F2" @change="change"></u-tabs>
 		</view>
 			
-			
-				
-		<view class="classifyGoods">
-			<view class="goods-item" v-for="(item,index) in goodlist" :key="index" @click="goodDetails(item.id)">
-				<view class="img-container">
-					<image class="img" :src="item.sku_thumbImg_url"></image>
-				</view>
-				<view class="info">
-					<view class="text">
-						<text class="title_tag">{{item.extProperty}}</text>
-						<text class="title">{{item.sku_name}}</text>
+		<k-scroll-view ref="k-scroll-view" :loadTip="loadTip" :loadingTip="loadingTip" :emptyTip="emptyTip" :touchHeight="touchHeight"
+		 :height="height" :bottom="bottom" :autoPullUp="autoPullUp" :stopPullDown="stopPullDown" @onPullDown="handlePullDown"
+		 @onPullUp="handleLoadMore">
+			<view class="classifyGoods">
+				<view class="goods-item" v-for="(item,index) in goodlist" :key="index" @click="goodDetails(item.id)">
+					<view class="img-container">
+						<image class="img" :src="item.sku_thumbImg_url"></image>
 					</view>
-					<view class="goods-tag-list">易卡分期</view>
-					<view class="price">
-						<view class="content">
-							<text class="symbol">￥</text>
-							<text class="money">{{item.sku_price}}</text>
+					<view class="info">
+						<view class="text">
+							<text class="title_tag">{{item.extProperty}}</text>
+							<text class="title">{{item.sku_name}}</text>
 						</view>
-						<view class="car-logo" @click.stop="addcar(item)">
-							<image class="img" src="../../static/images/shop/car-tag.png" mode=""></image>
+						<view class="goods-tag-list-box">
+							<text class="goods-tag-list" v-for="(color,indexs) in item.tagList" :key="indexs" 
+							:style="{'border': '1rpx solid #'+color.tagColor, 'color': '#'+color.tagColor}">{{color.tagName}}</text>
+						</view>
+						
+						<view class="price">
+							<view class="content">
+								<text class="symbol">￥</text>
+								<text class="money">{{item.sku_price}}</text>
+							</view>
+							<view class="car-logo" @click.stop="addcar(item)">
+								<image class="img" src="../../static/images/shop/car-tag.png" mode=""></image>
+							</view>
 						</view>
 					</view>
 				</view>
 			</view>
-		</view>
+		</k-scroll-view>
 		
-		<u-loadmore :status="status" :icon-type="iconType" :load-text="loadText" @loadmore="loadmore"/>
+		<goTop></goTop>
 	</view>
 </template>
 
 <script>
 	
-	import {getGoodsList,getCategory} from "../../api/common.js"
+	import {getGoodsList,getCategory} from "@/api/common.js";
+	import goTop from "@/component/goTop/goTop";
 	export default {
 		props:["pageid"],
 		data(){
 			return{
-				status: 'loadmore',
-				iconType: 'circle',
-				loadText: {
-					loadmore: '加载更多(*^▽^*)',
-					loading: '喝杯茶等一下正在努力加载中ヾ(≧▽≦*)o',
-					nomore: '还没看够吗ψ(｀∇´)ψ'
-				},
 				page:1,
 				currentTitle:1,
 				tabsList: [],
 				goodlist:[],
-				catId:1
+				catId:1,
+				
+				
+				loadTip: '获取更多数据',
+				loadingTip: '正在加载中...',
+				emptyTip: '',
+				touchHeight: 50,
+				height: 0,
+				bottom: 50,
+				autoPullUp: true,
+				stopPullDown: false, // 如果为 false 则不使用下拉刷新，只进行上拉加载
 			}
 		},
-		created() {
-			this.getGoodsListData(this.catId);
+		async created() {
+			this.goodlist = await this.getGoodsListData(this.catId);
+			console.log("asdfasdfsd",this.goodlist )
 			this.getCategoryData();
 		},
 		methods:{
@@ -68,21 +79,21 @@
 				this.$store.commit('setaddcar',data);
 			},
 			
-			change(obj){
+			async change(obj){
 				this.currentTitle = obj.index;
 				this.page = 1;
-				this.catId = obj.id
-				this.getGoodsListData(obj.id)
+				this.catId = obj.id;
+				this.goodlist = await this.getGoodsListData(obj.id);
+				 
 			},
-			loadmore(obj){
-				this.status = 'loading'
-				this.getGoodsListData(this.catId);
-				this.status = 'loadmore'
-			},
+			
 			async getGoodsListData(id){
 				var {message} = await getGoodsList(id,this.page);
-				this.page++;
-				this.goodlist = message;
+				// this.goodlist = message;
+				message.forEach(v=>{
+					v.tagList = JSON.parse(v.tagList)
+				})
+				return message;
 			},
 			goodDetails(id){
 				uni.navigateTo({
@@ -92,9 +103,36 @@
 			
 			async getCategoryData(){
 				var {message} = await getCategory("shop")
-				console.log("sadfasdfsafsdf",message);
+				// console.log("sadfasdfsafsdf",message);
 				this.tabsList = message;
+			},
+			
+			
+			
+			async handleLoadMore(stopLoad) {
+	
+				this.page++;
+				var message = await this.getGoodsListData(this.catId);
+				stopLoad ? stopLoad() : '';
+				if (message.length == 0) {
+					uni.showToast({
+						title:"客官已到底了哦~",
+						icon: "none"
+					})
+					stopLoad ? stopLoad({
+						isEnd: true
+					}) : '';
+					return;
+				}else{
+					message.map(v => {
+						this.goodlist.push(v)
+					})
+				}
+				
 			}
+		},
+		components:{
+			goTop
 		}
 	}
 </script>
@@ -195,9 +233,6 @@
 							width: 100rpx;
 							font-size: 24rpx;
 							text-align: center;
-							color: rgb(242, 12, 86);
-							border-color: rgb(242, 12, 86);
-							border: 1rpx solid rgb(242, 12, 86);
 							margin: 10rpx 0;
 							border-radius: 5rpx;
 						}

@@ -462,7 +462,8 @@
 			},
 			// 地址组件方法
 			siteCompile(){
-				this.$refs.show.show()
+				this.$refs.show.show();
+				this.$refs.show.getAddrsData();
 			},
 			// 查看导师信息
 			goGuide(item){
