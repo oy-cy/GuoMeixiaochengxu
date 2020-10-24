@@ -20,7 +20,7 @@
 				</view>
 				<view class="keyword">
 					<!-- <navigator url="../goodsList/goodsList"> -->
-						<navigator :url="'../goodsList/goodsList?item='+item" class="word"  v-for="(item,index) in hotSearchData" :key="index">{{item}}</navigator>
+						<navigator :url="'../goodsList/goodsList?item='+goodsName" class="word"  v-for="(item,index) in hotSearchData" :key="index">{{item}}</navigator>
 					<!-- </navigator> -->
 				</view>
 			</view>
@@ -38,7 +38,7 @@
 		</view>
 		<view class="dimQuery" v-else>
 			<view class="dim">
-				<navigator :url="'../goodsList/goodsList?item='+item" class="text" v-for="item in fuzzyQueryData">{{item.sku_name}}</navigator>
+				<navigator :url="'/pages/goodsList/goodsList?goodsName='+item" class="text" v-for="item in fuzzyQueryData">{{item.sku_name}}</navigator>
 			</view>
 		</view>
 		
@@ -91,11 +91,12 @@
 				var getValue = this.value;
 				this.historyArray.push(getValue);
 				this.isShow = true;
-				this.value = "";
-				uni.reLaunch({
-					url:'../goodsList/goodsList'
+				
+				uni.navigateTo({
+					url:"/pages/goodsList/goodsList?goodsName="+this.value
 				})
 				this.$store.commit('setHistoryArray',this.historyArray)
+				this.value = "";
 			},
 			
 			// onChange输入内容保存到数组中
