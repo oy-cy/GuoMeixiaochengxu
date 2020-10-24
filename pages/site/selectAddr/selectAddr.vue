@@ -19,13 +19,13 @@
 						</view>
 					</view>
 				</view>
-				<navigator :url="'/pages/site/editAddr/editAddr?id='+item.id" class="edit">
+				<navigator :url="getEditPage(item)" class="edit">
 					<view class="image"><image src="../../../static/images/site/edit.png" mode=""></image></view>
 					<view class="text">编辑</view>
 				</navigator>
 			</view>
 		</view>
-		<navigator url="/pages/site/addAddr/addAddr" class="button">新增地址</navigator>
+		<navigator :url="getUrl" class="button">新增地址</navigator>
 	</view>
 </template>
 
@@ -39,9 +39,14 @@ import { getAddrs,setSelectAddr } from '@/api/user.js';
 					// {addr:'深圳市龙华区观澜街道淑女路',name:'花花的贝贝',phone:'157****1010',isDeafault:1,select:0},
 					// {addr:'深圳市龙华区观澜街道淑女路',name:'花花的贝贝',phone:'157****1010',isDeafault:1,select:1}
 				],
+				// 是否购物车过来的页面
+				car:false
 			}
 		},
-		async onLoad() {
+		async onLoad(option) {
+			if(option && option.car){
+				this.car = true;
+			}
 			// 获取当前用户的地址列表
 			var data = await getAddrs(getApp().globalData.userInfo.userId);
 			this.receivingAddr = data.message;
@@ -50,9 +55,31 @@ import { getAddrs,setSelectAddr } from '@/api/user.js';
 			setSelectCity(id){
 				// 调用修改默认地址
 				setSelectAddr(getApp().globalData.userInfo.userId,id);
+				if(this.car == true){
+					uni.navigateBack();
+					return;
+				}
 				uni.switchTab({
 					url:"/pages/home/home"
 				})
+			}
+		},
+		computed:{
+			getUrl(){
+				if(this.car == true){
+					return '/pages/site/addAddr/addAddr?car=true';
+				}else {
+					return '/pages/site/addAddr/addAddr';
+				}
+			},
+			getEditPage(){
+				return function(item){
+					if(this.car == true){
+						return `/pages/site/editAddr/editAddr?id=${item.id}&car=true`
+					}else {
+						return `/pages/site/editAddr/editAddr?id=${item.id}`
+					}
+				}
 			}
 		}
 	}

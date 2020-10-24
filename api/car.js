@@ -15,15 +15,19 @@ export function deleteShopCar(deleIds){
 
 
 export function updateShopCar(info){
+	console.log(info)
 	return  request({
-		url:"/updateShopCar?info="+info
+		url:"/updateShopCar",
+		methods:"post",
+		data:info
 	})
 }
 
-export function addShopCar(car){
-	return  request({
-		url:"/addShopCar",
-		method:"post",
-		data:car
-	})
-}
+// 生成购物车
+ export function addShopCar(car){
+	 return request({
+		 url:"/addShopCar",
+		 methods:"post",
+		 data:car
+	 })
+ }

@@ -16,7 +16,7 @@
 			<view class="hot-search">
 				<view class="hot-top">
 					<image src="../../static/images/search/hot-search.png" mode=""></image>
-					<text>热门搜索</text>
+					<text>热门搜索</text>	
 				</view>
 				<view class="keyword">
 					<!-- <navigator url="../goodsList/goodsList"> -->
@@ -31,7 +31,7 @@
 					<text>搜索历史</text>
 				</view>
 				<view class="history-keyword">
-					<view class="word" v-for="item in historyArray">{{item}}</view>
+					<navigator url="../goodsList/goodsList" class="word" v-for="item in historyArray">{{item}}</navigator>
 				</view>
 				<view class="enpty" @click="onEmpty">清空历史记录</view>
 			</view>
@@ -67,9 +67,7 @@
 			}
 		},
 		methods:{
-			//搜索框点回车时拿到输入的数据保存起来
-			//拿到点击热门搜索与历史记录中的数据保存起来
-			//把拿到的数据发送对接
+			
 			hotClick(item){
 				console.log(item)
 			},
@@ -122,7 +120,7 @@
 			async fuzzyQueryWay(){
 				var {message} = await fuzzyQuery(this.value);
 			
-				console.log("aa",message)
+				console.log("模糊",message)
 				this.fuzzyQueryData = message;
 			}
 		}
