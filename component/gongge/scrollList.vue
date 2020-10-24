@@ -62,7 +62,7 @@
 		methods:{
 			skipGood(index){
 				uni.navigateTo({
-					url:'/pages/goodsDetail/goodsDetail'
+					url:'/pages/goodsDetail/goodsDetail?goodsId='+goodsId
 				})
 			},
 			addCar(index){
