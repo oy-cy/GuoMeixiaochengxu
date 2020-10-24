@@ -397,9 +397,10 @@
 							font-size: 26rpx;
 
 							text {
-								font-size: 26rpx;
+								font-size: 22rpx;
 								background-color: rgb(250, 29, 137);
 								color: #FFFFFF;
+								margin-right: 10rpx;
 							}
 						}
 					}
