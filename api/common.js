@@ -78,13 +78,13 @@ export function fuzzyQuery(name){
  	 })
  }
  
- // // 获取商品列表页价格的
- // export function getGoodsList(catId,page){
- // 	 return request({
- // 		 url:"/getGoodsList?catId="+catId+"&page="+page
+ // 根据搜索后的商品名称获取商品数据
+ export function getSearchGoods(goodsName,page){
+ 	 return request({
+ 		 url:"/search?name="+goodsName+"&page="+page
  		 
- // 	 })
- // }
+ 	 })
+ }
  
  // 生成购物车
  export function addShopCar(car){

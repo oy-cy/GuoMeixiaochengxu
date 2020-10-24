@@ -88,7 +88,7 @@
 
 <script>
 	import goTop from '@/component/goTop/goTop.vue';
-	import { getGoodsList } from "@/api/common.js";
+	import { getGoodsList,getSearchGoods } from "@/api/common.js";
 	export default {
 		data() {
 			return {
@@ -102,6 +102,7 @@
 				priceOrder: 0, //1 价格从低到高 2价格从高到低
 				sales: 0,
 				goodsId: '',
+				goodsName: '',
 				page: 1,
 				asc: "asc",
 				desc: "desc",
@@ -224,9 +225,18 @@
 					this.isShow = true;
 				}
 			},
-			// 获取商品数据
+			// 根据id获取商品数据
 			async getGoodsListData() {
 				var { message } = await getGoodsList(this.goodsId, this.page);
+				message.map(v => {
+					v.tagList = JSON.parse(v.tagList);	
+				})
+				this.tempArr = message;
+				this.goodsList = message;
+			},
+			// 根据名字获取商品数据
+			async getSearchGoodsData() {
+				var { message } = await getSearchGoods(this.goodsName,this.page);
 				message.map(v => {
 					v.tagList = JSON.parse(v.tagList);	
 				})
@@ -292,9 +302,15 @@
 			}
 		},
 		onLoad(e) {
-			console.log(e)
-			this.goodsId = e.goodsId;
-			this.getGoodsListData();
+			console.log("搜索",e.goodsName);
+			if(e.goodsId){
+				this.goodsId = e.goodsId;
+				this.getGoodsListData();
+			}else {
+				var goodsName = e.goodsName;
+				this.getSearchGoodsData();
+			}
+			
 		},
 		components:{
 			goTop
