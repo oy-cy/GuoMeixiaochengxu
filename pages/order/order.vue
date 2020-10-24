@@ -125,7 +125,7 @@
 		</view>
 		<!-- 支付 -->
 		<view class="payment">
-			<van-button type="primary" block >微信支付 ¥ {{ countPrice + freight }}.00</van-button>
+			<van-button type="primary" block @click="toPay" >微信支付 ¥ {{ countPrice + freight }}.00</van-button>
 		</view>
 	</view>
 </template>
@@ -157,8 +157,7 @@
 		methods: {
 			// 初始化
 			init(){
-				this.getaddrs()
-				this.getCountPrice()
+				this.getCountPrice();
 			},
 			// 获取地址
 			async getaddrs(){
@@ -181,10 +180,21 @@
 				this.goodsList.map(v=>{
 					this.countPrice +=(v.sku_price * v.com_count)
 				})
-			}
+			},
+			// 付款
+			toPay() {
+				
+			 }
 		},
-		onLoad() {
+		onLoad(option) {
+			if(option.goodsInfo){
+				
+				this.goodsList = JSON.parse(option.goodsInfo);
+			}
 			this.init()
+		},
+		onShow() {
+			this.getaddrs();
 		}
 	}
 </script>
@@ -246,7 +256,14 @@
 					padding-bottom: 30rpx;
 					color: #333;
  					.name{
-						width: 80rpx;
+						width: 170rpx;
+						display: -webkit-box;
+						-webkit-box-orient: vertical;
+						-webkit-line-clamp: 1;
+						overflow: hidden;
+					}
+					.phone{
+						flex: 1;
 					}
 				}
 			}
