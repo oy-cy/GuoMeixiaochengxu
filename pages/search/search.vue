@@ -20,7 +20,7 @@
 				</view>
 				<view class="keyword">
 					<!-- <navigator url="../goodsList/goodsList"> -->
-						<navigator :url="'../goodsList/goodsList?item='+goodsName" class="word"  v-for="(item,index) in hotSearchData" :key="index">{{item}}</navigator>
+						<view class="word"  v-for="(item,index) in hotSearchData" :key="index" @tap.stop="hotSearch(item)">{{item}}</view>
 					<!-- </navigator> -->
 				</view>
 			</view>
@@ -31,14 +31,14 @@
 					<text>搜索历史</text>
 				</view>
 				<view class="history-keyword">
-					<navigator url="../goodsList/goodsList" class="word" v-for="item in historyArray">{{item}}</navigator>
+					<view class="word" v-for="item in historyArray" @tap.stop="history(item)">{{item}}</view>
 				</view>
 				<view class="enpty" @click="onEmpty">清空历史记录</view>
 			</view>
 		</view>
 		<view class="dimQuery" v-else>
 			<view class="dim">
-				<navigator :url="'/pages/goodsList/goodsList?goodsName='+item" class="text" v-for="item in fuzzyQueryData">{{item.sku_name}}</navigator>
+				<view class="text" v-for="item in fuzzyQueryData"  @tap.stop="goGoodsList(item.sku_name)">{{item.sku_name}}</view>
 			</view>
 		</view>
 		
@@ -67,7 +67,6 @@
 			}
 		},
 		methods:{
-			
 			hotClick(item){
 				console.log(item)
 			},
@@ -123,6 +122,26 @@
 			
 				console.log("模糊",message)
 				this.fuzzyQueryData = message;
+			},
+			goGoodsList(goodsName){
+				// console.log("对象",item)
+				// var data = JSON.stringify(item);
+				console.log("字符",goodsName)
+				// uni.navigateTo({
+				// 	url:"/pages/goodsList/goodsList?goodsName=" + data
+				// })
+			},
+			hotSearch(goodsName){
+				console.log("热门",goodsName);
+				uni.navigateTo({
+					url:"../goodsList/goodsList?goodsName="+goodsName
+				})
+			},
+			history(goodsName){
+				console.log("历史",goodsName);
+				uni.navigateTo({
+					url:"../goodsList/goodsList?goodsName="+goodsName
+				})
 			}
 		}
 	}
