@@ -19,7 +19,7 @@
 			show(){
 				uni.pageScrollTo({
 					scrollTop: 0,
-					duration:50
+					duration:300
 				})
 			},
 		},
