@@ -38,7 +38,7 @@
 							<view class="addr">{{item.addr}}</view>
 							<view class="user-info">
 								<view class="name">{{item.receiver}}</view>
-								<view class="phone">{{item.phone}}</view>
+								<view class="phone">{{item.phone.substr(0,3)+"****"+item.phone.substr(7)}}</view>
 							</view>
 						</view>
 						<view class="select" v-if="item.is_select==1">
