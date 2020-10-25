@@ -20,7 +20,7 @@
 							<text class="money">
 								￥{{item.sku_price}}
 							</text>
-							<view class="car" @click.stop="addCar(index)">
+							<view class="car" @click.stop="addCar(item)">
 								<image src="../../static/images/gongge/car.png" style="width: 100%;height: 100%;"></image>
 							</view>
 						</view>
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-	import {getRecommend,getSellingList,getSeckill} from "../../api/common.js"
+	import {getRecommend,getSellingList,getSeckill} from "@/api/common.js"
 	export default {
 		props:["title",'catId'],
 		data(){
@@ -60,13 +60,13 @@
 			
 		},
 		methods:{
-			skipGood(index){
+			skipGood(id){
 				uni.navigateTo({
-					url:'/pages/goodsDetail/goodsDetail'
+					url:'/pages/goodsDetail/goodsDetail?goodsId='+id
 				})
 			},
-			addCar(index){
-				console.log(index)
+			addCar(data){
+				this.$store.commit('setaddcar',data);
 			},
 			async getSeckillData(){
 				var {message} = await getSeckill();

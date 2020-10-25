@@ -16,11 +16,11 @@
 			<view class="hot-search">
 				<view class="hot-top">
 					<image src="../../static/images/search/hot-search.png" mode=""></image>
-					<text>热门搜索</text>
+					<text>热门搜索</text>	
 				</view>
 				<view class="keyword">
 					<!-- <navigator url="../goodsList/goodsList"> -->
-						<navigator :url="'../goodsList/goodsList?item='+item" class="word"  v-for="(item,index) in hotSearchData" :key="index">{{item}}</navigator>
+						<view class="word"  v-for="(item,index) in hotSearchData" :key="index" @tap.stop="hotSearch(item)">{{item}}</view>
 					<!-- </navigator> -->
 				</view>
 			</view>
@@ -31,14 +31,14 @@
 					<text>搜索历史</text>
 				</view>
 				<view class="history-keyword">
-					<view class="word" v-for="item in historyArray">{{item}}</view>
+					<view class="word" v-for="item in historyArray" @tap.stop="history(item)">{{item}}</view>
 				</view>
 				<view class="enpty" @click="onEmpty">清空历史记录</view>
 			</view>
 		</view>
 		<view class="dimQuery" v-else>
 			<view class="dim">
-				<navigator :url="'../goodsList/goodsList?item='+item" class="text" v-for="item in fuzzyQueryData">{{item.sku_name}}</navigator>
+				<view class="text" v-for="item in fuzzyQueryData" @tap.stop="goGoodsList(item.sku_name)">{{item.sku_name}}</view>
 			</view>
 		</view>
 		
@@ -67,9 +67,6 @@
 			}
 		},
 		methods:{
-			//搜索框点回车时拿到输入的数据保存起来
-			//拿到点击热门搜索与历史记录中的数据保存起来
-			//把拿到的数据发送对接
 			hotClick(item){
 				console.log(item)
 			},
@@ -93,17 +90,20 @@
 				var getValue = this.value;
 				this.historyArray.push(getValue);
 				this.isShow = true;
-				this.value = "";
-				uni.reLaunch({
-					url:'../goodsList/goodsList'
+				
+				uni.navigateTo({
+					url:"/pages/goodsList/goodsList?goodsName="+this.value
 				})
 				this.$store.commit('setHistoryArray',this.historyArray)
+				this.value = "";
 			},
 			
 			// onChange输入内容保存到数组中
 			onChange(e){
-				this.value = e.detail
-				// console.log(this.value);
+				this.value = e.detail;
+				if(this.value == ""){
+					console.log("aabb")
+				}
 				this.fuzzyQueryWay();
 			},
 			
@@ -121,9 +121,45 @@
 			},
 			async fuzzyQueryWay(){
 				var {message} = await fuzzyQuery(this.value);
-			
-				console.log("aa",message)
+				console.log("模糊",message)
+				message.length = 6;
 				this.fuzzyQueryData = message;
+				// message.forEach(function(v){
+				// 		console.log("forEach",v);
+				// 	if(v == 11){
+				// 		return;
+				// 	}
+				// 	this.fuzzyQueryData = message;
+				// })
+				
+				// message.map((v,index)=>{
+				// 	console.log("forEach",v)
+				// 	if(index >= 10){
+						
+				// 	}
+				// 	console.log("tempFuzzyQueryDataArray",tempFuzzyQueryDataArray)
+				// 	this.fuzzyQueryData = tempFuzzyQueryDataArray;
+				// })
+			},
+			goGoodsList(goodsName){
+				// console.log("对象",item)
+				// var data = JSON.stringify(item);
+				console.log("字符",goodsName)
+				uni.navigateTo({
+					url:"/pages/goodsList/goodsList?goodsName=" + goodsName
+				})
+			},
+			hotSearch(goodsName){
+				console.log("热门",goodsName);
+				uni.navigateTo({
+					url:"../goodsList/goodsList?goodsName="+goodsName
+				})
+			},
+			history(goodsName){
+				console.log("历史",goodsName);
+				uni.navigateTo({
+					url:"../goodsList/goodsList?goodsName="+goodsName
+				})
 			}
 		}
 	}
@@ -200,7 +236,9 @@
 			.dim{
 				.text{
 					border-bottom: 2rpx solid #e6e6e6;
-					padding: 20rpx;
+					padding: 20rpx 40rpx;
+					font-size: 26rpx;
+					color: gray;
 				}
 			}
 		}

@@ -5,7 +5,7 @@
 			<navigator url="../site/receivingCity/receivingCity">
 				<view class="location-photo">
 					<image src="../../static/images/home/location.png" mode=""></image>
-					<text class="text">深圳</text>
+					<text class="text">{{getCurrentCity}}</text>
 				</view>
 			</navigator>
 			<navigator class="search" hover-class="none" url="../search/search">
@@ -38,9 +38,12 @@
 			<van-dialog id="van-dialog" />
 		</van-grid>
 		<!-- 国美秒杀 -->
-		<view class="seckill-content">
-			<seckill :goodsData="getSeckillData"></seckill>
-		</view>
+		<navigator :url="'../goodsDetail/goodsDetail?item='+item.id">
+			<view class="seckill-content">
+				<seckill :goodsData="getSeckillData"></seckill>
+			</view>
+		</navigator>
+			
 		<!-- 猜你喜欢 -->
 		<view class="related">
 			<van-divider contentPosition="center" customStyle="color: rgb(229, 54, 117); border-color: rgb(229, 54, 117); font-weight: bold; font-size: 14px;margin:0rpx 200rpx">
@@ -50,25 +53,27 @@
 			 :height="height" :bottom="bottom" :autoPullUp="autoPullUp" :stopPullDown="stopPullDown" @onPullDown="handlePullDown"
 			 @onPullUp="handleLoadMore">
 				<view class="list">
-					<view class="goodslist" v-for="item in getguessLikeData" :key="item.id">
-						<view class="photo">
-							<image :src="item.sku_thumbImg_url" mode=""></image>
+					<navigator :url="'../goodsDetail/goodsDetail?item='+item.id" style="display: flex;flex-wrap: wrap;">
+						<view class="goodslist" v-for="item in getguessLikeData" :key="item.id" @click="onId(item.id)">
+							<view class="photo">
+								<image :src="item.sku_thumbImg_url" mode=""></image>
+							</view>
+							<view class="title">
+								<image src="../../static/images/home/guomei-logo.png" mode=""></image>
+								<text>{{item.shop_name}}</text>
+							</view>
+							<view class="recommend">
+								<view class="name"><text>{{item.extProperty}}</text>{{item.sku_name}}</view>
+							</view>
+							<view class="good_tab" v-if="item.tagList.length != 0">
+								<text class="tab" >{{item.tagList[0].tagName}}</text>
+							</view>
+							<view class="price">
+								<text>￥</text>
+								{{item.sku_price}}
+							</view>
 						</view>
-						<view class="title">
-							<image src="../../static/images/home/guomei-logo.png" mode=""></image>
-							<text>{{item.shop_name}}</text>
-						</view>
-						<view class="recommend">
-							<view class="name"><text>{{item.extProperty}}</text>{{item.sku_name}}</view>
-						</view>
-						<view class="good_tab">
-							<text class="tagColor">{{item.tagList[0].tagName}}</text>
-						</view>
-						<view class="price">
-							<text>￥</text>
-							{{item.sku_price}}
-						</view>
-					</view>
+					</navigator>
 				</view>
 			</k-scroll-view>
 		</view>
@@ -113,6 +118,7 @@
 				bottom: 50,
 				autoPullUp: true,
 				stopPullDown: false, // 如果为 false 则不使用下拉刷新，只进行上拉加载
+				isTabShow:false
 			};
 		},
 		methods: {
@@ -123,6 +129,11 @@
 				this.getSeckillWay();
 				this.getGridWay();
 			},
+			// 猜你喜欢点击某个商品
+			onId(id){
+				console.log(id)
+			},
+			
 			async getGridWay() {
 				var {
 					message
@@ -131,9 +142,7 @@
 				this.getGridData = message;
 			},
 			async getSeckillWay() {
-				var {
-					message
-				} = await getSeckill();
+				var {message} = await getSeckill();
 				// console.log(message)
 				// message.map(v=>{
 				// 	this.getSeckillData.push({
@@ -144,11 +153,15 @@
 				// })
 				this.getSeckillData = message;
 			},
+			
 			async getguesslikeWay() {
 				var {
 					message
 				} = await getGoodsList(this.goodsId, this.page);
 				console.log("aaa", message);
+				message.forEach(v=>{
+					v.tagList = JSON.parse(v.tagList)
+				})
 				this.getguessLikeData = message;
 			},
 			async getLunboWay() {
@@ -191,9 +204,9 @@
 			// 上拉刷新
 			async handleLoadMore(stopLoad) {
 				// 判断hasData是否等false，等于false就不让再发送请求
-				if (this.hasData == false) {
+				/* if (this.hasData == false) {
 					return;
-				}
+				} */
 				this.page++;
 				var {
 					message
@@ -201,8 +214,11 @@
 				stopLoad ? stopLoad() : '';
 				if (message.length == 0) {
 					// message.length等于0的时候，把hasData设为false；用于后续的判断；
-					this.hasData = false;
-					this.emptyTip = "客官没有更多了哦~";
+					// this.hasData = false;
+					uni.showToast({
+						title:"客官已到底了哦~",
+						icon: "none"
+					})
 					stopLoad ? stopLoad({
 						isEnd: true
 					}) : '';
@@ -237,6 +253,11 @@
 		created() {
 			this.init();
 
+		},
+		computed:{
+			getCurrentCity(){
+				return this.$store.getters.getCurrentCity;
+			}
 		}
 	}
 </script>
@@ -337,8 +358,8 @@
 			}
 
 			.list {
-				display: flex;
-				flex-wrap: wrap; //超出换行
+				// display: flex;
+				// flex-wrap: wrap; //超出换行
 
 				.goodslist {
 					margin: 15rpx 0rpx 10rpx 15rpx;
@@ -384,10 +405,19 @@
 							font-size: 26rpx;
 
 							text {
-								font-size: 26rpx;
+								font-size: 22rpx;
 								background-color: rgb(250, 29, 137);
 								color: #FFFFFF;
+								margin-right: 10rpx;
 							}
+						}
+					}
+					.good_tab{
+						.tab{
+							font-size: 24rpx;
+							color: rgb(242, 12, 86);
+							border: 2rpx solid rgb(242, 12, 86);
+							margin: 20rpx;
 						}
 					}
 
@@ -395,12 +425,12 @@
 						font-size: 38rpx;
 						font-weight: bold;
 						color: rgb(243, 30, 101);
-						margin: 25rpx 20rpx;
+						margin: 15rpx;
 
 						text {
 							font-weight: bold;
 							font-size: 20rpx;
-						}
+						} 
 					}
 				}
 			}

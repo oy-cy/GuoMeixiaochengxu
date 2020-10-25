@@ -415,15 +415,12 @@
 				this.isLogin();
 				let arr = this.$store.getters.getCarList;
 				let index = -1;
-				console.log("arrss",arr)
 				arr.map((v,indexs) =>{
-					
 					if(v.user_id == this.userInfo.userId && v.com_id == this.goodsId){
 						v.com_count += this.select.number
 						index = indexs;
 					}
 				})
-				
 				if(index == -1){
 					let car = {
 						userId :this.userInfo.userId,
@@ -434,8 +431,13 @@
 					}
 					await addShopCar(car);
 					var {message} = await queryShopCar(this.userInfo.userId)
+					message.forEach(v=>{
+						v.shop_specification = JSON.parse( v.shop_specification);
+					})
 					this.$store.commit('setCarList',message)
 				}else{
+					// var tempCar = arr[index];
+					// tempCar.shop_specification = JSON.parse(tempCar.shop_specification)
 					await updateShopCar(arr[index]);
 					this.$store.commit('setCarList',arr)
 				}
@@ -448,12 +450,25 @@
 			},
 			// 购买商品
 			promptlyBuy(){
-				console.log('立即购买')
+				let goodsInfo = [{
+					sku_name:this.recommend.sku_name,
+					sku_thumbImg_url:this.select.img || this.recommend.sku_thumbImg_url,
+					user_id :this.userInfo.userId,
+					com_ibbd : this.goodsId,
+					com_count : this.select.number,
+					shop_specification : this.select.confirm,
+					sku_price : (this.select.price == 0 ? this.recommend.sku_price : this.select.price),
+				}]
+				
+				// console.log('立即购买')
+				uni.navigateTo({
+					url:"/pages/order/order?goodsInfo="+JSON.stringify(goodsInfo)+"&detail=true"
+				})
 			},
 			// 地址组件方法
 			siteCompile(){
-				this.$refs.show.show()
-				// this.siteShow = true;
+				this.$refs.show.show();
+				this.$refs.show.getAddrsData();
 			},
 			// 查看导师信息
 			goGuide(item){

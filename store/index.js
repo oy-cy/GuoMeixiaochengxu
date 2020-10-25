@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import {addShopCar,updateShopCar,getCarList} from "@/api/car.js"
+
 Vue.use(Vuex)
 
 
@@ -47,6 +49,18 @@ const store = new Vuex.Store({
 	},
 	// 存放修改数据的方法
 	mutations: {
+		// 删除购物车
+		deleteCar(state,carIdArr){
+			carIdArr.map((v,index) =>{
+				let temp =  state.carList.findIndex( (value) => value.id == v);
+				if(temp != -1){
+					console.log("temp",temp);
+					state.carList.splice(temp,1);
+					console.log("temps",state.carList);
+				}
+			})
+			console.log(state.carList);
+		},
 		// 修改当前城市
 		setCurrentCity(state,city){
 			state.currentCity = city;
@@ -71,21 +85,57 @@ const store = new Vuex.Store({
 			state.carList = carList;
 		},
 		
-		setaddcar(){
+		async setaddcar(state,data){
 			if(getApp().globalData.isLogin){
-				var boot = false
-				start.carList.forEach(v=>{
-					if(v.id == good.id){
-						v.num++;
-						boot=true;
+				var index = -1;
+				state.carList.forEach((v,indexs)=>{
+					if(v.com_id == data.id){
+						v.com_count++
+						index = indexs;
+						return;
 					}
 				})
-				if(boot == true){
-					start.carList.push(good)
+				
+				if(index == -1){
+					var user = getApp().globalData.userInfo.userId
+					var car = {
+						userId:user,
+						comId:data.id,
+						comCount:1,
+						specification:[],
+						price:data.sku_price
+					}
+					await addShopCar(car);
+					var {message} = await getCarList(user);
+					message.forEach(v=>{
+						v.shop_specification = JSON.parse( v.shop_specification);
+					})
+					state.carList = message
+				}else{
+					var info = {id:state.carList[index].id,
+								com_id:state.carList[index].com_id,
+								com_count:state.carList[index].com_count,
+								specification:state.carList[index].specification,
+								price:state.carList[index].price}
+					
+					await updateShopCar(info);
 				}
+				
+				
+				// var boot = false
+				// start.carList.forEach(v=>{
+				// 	if(v.id == good.id){
+				// 		v.num++;
+				// 		boot=true;
+				// 	}
+				// })
+				// if(boot == true){
+				// 	start.carList.push(good)
+				// }
 			}else{
-				uni.navigateTo({
-					url:"/pages/user/user.vue"
+				uni.showToast({
+					title:"请先登录",
+					icon:"none"
 				})
 			}
 		},
@@ -103,7 +153,8 @@ const store = new Vuex.Store({
 			// })
 			// state.historyArray = keys;
 
-		}
+		},
+		
 	},
 	//异步修改
     actions: {}
