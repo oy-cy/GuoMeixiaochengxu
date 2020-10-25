@@ -116,8 +116,11 @@ import {getCarList} from "@/api/car.js"
 		methods:{
 			async getCarListData(userId){
 				var {message} = await getCarList(userId)
-				// console.log("",data)
-				
+				// console.log(1231231231231312312)
+				message.forEach(v=>{
+					v.shop_specification = JSON.parse( v.shop_specification);
+					v.price = parseFloat(v.price).toFixed(2);
+				})
 				// 购物车初始化数据
 				this.$store.commit('setCarList',message);
 			},
@@ -130,6 +133,8 @@ import {getCarList} from "@/api/car.js"
 					key:'isLogin',
 					data:false
 				})
+				console.log("adfafsdfsdaf")
+				this.$store.commit('setCarList',[]);
 			},
 			// 登录
 			login(){

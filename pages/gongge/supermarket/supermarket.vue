@@ -67,9 +67,9 @@
 </template>
 
 <script>
-	import {getLunbotu} from "../../../api/common.js"
-	import {getGrid} from "../../../api/common.js"
-	import {getSeckill,getCategory} from "../../../api/common.js"
+	import {getLunbotu} from "@/api/common.js"
+	import {getGrid} from "@/api/common.js"
+	import {getSeckill,getCategory} from "@/api/common.js"
 	export default {
 		data() {
 			return {

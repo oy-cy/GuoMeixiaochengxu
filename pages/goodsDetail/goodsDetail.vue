@@ -445,11 +445,25 @@
 			},
 			// 购买商品
 			promptlyBuy(){
-				console.log('立即购买')
+				let goodsInfo = [{
+					sku_name:this.recommend.sku_name,
+					sku_thumbImg_url:this.select.img || this.recommend.sku_thumbImg_url,
+					user_id :this.userInfo.userId,
+					com_ibbd : this.goodsId,
+					com_count : this.select.number,
+					shop_specification : this.select.confirm,
+					sku_price : (this.select.price == 0 ? this.recommend.sku_price : this.select.price),
+				}]
+				
+				// console.log('立即购买')
+				uni.navigateTo({
+					url:"/pages/order/order?goodsInfo="+JSON.stringify(goodsInfo)
+				})
 			},
 			// 地址组件方法
 			siteCompile(){
-				this.$refs.show.show()
+				this.$refs.show.show();
+				this.$refs.show.getAddrsData();
 			},
 			// 查看导师信息
 			goGuide(item){

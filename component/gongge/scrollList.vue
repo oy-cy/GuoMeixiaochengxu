@@ -33,7 +33,7 @@
 </template>
 
 <script>
-	import {getRecommend,getSellingList,getSeckill} from "../../api/common.js"
+	import {getRecommend,getSellingList,getSeckill} from "@/api/common.js"
 	export default {
 		props:["title",'catId'],
 		data(){
