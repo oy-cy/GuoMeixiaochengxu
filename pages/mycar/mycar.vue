@@ -53,7 +53,7 @@
 									<text class="specifications" v-for="(item,index) in items.shop_specification" :key="index">{{item.title}}<text v-if="items.shop_specification.length-1!=index">,</text></text> 
 								</view>
 								<view class="price_num">
-									<text class="price">￥{{items.price}}</text>
+									<text class="price">￥{{items.price.toFixed(2)}}</text>
 									<u-number-box 
 									:min="1" :max="100" 
 									 size='18' 
@@ -292,7 +292,7 @@
 					var info = {id:obj.index,
 								com_id:this.getCarListData[index].com_id,
 								com_count:obj.value,
-								specification:specification.length == 0?"[]":JSON.stringify(specification),
+								specification:JSON.stringify(specification),
 								price:this.getCarListData[index].price}
 					await updateShopCar(info);
 				}
@@ -382,10 +382,8 @@
 			},
 			
 			async affirm(){
-				// this.isSelect = false;
 				var data = this.specification;
 				console.log(data)
-				// // .spec[0].list[this.sureSelect].title
 				
 				var temp = [];
 				data.spec.map(v=>{
