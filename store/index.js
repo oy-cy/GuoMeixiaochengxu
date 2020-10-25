@@ -49,6 +49,18 @@ const store = new Vuex.Store({
 	},
 	// 存放修改数据的方法
 	mutations: {
+		// 删除购物车
+		deleteCar(state,carIdArr){
+			carIdArr.map((v,index) =>{
+				let temp =  state.carList.findIndex( (value) => value.id == v);
+				if(temp != -1){
+					console.log("temp",temp);
+					state.carList.splice(temp,1);
+					console.log("temps",state.carList);
+				}
+			})
+			console.log(state.carList);
+		},
 		// 修改当前城市
 		setCurrentCity(state,city){
 			state.currentCity = city;
@@ -95,6 +107,9 @@ const store = new Vuex.Store({
 					}
 					await addShopCar(car);
 					var {message} = await getCarList(user);
+					message.forEach(v=>{
+						v.shop_specification = JSON.parse( v.shop_specification);
+					})
 					state.carList = message
 				}else{
 					var info = {id:state.carList[index].id,
@@ -138,7 +153,8 @@ const store = new Vuex.Store({
 			// })
 			// state.historyArray = keys;
 
-		}
+		},
+		
 	},
 	//异步修改
     actions: {}
