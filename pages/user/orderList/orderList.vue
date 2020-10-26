@@ -61,11 +61,16 @@
 					<view class="to_pay" v-if="item.status ==1" @click="confirm(item.id,index)">确认收货</view>
 				</view>
 			</block>
+			<!-- 支付密码框 -->
+			<jpPwd ref="jpPwds"  @completed="completed" contents=" " forgetName=" "></jpPwd>
+			<!-- 密码错误 -->
+			<u-toast ref="uToast" />
 		</view>
 	</view>
 </template>
 
 <script>
+import jpPwd from '@/components/jp-pwd/jp-pwd.vue';
 import { getCommodityDetails } from '@/api/goodsDetail.js';
 import { getUserOrders,getOrderByStatus,deleteOrder,updateOrderStatus } from '@/api/order.js';
 	export default {
@@ -75,8 +80,12 @@ import { getUserOrders,getOrderByStatus,deleteOrder,updateOrderStatus } from '@/
 				active: 0,
 				// 订单数据
 				orderList:[],
-				userId:''
+				userId:'',
+				current:{id:'',index:''}
 			}
+		},
+		components:{
+			jpPwd
 		},
 		async onLoad(option) {
 			this.userId = getApp().globalData.userInfo.userId;
@@ -90,7 +99,7 @@ import { getUserOrders,getOrderByStatus,deleteOrder,updateOrderStatus } from '@/
 			}
 			if(bool){
 				if(this.active!=""){
-					var data = await getOrderByStatus(this.userId,this.active);
+					var data = await getOrderByStatus(this.userId,this.active-1);
 					this.orderList = data;
 				}else {
 					var data = await getUserOrders(this.userId);
@@ -103,6 +112,27 @@ import { getUserOrders,getOrderByStatus,deleteOrder,updateOrderStatus } from '@/
 			this.orderList = data;
 		},
 		methods: {
+			// 支付判断
+			async completed(e) {
+				  if (e == '123456') {
+					this.$refs.jpPwds.toCancel()
+					// todo 将订单转为等发货
+					await updateOrderStatus(this.current.id,4);
+					if(this.active != 0){
+						this.orderList.splice(this.current.index,1);
+					}else {
+						var data = await getUserOrders(this.userId);
+						this.orderList = data;
+					}
+					this.current = {};
+				 } else {
+					 this.$refs.uToast.show({
+						title: '密码错误',
+						type: 'default',
+					 })
+				   this.$refs.jpPwds.backs()
+				 }
+			 },
 			async setActive(active){
 				this.active = active;
 				switch (active){
@@ -142,15 +172,10 @@ import { getUserOrders,getOrderByStatus,deleteOrder,updateOrderStatus } from '@/
 				}
 			},
 			// 立刻支付
-			async payOrder(id,index){
-				// todo 将订单转为等发货
-				await updateOrderStatus(id,4);
-				if(this.active != 0){
-					this.orderList.splice(index,1);
-				}else {
-					var data = await getUserOrders(this.userId);
-					this.orderList = data;
-				}
+			payOrder(id,index){
+				this.$refs.jpPwds.toOpen()
+				this.current.id = id;
+				this.current.index = index;
 			},
 			// 删除订单
 			async deleteOrder(id,index){

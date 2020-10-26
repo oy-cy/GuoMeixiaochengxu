@@ -97,16 +97,24 @@
 				<view class="control_color" v-if="order.status == 1" @click="receiving(order.id)">确认收货</view>
 			</view>
 		</view>
+		<!-- 支付密码框 -->
+		<jpPwd ref="jpPwds"  @completed="completed" contents=" " forgetName=" "></jpPwd>
+		<!-- 密码错误 -->
+		<u-toast ref="uToast" />
 	</view>
 </template>
 
 <script>
 import { updateOrderStatus,getOrder } from '@/api/order.js';
+import jpPwd from '@/components/jp-pwd/jp-pwd.vue';
 	export default {
 		data() {
 			return {
 				order:{}
 			}
+		},
+		components:{
+			jpPwd
 		},
 		async onLoad(option) {
 			this.orderId = option.orderId;
@@ -173,19 +181,32 @@ import { updateOrderStatus,getOrder } from '@/api/order.js';
 						break;
 				}
 			},
+			// 支付判断
+			async completed(e) {
+				  if (e == '123456') {
+					this.$refs.jpPwds.toCancel()
+					await updateOrderStatus(this.order.id,4);
+					uni.navigateBack({
+					  success: () => {
+					    let page = getCurrentPages().pop();  //跳转页面成功之后
+					    if (!page) return;
+					    let options = {
+							bool:true
+					    }
+					    page.onLoad(options);
+					  }
+					})
+				 } else {
+					 this.$refs.uToast.show({
+						title: '密码错误',
+						type: 'default',
+					 })
+				   this.$refs.jpPwds.backs()
+				 }
+			 },
 			// 订单支付
 			async payOrder(id){
-				await updateOrderStatus(id,4);
-				uni.navigateBack({
-				  success: () => {
-				    let page = getCurrentPages().pop();  //跳转页面成功之后
-				    if (!page) return;
-				    let options = {
-						bool:true
-				    }
-				    page.onLoad(options);
-				  }
-				})
+				this.$refs.jpPwds.toOpen()
 			},
 			// 取消支付
 			async cancelOrder(id){
@@ -214,7 +235,7 @@ import { updateOrderStatus,getOrder } from '@/api/order.js';
 				    page.onLoad(options);
 				  }
 				})
-			}
+			},
 		}
 		
 	}
