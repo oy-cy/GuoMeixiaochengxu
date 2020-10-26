@@ -38,11 +38,9 @@
 			<van-dialog id="van-dialog" />
 		</van-grid>
 		<!-- 国美秒杀 -->
-		<navigator :url="'../goodsDetail/goodsDetail?item='+item.id">
-			<view class="seckill-content">
-				<seckill :goodsData="getSeckillData"></seckill>
-			</view>
-		</navigator>
+		<view class="seckill-content">
+			<seckill :goodsData="getSeckillData"></seckill>
+		</view>
 			
 		<!-- 猜你喜欢 -->
 		<view class="related">
@@ -53,7 +51,7 @@
 			 :height="height" :bottom="bottom" :autoPullUp="autoPullUp" :stopPullDown="stopPullDown" @onPullDown="handlePullDown"
 			 @onPullUp="handleLoadMore">
 				<view class="list">
-					<navigator :url="'../goodsDetail/goodsDetail?item='+item.id" style="display: flex;flex-wrap: wrap;">
+					<view style="display: flex;flex-wrap: wrap;">
 						<view class="goodslist" v-for="item in getguessLikeData" :key="item.id" @click="onId(item.id)">
 							<view class="photo">
 								<image :src="item.sku_thumbImg_url" mode=""></image>
@@ -73,7 +71,7 @@
 								{{item.sku_price}}
 							</view>
 						</view>
-					</navigator>
+					</view>
 				</view>
 			</k-scroll-view>
 		</view>
@@ -131,7 +129,9 @@
 			},
 			// 猜你喜欢点击某个商品
 			onId(id){
-				console.log(id)
+				uni.navigateTo({
+					url:"/pages/goodsDetail/goodsDetail?goodsId="+id
+				})
 			},
 			
 			async getGridWay() {
