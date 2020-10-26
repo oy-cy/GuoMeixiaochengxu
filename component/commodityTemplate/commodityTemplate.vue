@@ -10,7 +10,7 @@
 						<text class="title_tag" v-if="item.extProperty">{{ item.extProperty }}</text>
 						<text class="title">{{ item.sku_name }}</text>
 					</view>
-					<view class="goods-tag-list">{{ item.tagList[0].tagName }}</view>
+					<text class="goods-tag-list" :style="{'border': '1rpx solid #'+item.tagList[0].tagColor, 'color': '#'+item.tagList[0].tagColor}" >{{ item.tagList[0].tagName }}</text>
 					<view class="price">
 						<view class="content">
 							<text class="symbol">￥</text>
@@ -133,12 +133,12 @@
 						}
 					}
 					.goods-tag-list {
-						width: 100rpx;
+						// width: 100rpx;
 						font-size: 24rpx;
-						text-align: center;
-						color: rgb(242, 12, 86);
-						border-color: rgb(242, 12, 86);
-						border: 1rpx solid rgb(242, 12, 86);
+						// text-align: center;
+						// color: rgb(242, 12, 86);
+						// border-color: rgb(242, 12, 86);
+						// border: 1rpx solid rgb(242, 12, 86);
 						margin: 10rpx 0;
 						border-radius: 5rpx;
 					}
