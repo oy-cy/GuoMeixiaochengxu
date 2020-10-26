@@ -77,7 +77,8 @@
 				tabsList: [],
 				lbdata:[],
 				gogeidata:[],
-				goodlist:[]
+				goodlist:[],
+				catId:"coles"
 			}
 		},
 		methods:{
@@ -89,19 +90,19 @@
 				console.log(obj)
 			},
 			async getLunboData(){
-				var {message} = await getLunbotu("coles");
+				var {message} = await getLunbotu(this.catId);
 				this.lbdata = message
 			},
 			async getGridData(){
-				var {message} = await getGrid("coles");
+				var {message} = await getGrid(this.catId);
 				this.gogeidata = message
 			},
 			async getSeckillData(){
 				var {message} = await getSeckill(1);
 				this.goodlist = message
 			},
-			async getCategoryData(data){
-				var {message} = await getCategory(data);
+			async getCategoryData(){
+				var {message} = await getCategory(this.catId);
 				this.tabsList = message;
 			},
 			
@@ -121,7 +122,7 @@
 			this.getLunboData();
 			this.getGridData();
 			this.getSeckillData();
-			this.getCategoryData('shop')
+			this.getCategoryData()
 		}
 	}
 </script>

@@ -11,7 +11,7 @@
 					<view class="consignee-info">
 						<view class="basic-info">
 							<view class="name">{{item.receiver}}</view>
-							<view class="phone">{{item.phone}}</view>
+							<view class="phone">{{item.phone.substr(0,3)+"****"+item.phone.substr(7)}}</view>
 						</view>
 						<view class="addr-info">
 							<view class="default" v-if="item.is_default">默认</view>
@@ -90,6 +90,7 @@ import { getAddrs,setSelectAddr } from '@/api/user.js';
 	position: relative;
 	height: 100vh;
 	background-color: rgb(243,245,247);
+	margin-bottom: 100rpx;
 	.list {
 		display: flex;
 		flex-direction: column;
@@ -179,7 +180,7 @@ import { getAddrs,setSelectAddr } from '@/api/user.js';
 		}
 	}
 	.button {
-		position: absolute;
+		position: fixed;
 		width: 100%;
 		height: 100rpx;
 		display: flex;

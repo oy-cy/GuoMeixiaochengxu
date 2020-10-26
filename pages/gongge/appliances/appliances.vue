@@ -6,23 +6,19 @@
 		<lb :pageid="pageid"></lb>
 		
 		<!-- 宫格 -->
-		
 		<gogei hang='4' :pageid="pageid"></gogei>
 		
 		<!-- 抢购 -->
 		<scrollList title="rob" ></scrollList>
 		
 		<!-- 换新推荐 -->
-		
 		<scrollList title="exchange"></scrollList>
 		
 		
 		<!-- 热卖榜单 -->
-		
 		<scrollList title="hot"></scrollList>
 		
-		<!-- 大家都在买 -->   
-		 
+		<!-- 大家都在买 -->
 		<everyone :pageid="pageid"></everyone>
 		
 		

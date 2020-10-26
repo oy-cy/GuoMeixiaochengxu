@@ -431,8 +431,13 @@
 					}
 					await addShopCar(car);
 					var {message} = await queryShopCar(this.userInfo.userId)
+					message.forEach(v=>{
+						v.shop_specification = JSON.parse( v.shop_specification);
+					})
 					this.$store.commit('setCarList',message)
 				}else{
+					// var tempCar = arr[index];
+					// tempCar.shop_specification = JSON.parse(tempCar.shop_specification)
 					await updateShopCar(arr[index]);
 					this.$store.commit('setCarList',arr)
 				}
@@ -457,7 +462,7 @@
 				
 				// console.log('立即购买')
 				uni.navigateTo({
-					url:"/pages/order/order?goodsInfo="+JSON.stringify(goodsInfo)
+					url:"/pages/order/order?goodsInfo="+JSON.stringify(goodsInfo)+"&detail=true"
 				})
 			},
 			// 地址组件方法

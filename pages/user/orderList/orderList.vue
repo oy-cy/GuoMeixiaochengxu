@@ -1,13 +1,15 @@
 <template>
 	<view class="order-list-container">
 		<!-- 顶部导航栏 -->
-		<view class="tabs">
-			<view :class="['item',active==0?'select':'']" @click="setActive(0)">全部</view>
-			<view :class="['item',active==1?'select':'']" @click="setActive(1)">待付款</view>
-			<view :class="['item',active==2?'select':'']" @click="setActive(2)">待收货</view>
-			<view :class="['item',active==3?'select':'']" @click="setActive(3)">已完成</view>
-			<view :class="['item',active==4?'select':'']" @click="setActive(4)">已取消</view>
-		</view>
+		<van-sticky>
+			<view class="tabs">
+				<view :class="['item',active==0?'select':'']" @click="setActive(0)">全部</view>
+				<view :class="['item',active==1?'select':'']" @click="setActive(1)">待付款</view>
+				<view :class="['item',active==2?'select':'']" @click="setActive(2)">待收货</view>
+				<view :class="['item',active==3?'select':'']" @click="setActive(3)">已完成</view>
+				<view :class="['item',active==4?'select':'']" @click="setActive(4)">已取消</view>
+			</view>
+		</van-sticky>
 		<!-- 无订单 -->
 		<view class="no-order" v-if="orderList.length==0">
 			<view class="image">
@@ -26,11 +28,13 @@
 						</view>
 						<view class="order-status">
 							<view class="status">{{getOrderStatus(item.status)}}</view>
-							<view class="cancel"><image src="/static/images/user/delete.png" mode=""></image></view>
+							<view class="cancel" v-if="item.status != 0 && item.status != 1 && item.status != 4" @click="deleteOrder">
+								<image src="/static/images/user/delete.png" mode=""></image>
+							</view>
 						</view>
 					</view>
-					<view class="content-box">
-						<block v-for="good in item.buyGoods" :key="good.id">
+					<navigator class="content-box" :url="'/pages/order/orderDetails/orderDetails?orderId='+item.id">
+						<block v-for="(good,indexs) in item.buyGoods" :key="indexs">
 							<view class="good-item">
 								<view class="good-img"><image :src="good.goodImg" mode=""></image></view>
 								<view class="info">
@@ -42,17 +46,25 @@
 								</view>
 							</view>
 						</block>
-					</view>
+					</navigator>
 					<view class="bottom">
 						<view class="total">
 							共<text class="count">{{item.count}}</text>件商品，实付:<text class="total_price">&yen;{{getTotalPrice(item.buyGoods)}}</text>
 						</view>
-						<view class="manipulate">
-							<view class="">
-								
-							</view>
-						</view>
 					</view>
+				</view>
+				<!-- 订单对应操作 -->
+				<view class="order_no_pay" v-if="getTime(item)">
+					<view class="time">
+						剩余支付时间：
+						<text>{{getHour(item)}}</text>：
+						<text>{{getMinute(item.create_time)}}</text>：
+						<text>{{getSecond(item.create_time)}}</text>
+					</view>
+					<view class="cancel" v-if="item.status == 0" @click="cancelOrder(item.id)">取消订单</view>
+					<view class="cancel" v-if="item.status == 4">等待发货</view>
+					<view class="to_pay" v-if="item.status == 0" @click="payOrder(item.id)">立刻支付</view>
+					<view class="to_pay" v-if="item.status ==1" @click="confirm(item.id)">确认收货</view>
 				</view>
 			</block>
 		</view>
@@ -68,7 +80,8 @@
 				// 订单数据
 				orderList:[
 					{
-						shopName:'深圳观澜店',
+						id:1,
+						status:2,
 						buyGoods:[
 							{
 								goodName:'七河源大米25kg 长粒粳米 东北大米 长粒香米',
@@ -77,10 +90,10 @@
 								goodImg:'http://gfs17.gomein.net.cn/T17OD5BKAT1RCvBVdK_80.jpg?v=2?v=2'
 							}
 						],
-						status:0
 					},
 					{
-						shopName:'深圳观澜店',
+						id:2,
+						status:3,
 						buyGoods:[
 							{
 								goodName:'七河源大米25kg 长粒粳米 东北大米 长粒香米',
@@ -95,7 +108,6 @@
 								goodImg:'http://gfs17.gomein.net.cn/T17OD5BKAT1RCvBVdK_80.jpg?v=2?v=2'
 							}
 						],
-						status:0
 					}
 				]
 			}
@@ -103,14 +115,30 @@
 		methods: {
 			setActive(active){
 				this.active = active;
+			},
+			// 取消订单
+			cancelOrder(id){
+				// todo 将订单转为已取消
+			},
+			// 立刻支付
+			payOrder(id){
+				// todo 将订单转为未收货
+			},
+			// 删除订单
+			deleteOrder(id){
+				// 将订单修改成已删除
+			},
+			// 确认订单
+			confirm(id){
+				// 将订单修改成已完成
 			}
-			// 调用接口返回对应的状态订单(todo)
 		},
 		onLoad(option) {
 			var status = option.status;
 			if(status){
 				this.active = status;
 			}
+			// 调用接口返回对应的状态订单(todo)
 		},
 		computed: {
 			// 根据订单状态返回文字
@@ -125,6 +153,8 @@
 							return '已完成';
 						case 3:
 							return '已取消';
+						case 4:
+							return '待发货';
 						default:
 							break;
 					}
@@ -142,6 +172,78 @@
 					return (sum/1000);
 				}
 			},
+			// 判断未付款订单或未收货或未发货订单是否已到时间(过期：转为已取消并返回false，未过期返回true)
+			getTime(){
+				return function(item){
+					// 将当前时间戳-生成时间戳
+					var timestamp = (new Date()).getTime();
+					timestamp -= item.create_time;
+					if(item.status == 0 && (timestamp > (60*60*24))){
+						// todo 将订单转为已取消状态
+						return false;
+					}else if(item.status == 4 && (timestamp > (60*60*24*7))){
+						// todo 7天未发货自动转为已取消
+						return false;
+					}else if(item.status == 1 && (timestamp > (60*60*24*7))){
+						// todo 发货并过7天自动转为已完成
+						return false;
+					}else if(item.status == 2 || item.status == 3){
+						return false;
+					}else {
+						return true;
+					}
+				}
+			},
+			// 返回剩余小时
+			getHour(){
+				return function(item){
+					var currentTimestamp = (new Date()).getTime();
+					currentTimestamp -= item.create_time;
+					if(item.status == 0){
+						var time = currentTimestamp/60/60%24;
+						if(time == 0){
+							return '00';
+						}else if(time.length == 1 && time != 0){
+							return '0'+time;
+						}
+						return time;
+					}else {
+						var time = currentTimestamp/60/60;
+						if(time == 0){
+							return '00';
+						}else if(time.length == 1 && time != 0){
+							return '0'+time;
+						}
+						return time;
+					}
+				}
+			},
+			// 返回剩余分钟
+			getMinute(){
+				return function(timestamp){
+					var currentTimestamp = (new Date()).getTime();
+					currentTimestamp -= timestamp;
+					var time = currentTimestamp/60%24;
+					if(time == 0){
+						return '00';
+					}else if(time.length == 1 && time != 0){
+						return '0'+time;
+					}
+					return time;
+				}
+			},
+			// 返回剩余秒
+			getSecond(){
+				return function(timestamp){
+					var currentTimestamp = (new Date()).getTime();
+					currentTimestamp -= timestamp;
+					var time = currentTimestamp%60;
+					if(time.length == 1 && time != 0){
+						return '0'+time;
+					}
+					return time;
+				}
+			}
 		}
 	}
 </script>
@@ -210,6 +312,8 @@
 				.order-status {
 					display: flex;
 					.status {
+						font-size: 30rpx;
+						padding-right: 16rpx;
 						color: rgb(242,12,89);
 					}
 					.cancel {
@@ -275,6 +379,38 @@
 						font-size: 38rpx;
 						padding-left: 12rpx;
 					}
+				}
+			}
+		}
+		.order_no_pay {
+			display: flex;
+			font-size: 24rpx;
+			justify-content: flex-end;
+			align-items: center;
+			background-color: #fff;
+			padding: 14rpx 0;
+			view {
+				margin: 0 10rpx;
+			}
+			.cancel {
+				color: #555;
+				border: 2rpx solid #555;
+				padding: 6rpx 12rpx;
+				border-radius: 40rpx;
+			}
+			.to_pay {
+				color: #F20C59;
+				border: 2rpx solid #F20C59;
+				padding: 6rpx 12rpx;
+				border-radius: 40rpx;
+			}
+			.time {
+				display: flex;
+				font-size: 26rpx;
+				text {
+					background-color: #000;
+					color: #fff;
+					padding: 4rpx;
 				}
 			}
 		}
