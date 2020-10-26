@@ -7,12 +7,6 @@
 					<view class="text">
 						{{getOrderStatus}}
 					</view>
-					<view class="time">
-						剩余支付时间：
-						<text>{{getHour}}</text>：
-						<text>{{getMinute}}</text>：
-						<text>{{getSecond}}</text>
-					</view>
 				</view>
 				<view class="image">
 					<image :src="getImgUrl()" mode=""></image>
@@ -20,21 +14,12 @@
 			</view>
 			<!-- 订单地址 -->
 			<view class="dispatching">
-				<!-- <view class="situation" v-if="order.status!=0 && order.status!=4">
-					<view class="image"><image src="/static/images/order/car.png" mode=""></image></view>
-					<view class="situation_info">
-						<view class="text">配送单{{getOrderStatus}}</view>
-						<view class="time">
-							{{order.update_time}}
-						</view>
-					</view>
-				</view> -->
 				<view class="addr">
 					<view class="image"><image src="/static/images/order/addr.png" mode=""></image></view>
 					<view class="addr_info">
 						<view class="text">
 							<text class="addr_text">配送地址</text>
-							<text class="recipients_name">{{order.user_name}}</text>
+							<text class="recipients_name">{{order.name}}</text>
 							<text class="recipients_phone">{{order.phone}}</text>
 						</view>
 						<view class="receiving_addr">
@@ -45,17 +30,17 @@
 			</view>
 			<!-- 订单详情 -->
 			<view class="order_info">
-				<block v-for="(good,indexs) in order.buyGoods" :key="indexs">
-					<view class="good-item">
-						<view class="good-img"><image :src="good.goodImg" mode=""></image></view>
+				<block v-for="(good,indexs) in order.orderLlsts" :key="indexs">
+					<navigator class="good-item" :url="'/pages/goodsDetail/goodsDetail?goodsId='+good.good_id">
+						<view class="good-img"><image :src="good.skuThumbImgUrl" mode=""></image></view>
 						<view class="info">
-							<view class="good-name">{{good.goodName}}</view>
+							<view class="good-name">{{good.skuName}}</view>
 							<view class="price-box">
 								<view class="price">&yen;{{good.price}}</view>
 								<view class="count">x{{good.count}}</view>
 							</view>
 						</view>
-					</view>
+					</navigator>
 				</block>
 				<view class="prompt">配送时间：工作日、双休日与节日均可送货</view>
 			</view>
@@ -106,47 +91,26 @@
 				<text class="text">实付款：</text>
 				<text class="count">&yen;{{getTotalPrice}}</text>
 			</view>
-			<view class="order_control" v-if="order.status==0">
+			<view class="order_control" v-if="order.status==0||order.status==1">
 				<view class="control_color m-right" v-if="order.status == 0" @click="payOrder(order.id)">立刻支付</view>
 				<view class="control_color" v-if="order.status == 0" @click="cancelOrder(order.id)">取消订单</view>
+				<view class="control_color" v-if="order.status == 1" @click="receiving(order.id)">确认收货</view>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+import { updateOrderStatus,getOrder } from '@/api/order.js';
 	export default {
 		data() {
 			return {
-				order:{
-					id:1,
-					status:1,
-					user_name:'xi',
-					phone:'157****1234',
-					update_time:'2020-10-22 11:10:23',
-					create_time:'2020-10-22 11:10:23',
-					receiving_addr:'广东省广州市越秀区光塔街道无',
-					buyGoods:[
-						{
-							goodName:'七河源大米25kg 长粒粳米 东北大米 长粒香米1',
-							price:20,
-							count:4,
-							goodImg:'http://gfs17.gomein.net.cn/T17OD5BKAT1RCvBVdK_80.jpg?v=2?v=2'
-						},
-						{
-							goodName:'七河源大米25kg 长粒粳米 东北大米 长粒香米2',
-							price:80,
-							count:4,
-							goodImg:'http://gfs17.gomein.net.cn/T17OD5BKAT1RCvBVdK_80.jpg?v=2?v=2'
-						}
-					]
-				}
+				order:{}
 			}
 		},
-		onLoad(option) {
-			if(option){
-				this.orderId = option.orderId;
-			}
+		async onLoad(option) {
+			this.orderId = option.orderId;
+			this.order = await getOrder(this.orderId);
 		},
 		computed: {
 			// 获取订单状态
@@ -166,74 +130,29 @@
 						break;
 				}
 			},
-			// 判断未付款订单或未收货或未发货订单是否已到时间(过期：转为已取消并返回false，未过期返回true)
-			getTime(){
-				return function(item){
-					// 将当前时间戳-生成时间戳
-					var timestamp = (new Date()).getTime();
-					timestamp -= item.create_time;
-					if(item.status == 0 && (timestamp > (60*60*24))){
-						// todo 将订单转为已取消状态
-						return false;
-					}else if(item.status == 4 && (timestamp > (60*60*24*7))){
-						// todo 7天未发货自动转为已取消
-						return false;
-					}else if(item.status == 1 && (timestamp > (60*60*24*7))){
-						// todo 发货并过7天自动转为已完成
-						return false;
-					}else if(item.status == 2 || item.status == 3){
-						return false;
-					}else {
-						return true;
-					}
+			// 计算订单总金额
+			getTotalPrice(){
+				if(!this.order.orderLlsts){
+					return;
 				}
+				var sum = 0;
+				this.order.orderLlsts.map(v => {
+					var price = (v.price * 1000);
+					var total = price * v.count;
+					sum += total;
+				})
+				return (sum/1000);
 			},
-			// 返回剩余小时
-			getHour(){
-				var timestamp = this.order.create_time;
-				var currentTimestamp = (new Date()).getTime();
-				currentTimestamp -= timestamp;
-				if(this.order.status == 0){
-					var time = currentTimestamp/60/60%24;
-					if(time == 0){
-						return '00';
-					}else if(time.length == 1 && time != 0){
-						return '0'+time;
-					}
-					return time;
-				}else {
-					var time = currentTimestamp/60/60;
-					if(time == 0){
-						return '00';
-					}else if(time.length == 1 && time != 0){
-						return '0'+time;
-					}
-					return time;
+			// 计算总数量
+			getTotalCount(){
+				if(!this.order.orderLlsts){
+					return;
 				}
-			},
-			// 返回剩余分钟
-			getMinute(){
-				var timestamp = this.order.create_time;
-				var currentTimestamp = (new Date()).getTime();
-				currentTimestamp -= timestamp;
-				var time = currentTimestamp/60%24;
-				if(time == 0){
-					return '00';
-				}else if(time.length == 1 && time != 0){
-					return '0'+time;
-				}
-				return time;
-			},
-			// 返回剩余秒
-			getSecond(){
-				var timestamp = this.order.create_time;
-				var currentTimestamp = (new Date()).getTime();
-				currentTimestamp -= timestamp;
-				var time = currentTimestamp%60;
-				if(time.length == 1 && time != 0){
-					return '0'+time;
-				}
-				return time;
+				var sum = 0;
+				this.order.orderLlsts.map(v => {
+					sum += v.count;
+				})
+				return sum;
 			}
 		},
 		methods: {
@@ -253,6 +172,48 @@
 					default:
 						break;
 				}
+			},
+			// 订单支付
+			async payOrder(id){
+				await updateOrderStatus(id,4);
+				uni.navigateBack({
+				  success: () => {
+				    let page = getCurrentPages().pop();  //跳转页面成功之后
+				    if (!page) return;
+				    let options = {
+						bool:true
+				    }
+				    page.onLoad(options);
+				  }
+				})
+			},
+			// 取消支付
+			async cancelOrder(id){
+				await updateOrderStatus(id,3);
+				uni.navigateBack({
+				  success: () => {
+				    let page = getCurrentPages().pop();  //跳转页面成功之后
+				    if (!page) return;
+				    let options = {
+						bool:true
+				    }
+				    page.onLoad(options);
+				  }
+				})
+			},
+			// 确认收货
+			async receiving(id){
+				await updateOrderStatus(id,2);
+				uni.navigateBack({
+				  success: () => {
+				    let page = getCurrentPages().pop();  //跳转页面成功之后
+				    if (!page) return;
+				    let options = {
+						bool:true
+				    }
+				    page.onLoad(options);
+				  }
+				})
 			}
 		}
 		
@@ -261,6 +222,7 @@
 
 <style lang="scss" scoped>
 .order_details_container {
+	height: 100vh;
 	background-color: rgb(243,245,247);
 	font-size: 28rpx;
 	.order_details {
