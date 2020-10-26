@@ -199,11 +199,7 @@
 			</view>
 		  </van-popup>
 		  
-		  <site ref="show"></site>
-		 
-		 
-		 <goTop></goTop>
-		 
+		  <site ref="show"></site>	 
 		 <u-toast ref="uToast" />
 	</view>
 
@@ -212,7 +208,6 @@
 
 <script>
 	import site from "@/component/gongge/site.vue"
-	import goTop from "@/component/goTop/goTop.vue"
 	import {deleteShopCar,updateShopCar} from "@/api/car.js"
 	
 	import {getSeckill} from "@/api/common.js"
@@ -437,7 +432,6 @@
 		},
 		components:{
 			site,
-			goTop
 		}
 	}
 </script>

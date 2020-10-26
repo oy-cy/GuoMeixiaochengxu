@@ -42,10 +42,6 @@
 				})
 			},
 			addcar(data){
-				uni.showToast({
-					title:"成功加入购物车",
-					icon:"none"
-				})
 				this.$store.commit('setaddcar',data);
 			}
 		}
