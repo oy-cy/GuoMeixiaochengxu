@@ -70,10 +70,12 @@
 			</view>
 			
 			<view class="like" :style="{'margin-bottom':getCarListData.length != 0?'150rpx;':'0rpx'}">
-				<view class="img">
-					<image src="../../static/images/gongge/weni.jpg" style="width: 300rpx;height: 70rpx;"></image>
-				</view>
-					
+				<!-- <view class="img">
+					<image  src="../../static/images/gongge/weni.jpg" style="width: 300rpx;height: 70rpx;"></image>
+				</view> -->
+				<van-divider contentPosition="center" customStyle="color: rgb(229, 54, 117); border-color: rgb(229, 54, 117); font-weight: bold; font-size: 14px;margin:20rpx 200rpx">
+					<image class="img" src="../../static/images/home/favour.png" mode=""></image>猜你喜欢
+				</van-divider>
 				<van-grid column-num="2" gutter="4">
 				  <van-grid-item use-slot v-for="(item,index) in allgoodList" :key="index" class="goodlist" @click="details(item.id)">
 					<image
@@ -557,9 +559,12 @@
 			.like{
 				
 				.img{
-					display: flex;
-					justify-content: center;
+					// display: flex;
+					// justify-content: center;
 					margin: 10rpx 0;
+					width: 32rpx;
+					height: 32rpx;
+					margin-right: 4rpx;
 				}
 				.goodlist{
 					/deep/ .van-grid-item__content{

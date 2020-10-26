@@ -38,11 +38,9 @@
 			<van-dialog id="van-dialog" />
 		</van-grid>
 		<!-- 国美秒杀 -->
-		<navigator :url="'../goodsDetail/goodsDetail?item='+item.id">
-			<view class="seckill-content">
-				<seckill :goodsData="getSeckillData"></seckill>
-			</view>
-		</navigator>
+		<view class="seckill-content">
+			<seckill :goodsData="getSeckillData"></seckill>
+		</view>
 			
 		<!-- 猜你喜欢 -->
 		<view class="related">
@@ -53,7 +51,7 @@
 			 :height="height" :bottom="bottom" :autoPullUp="autoPullUp" :stopPullDown="stopPullDown" @onPullDown="handlePullDown"
 			 @onPullUp="handleLoadMore">
 				<view class="list">
-					<navigator :url="'../goodsDetail/goodsDetail?item='+item.id" style="display: flex;flex-wrap: wrap;">
+					<view style="display: flex;flex-wrap: wrap;">
 						<view class="goodslist" v-for="item in getguessLikeData" :key="item.id" @click="onId(item.id)">
 							<view class="photo">
 								<image :src="item.sku_thumbImg_url" mode=""></image>
@@ -66,14 +64,14 @@
 								<view class="name"><text>{{item.extProperty}}</text>{{item.sku_name}}</view>
 							</view>
 							<view class="good_tab" v-if="item.tagList.length != 0">
-								<text class="tab" >{{item.tagList[0].tagName}}</text>
+								<text class="tab" :style="{'border': '1rpx solid #'+item.tagList[0].tagColor, 'color': '#'+item.tagList[0].tagColor}" >{{item.tagList[0].tagName}}</text>
 							</view>
 							<view class="price">
 								<text>￥</text>
 								{{item.sku_price}}
 							</view>
 						</view>
-					</navigator>
+					</view>
 				</view>
 			</k-scroll-view>
 		</view>
@@ -131,7 +129,9 @@
 			},
 			// 猜你喜欢点击某个商品
 			onId(id){
-				console.log(id)
+				uni.navigateTo({
+					url:"/pages/goodsDetail/goodsDetail?goodsId="+id
+				})
 			},
 			
 			async getGridWay() {
@@ -398,10 +398,11 @@
 						padding-top: 15rpx;
 
 						.name {
-							overflow: hidden;
+							text-overflow: ellipsis;
 							display: -webkit-box;
 							-webkit-line-clamp: 2;
 							-webkit-box-orient: vertical;
+							overflow: hidden;
 							font-size: 26rpx;
 
 							text {
@@ -415,8 +416,8 @@
 					.good_tab{
 						.tab{
 							font-size: 24rpx;
-							color: rgb(242, 12, 86);
-							border: 2rpx solid rgb(242, 12, 86);
+							// color: rgb(242, 12, 86);
+							// border: 2rpx solid rgb(242, 12, 86);
 							margin: 20rpx;
 						}
 					}
