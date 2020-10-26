@@ -7,7 +7,7 @@
 </template>
 
 <script>
-	import {getGrid} from "../../api/common.js"
+	import {getGrid} from "@/api/common.js"
 		export default {
 			
 			props:['hang',"pageid"],

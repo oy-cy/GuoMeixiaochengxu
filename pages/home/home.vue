@@ -5,7 +5,7 @@
 			<navigator url="../site/receivingCity/receivingCity">
 				<view class="location-photo">
 					<image src="../../static/images/home/location.png" mode=""></image>
-					<text class="text">深圳</text>
+					<text class="text">{{getCurrentCity}}</text>
 				</view>
 			</navigator>
 			<navigator class="search" hover-class="none" url="../search/search">
@@ -253,6 +253,11 @@
 		created() {
 			this.init();
 
+		},
+		computed:{
+			getCurrentCity(){
+				return this.$store.getters.getCurrentCity;
+			}
 		}
 	}
 </script>

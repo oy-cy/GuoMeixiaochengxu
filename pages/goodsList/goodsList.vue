@@ -1,6 +1,6 @@
 <template>
 	<view class="goodsList-container">
-		<view v-if="hasGoods">
+	
 			<!-- 首页头部 -->
 			<view class="header-search">
 				<navigator class="search" url="../search/search">
@@ -48,7 +48,7 @@
 						<view class="title">品牌</view>
 						<view class="content">
 							<view class="brand-list" v-for="(item,index) in brandList" :key="index" @tap.stop="getBrandName(item.brandName)">
-								<view class="item-list">{{ item.brandName }}</view>
+								<view class="item-list" :class="[item.brandName==brandName ?'selectedItem' :'']">{{ item.brandName }}</view>
 							</view>
 						</view>
 					</view>
@@ -59,11 +59,12 @@
 			
 				</van-popup>
 			</view>
+		<view v-if="hasGoods">
 			<k-scroll-view ref="k-scroll-view" :loadTip="loadTip" :loadingTip="loadingTip" :emptyTip="emptyTip" :touchHeight="touchHeight"
 			 :height="height" :bottom="bottom" :autoPullUp="autoPullUp" :stopPullDown="stopPullDown" @onPullDown="handlePullDown"
 			 @onPullUp="handleLoadMore">
 				<view class="goods-list">
-					<view class="item-list" v-for="item in goodsList" :key="item.id">
+					<view class="item-list" v-for="item in goodsList" :key="item.id"  @tap.stop="goGoodsDetail(item.id)">
 						<view class="img-container">
 							<image :src="item.sku_thumbImg_url" mode=""></image>
 						</view>
@@ -90,7 +91,7 @@
 				<view class="img-container">
 					<image src="../../static/images/common/empty.png" mode=""></image>
 				</view>
-				<view class="evaluate">暂无商品</view>
+				<view class="evaluate">此商品暂无货</view>
 			</view>
 		</view>
 	</view>
@@ -107,7 +108,8 @@
 				minPrice: '', //最低价
 				maxPrice: '', //最高价
 				brandName: '',
-				screenIndex: 0,
+				screenIndex: 0, // 1代表以价格和品牌名上拉加载、2.代表以价格上拉加载、2代表以品牌名上拉加载
+				searchIndex: 0,
 				isShow: false, // 点击的右侧弹出层
 				filterIndex: 0, // navbar点击的下标
 				priceOrder: 0, //1 价格从低到高 2价格从高到低
@@ -174,6 +176,13 @@
 			};
 		},
 		methods: {
+			//跳转到商品详情页
+			goGoodsDetail(id){
+				uni.navigateTo({
+					url: "/pages/goodsDetail/goodsDetail?goodsId="+ id
+				})
+			},
+			// 获取筛选的品牌名
 			getBrandName(name) {
 				this.brandName = name;
 				console.log(name);
@@ -184,22 +193,27 @@
 				this.page = 1;
 				// 确定筛选后关闭右弹窗
 				this.isShow = false;
-				console.log(this.minPrice);
-				console.log(this.maxPrice);
+				// 把goodsId和goodsName的值清空掉，防止上拉刷新时发送请求
+				// 因为goodsId是从分类页面带过来的，goodsName是从搜索页面带过来的
+				this.searchIndex = 0;
+				
 				if(this.minPrice && this.maxPrice && this.brandName){
-					console.log("1")
+					// console.log("111111")
+					this.screenIndex = 1;
 					this.getFilterPriceAndBrandNameData();
-					this.reset();
+					return;
 				}
 				if(this.minPrice && this.maxPrice){
-					console.log("2")
+					// console.log("222222")
+					this.screenIndex = 2;
 					this.getFilterPriceData();
-					this.reset();
+					return;
 				}
 				if(this.brandName){
-					console.log("3")
+					// console.log("333333")
+					this.screenIndex = 3;
 					this.getFilterBrandNameData();
-					this.reset();
+					return;
 				}
 			},
 			// 重置
@@ -209,6 +223,7 @@
 				this.maxPrice = '';
 				this.brandName = '';
 			},
+			// 关闭右弹窗
 			onClose() {
 				this.isShow = false;
 			},
@@ -318,30 +333,31 @@
 					return;
 				} */
 				this.page++;
-				// 根据分类点过来的id、上拉加载
-				if(this.goodsId){
-					console.log("根据分类")
-					var { message } = await getGoodsList(this.goodsId, this.page);
-				}
-				// 根据所搜点过来的名字、上拉加载
-				if(this.goodsName){
-					console.log("根据搜索名字")
-					var { message } = await getSearchGoods(this.goodsName,this.page);
-				}
+			
 				 // 根据价格和名字进行筛选商品、上拉加载
-				if(this.minPrice && this.maxPrice && this.brandName){
+				if(this.screenIndex == 1){
 					console.log("根据价格和名字进行筛选商品")
 					var { message } = await getFilterPriceAndBrandName(this.maxPrice,this.minPrice,this.brandName,this.page);
 				}
 				// 根据价格进行筛选商品、上拉加载
-				if(this.minPrice && this.maxPrice){
+				if(this.screenIndex == 2){
 					console.log("根据价格进行筛选商品")
 					var { message } = await getFilterPrice(this.maxPrice,this.minPrice,this.page);
 				}
 				// 根据品牌名进行筛选商品、上拉加载
-				if(this.brandName){
+				if(this.screenIndex == 3){
 					console.log("根据品牌名进行筛选商品")
 					var { message } = await getFilterBrandName(this.brandName,this.page);
+				}
+				// 根据分类点过来的id、上拉加载
+				if(this.searchIndex == 4){
+					console.log("根据分类")
+					var { message } = await getGoodsList(this.goodsId, this.page);
+				}
+				// 根据所搜点过来的名字、上拉加载
+				if(this.searchIndex == 5){
+					console.log("根据搜索名字")
+					var { message } = await getSearchGoods(this.goodsName,this.page);
 				}
 				stopLoad ? stopLoad() : '';
 				if (message.length == 0) {
@@ -393,10 +409,12 @@
 			// 点击分类过来的id
 			if(e.goodsId){
 				this.goodsId = e.goodsId;
+				this.searchIndex = 4;
 				this.getGoodsListData();
 			}else {
 				// 搜索过来的名字
 				this.goodsName = e.goodsName;
+				this.searchIndex = 5;
 				this.getSearchGoodsData();
 			}
 			
@@ -405,6 +423,8 @@
 			hasGoods:function(){
 				if(this.goodsList.length > 0){
 					return true;
+				}else {
+					return false;
 				}
 			}
 		},
@@ -627,7 +647,7 @@
 							box-sizing: border-box;
 						}
 
-						.item-list:hover {
+						.selectedItem {
 							border: 2rpx solid #F42F71;
 							color: #F42F71;
 							background-color: #FFF3F7;

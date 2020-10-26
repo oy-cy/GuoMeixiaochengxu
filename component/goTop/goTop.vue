@@ -46,6 +46,7 @@
 		padding: 4rpx 18rpx;
 		border-radius: 50%;
 		background-color: rgba($color: #ffffff, $alpha: 0.8);
+		z-index: 100;
 		image{
 			padding-top: 6rpx;
 			width: 32rpx;

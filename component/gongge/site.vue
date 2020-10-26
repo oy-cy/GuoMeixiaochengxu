@@ -19,7 +19,6 @@
 						
 						
 					<view class="content" :class="leftRight==true?'towardsLeft':'towardsRight'">
-						<!-- 等阿宇的收货地址数据 -->
 						<view class="y">
 							<scroll-view scroll-y="true" class="consigneeSite">
 								<view class="location" v-for="(item,index) in siteList" :key="index" @click="selectSite(item.id,item.city,item.name)">
@@ -48,7 +47,8 @@
 </template>
 
 <script>
-	import erhaPicker from "../../component/site/erha-picker/erha-picker.vue";
+	import erhaPicker from "@/component/site/erha-picker/erha-picker.vue";
+	import {getAddrs} from "@/api/user.js"
 	
 	export default {
 		data(){
@@ -59,22 +59,31 @@
 				
 				
 				// 假数据
-				siteList:[
-						{id:1,name:"广东省深圳市龙华区安仿学院",city:"深圳市"},
-						{id:2,name:"广东省深圳市龙华区安仿学院1",city:"深圳市"},
-						{id:3,name:"广东省深圳市龙华区安仿学院2",city:"深圳市"},
-						{id:4,name:"广东省深圳市龙华区安仿学院3",city:"深圳市"}
-				]
+				siteList:[]
 			}
 		},
-		
-		
-		created() {
-			if(this.siteList.length == 0){
-				this.leftRight=false;
-			} 
-		},
 		methods:{
+			async getAddrsData(){
+				this.siteList = [];
+				var {message} = await getAddrs(getApp().globalData.userInfo.userId);
+				console.log("asdfasdfsdafsdafsdafss",message)
+				
+				if(message.length == 0){
+					this.leftRight=false;
+					return;
+				} 
+				message.map(v=>{
+					var addr = v.addr.split("-")
+					var temp = addr.join('');
+					var city = addr[1];
+					if(addr[1] == "市辖区"){
+						city = addr[0]
+					}
+					this.siteList.push({id:v.id,name:temp,city:city})
+				})
+				console.log(this.siteList)
+			},
+			
 			conceal(param){
 				console.log("param",param);
 				this.$store.commit('setDefaultSite',param)

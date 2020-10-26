@@ -38,7 +38,7 @@
 		</view>
 		<view class="dimQuery" v-else>
 			<view class="dim">
-				<view class="text" v-for="item in fuzzyQueryData"  @tap.stop="goGoodsList(item.sku_name)">{{item.sku_name}}</view>
+				<view class="text" v-for="item in fuzzyQueryData" @tap.stop="goGoodsList(item.sku_name)">{{item.sku_name}}</view>
 			</view>
 		</view>
 		
@@ -100,8 +100,10 @@
 			
 			// onChange输入内容保存到数组中
 			onChange(e){
-				this.value = e.detail
-				// console.log(this.value);
+				this.value = e.detail;
+				if(this.value == ""){
+					console.log("aabb")
+				}
 				this.fuzzyQueryWay();
 			},
 			
@@ -119,11 +121,30 @@
 			},
 			async fuzzyQueryWay(){
 				var {message} = await fuzzyQuery(this.value);
-			
 				console.log("模糊",message)
+				message.length = 6;
 				this.fuzzyQueryData = message;
+				// message.forEach(function(v){
+				// 		console.log("forEach",v);
+				// 	if(v == 11){
+				// 		return;
+				// 	}
+				// 	this.fuzzyQueryData = message;
+				// })
+				
+				// message.map((v,index)=>{
+				// 	console.log("forEach",v)
+				// 	if(index >= 10){
+						
+				// 	}
+				// 	console.log("tempFuzzyQueryDataArray",tempFuzzyQueryDataArray)
+				// 	this.fuzzyQueryData = tempFuzzyQueryDataArray;
+				// })
 			},
 			goGoodsList(goodsName){
+		// console.log("对象",item)
+				// var data = JSON.stringify(item);
+				console.log("字符",goodsName)
 				uni.navigateTo({
 					url:"/pages/goodsList/goodsList?goodsName=" + goodsName
 				})
@@ -215,7 +236,9 @@
 			.dim{
 				.text{
 					border-bottom: 2rpx solid #e6e6e6;
-					padding: 20rpx;
+					padding: 20rpx 40rpx;
+					font-size: 26rpx;
+					color: gray;
 				}
 			}
 		}

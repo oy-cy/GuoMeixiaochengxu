@@ -119,22 +119,32 @@
 					运费
 				</view>
 				<view class="freight-content">
-					¥ {{freight}}.00
+					+ ¥ {{freight}}.00
 				</view>
 			</view>
 		</view>
 		<!-- 支付 -->
 		<view class="payment">
-			<van-button type="primary" block >微信支付 ¥ {{ countPrice + freight }}.00</van-button>
+			<van-button type="primary" block @click="toPay" >微信支付 ¥ {{ countPrice + freight }}.00</van-button>
 		</view>
+		<!-- 确定支付框 -->
+		<van-dialog id="van-dialog" />
+		<!-- 支付密码框 -->
+		 <jpPwd ref="jpPwds"  @completed="completed" contents=" "></jpPwd>
+		 <!-- 密码错误 -->
+		 <u-toast ref="uToast" />
 	</view>
 </template>
 
 <script>
+	 import jpPwd from '@/components/jp-pwd/jp-pwd.vue';
+	import Dialog from '@/wxcomponents/dist/dialog/dialog';
 	import {getaddrs} from "@/api/order.js"
+	import {deleteShopCar} from "@/api/car.js"
 	export default {
 		data() {
 			return {
+				isDetail:false,
 				isSite:false,
 				site:"请先填写收货地址",
 				userSite:{},
@@ -157,8 +167,7 @@
 		methods: {
 			// 初始化
 			init(){
-				this.getaddrs()
-				this.getCountPrice()
+				this.getCountPrice();
 			},
 			// 获取地址
 			async getaddrs(){
@@ -177,15 +186,84 @@
 			},
 			// 计算总价
 			getCountPrice(){
-				console.log(123321)
 				this.goodsList.map(v=>{
 					this.countPrice +=(v.sku_price * v.com_count)
 				})
-			}
+			},
+			// 付款
+			 toPay() {
+				if(this.isSite){
+					Dialog.confirm({
+					  title: '你确定要购买此商品吗',
+					}).then(() => {
+						this.$refs.jpPwds.toOpen();
+					  }).catch(async () => {
+						  console.log('未付款')
+						let obj = {
+							userId:this.userInfo.userId,
+							addr:this.userSite.addr +"-"+ this.userSite.addr_details,
+							receiver:this.userSite.receiver,
+							phone:this.userSite.phone,
+							goodsList:this.goodsList,
+							status:0
+						}
+						if(!this.isDetail){
+							// 删除购物车
+							let carId = this.goodsList.map(v => v.id);
+							this.$store.commit("deleteCar",carId);
+							await deleteShopCar(carId.join(","));
+						}
+						console.log(obj)
+					  });
+				}else{
+					 this.$refs.uToast.show({
+						title: '请先选择收货地址',
+						type: 'default',
+					 })
+				}
+				
+			 },
+			 // 支付判断
+			 async completed(e) {
+				  if (e == '123456') {
+					this.$refs.jpPwds.toCancel()
+					let obj = {
+						userId:this.userInfo.userId,
+						addr:this.userSite.addr +"-"+ this.userSite.addr_details,
+						receiver:this.userSite.receiver,
+						phone:this.userSite.phone,
+						goodsList:this.goodsList,
+						status:1
+					}
+					console.log('付款')
+					if(!this.isDetail){
+						// 删除购物车
+						// 删除购物车
+						let carId = this.goodsList.map(v => v.id);
+						this.$store.commit("deleteCar",carId);
+						await deleteShopCar(carId.join(","));
+					}
+				 } else {
+					 this.$refs.uToast.show({
+					 	title: '密码错误',
+					 	type: 'default',
+					 })
+				   this.$refs.jpPwds.backs()
+				 }
+			  },
 		},
-		onLoad() {
+		onLoad(option) {
+			if(option.goodsInfo){
+				this.isDetail = option.detail || false
+				this.goodsList = JSON.parse(option.goodsInfo);
+				console.log(this.goodsList);
+			}
 			this.init()
-		}
+		},
+		onShow() {
+			this.getaddrs();
+		},
+		components: { jpPwd },
 	}
 </script>
 
@@ -246,7 +324,14 @@
 					padding-bottom: 30rpx;
 					color: #333;
  					.name{
-						width: 80rpx;
+						width: 170rpx;
+						display: -webkit-box;
+						-webkit-box-orient: vertical;
+						-webkit-line-clamp: 1;
+						overflow: hidden;
+					}
+					.phone{
+						flex: 1;
 					}
 				}
 			}
