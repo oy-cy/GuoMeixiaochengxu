@@ -86,6 +86,27 @@ export function fuzzyQuery(name){
  	 })
  }
  
+ // 根据价格和名字进行筛选商品
+ export function getFilterPriceAndBrandName(maxPrice,minPrice,brandName,page){
+ 	 return request({
+ 		 url:`/filter?maxPrice=${maxPrice}&minPrice=${minPrice}&name=${brandName}&page=${page}`
+ 		 
+ 	 })
+ }
+ // 根据价格进行筛选商品
+ export function getFilterPrice(maxPrice,minPrice,page){
+ 	 return request({
+ 		 url:`/filter?maxPrice=${maxPrice}&minPrice=${minPrice}&page=${page}`
+ 		 
+ 	 })
+ }
+ // 根据价格进行筛选商品
+ export function getFilterBrandName(brandName,page){
+ 	 return request({
+ 		 url:`/filter?name=${brandName}&page=${page}`
+ 		 
+ 	 })
+ }
  // 生成购物车
  export function addShopCar(car){
 	 return request({

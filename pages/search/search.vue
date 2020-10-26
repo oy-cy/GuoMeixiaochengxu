@@ -124,12 +124,9 @@
 				this.fuzzyQueryData = message;
 			},
 			goGoodsList(goodsName){
-				// console.log("对象",item)
-				// var data = JSON.stringify(item);
-				console.log("字符",goodsName)
-				// uni.navigateTo({
-				// 	url:"/pages/goodsList/goodsList?goodsName=" + data
-				// })
+				uni.navigateTo({
+					url:"/pages/goodsList/goodsList?goodsName=" + goodsName
+				})
 			},
 			hotSearch(goodsName){
 				console.log("热门",goodsName);
