@@ -25,7 +25,7 @@
 						{{userSite.receiver}}
 					</view>
 					<view class="phone">
-						{{userSite.phone}}
+						{{userSite.phones}}
 					</view>
 				</view>
 			</view>
@@ -45,7 +45,7 @@
 					<image :src="item.sku_thumbImg_url"></image>
 					<view class="msgs">
 						<view class="goods-title">
-							{{item.sku_name}}{{item.shop_specification}}
+							{{item.sku_name}}{{JSON.stringify(item.shop_specification)}}
 						</view>
 						<view class="price-count">
 							<view class="price">
@@ -130,7 +130,7 @@
 		<!-- 确定支付框 -->
 		<van-dialog id="van-dialog" />
 		<!-- 支付密码框 -->
-		 <jpPwd ref="jpPwds"  @completed="completed" contents=" "></jpPwd>
+		 <jpPwd ref="jpPwds"  @completed="completed" contents=" " forgetName=" "></jpPwd>
 		 <!-- 密码错误 -->
 		 <u-toast ref="uToast" />
 	</view>
@@ -139,7 +139,7 @@
 <script>
 	 import jpPwd from '@/components/jp-pwd/jp-pwd.vue';
 	import Dialog from '@/wxcomponents/dist/dialog/dialog';
-	import {getaddrs} from "@/api/order.js"
+	import {getaddrs,addOrder} from "@/api/order.js"
 	import {deleteShopCar} from "@/api/car.js"
 	export default {
 		data() {
@@ -175,7 +175,8 @@
 				if(message.length != 0){
 					this.isSite = true;
 					this.userSite = message[0];
-					this.userSite.phone = this.userSite.phone.replace(this.userSite.phone.substring(3,7), "****")
+					this.userSite.phones = this.userSite.phone.replace(this.userSite.phone.substring(3,7), "****")
+					
 				}
 			},
 			// 跳转到地址管理页面
@@ -191,29 +192,37 @@
 				})
 			},
 			// 付款
-			 toPay() {
+			toPay() {
 				if(this.isSite){
 					Dialog.confirm({
 					  title: '你确定要购买此商品吗',
 					}).then(() => {
 						this.$refs.jpPwds.toOpen();
 					  }).catch(async () => {
-						  console.log('未付款')
 						let obj = {
 							userId:this.userInfo.userId,
-							addr:this.userSite.addr +"-"+ this.userSite.addr_details,
-							receiver:this.userSite.receiver,
+							receivingAddr:this.userSite.addr +"-"+ this.userSite.addr_details,
+							name:this.userSite.receiver,
 							phone:this.userSite.phone,
-							goodsList:this.goodsList,
+							buyGoods:this.goodsList,
+							remarks:this.leave|| '无',
 							status:0
 						}
+						var rows = await addOrder(obj);
 						if(!this.isDetail){
 							// 删除购物车
 							let carId = this.goodsList.map(v => v.id);
 							this.$store.commit("deleteCar",carId);
 							await deleteShopCar(carId.join(","));
 						}
-						console.log(obj)
+						this.$refs.uToast.show({
+							title: '订单生成成功',
+							type: 'default',
+							back :true,
+						})
+						// uni.navigateBack({
+						// 	delta:1
+						// })
 					  });
 				}else{
 					 this.$refs.uToast.show({
@@ -229,20 +238,29 @@
 					this.$refs.jpPwds.toCancel()
 					let obj = {
 						userId:this.userInfo.userId,
-						addr:this.userSite.addr +"-"+ this.userSite.addr_details,
-						receiver:this.userSite.receiver,
+						receivingAddr:this.userSite.addr +"-"+ this.userSite.addr_details,
+						name:this.userSite.receiver,
 						phone:this.userSite.phone,
-						goodsList:this.goodsList,
+						buyGoods:this.goodsList,
+						remarks:this.leave|| '无',
 						status:1
 					}
 					console.log('付款')
+					var rows = await addOrder(obj);
 					if(!this.isDetail){
-						// 删除购物车
 						// 删除购物车
 						let carId = this.goodsList.map(v => v.id);
 						this.$store.commit("deleteCar",carId);
 						await deleteShopCar(carId.join(","));
 					}
+					this.$refs.uToast.show({
+						title: '订单生成成功',
+						type: 'default',
+						back :true,
+					})
+					// uni.navigateBack({
+					// 	delta:1
+					// })
 				 } else {
 					 this.$refs.uToast.show({
 					 	title: '密码错误',
@@ -256,6 +274,9 @@
 			if(option.goodsInfo){
 				this.isDetail = option.detail || false
 				this.goodsList = JSON.parse(option.goodsInfo);
+				this.goodsList.map(v =>
+					v.shop_specification = JSON.stringify(v.shop_specification) || '[]',
+				)
 				console.log(this.goodsList);
 			}
 			this.init()
@@ -414,7 +435,7 @@
 					.right{
 						font-weight: 600;
 						text-align: right;
-						padding-right: 64rpx;
+						padding-right: 40rpx;
 						font-size: 26rpx;
 						color: #333;
 					}
