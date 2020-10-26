@@ -119,16 +119,10 @@ const store = new Vuex.Store({
 				}
 				
 				
-				// var boot = false
-				// start.carList.forEach(v=>{
-				// 	if(v.id == good.id){
-				// 		v.num++;
-				// 		boot=true;
-				// 	}
-				// })
-				// if(boot == true){
-				// 	start.carList.push(good)
-				// }
+				uni.showToast({
+					title:"加入购物车成功",
+					icon:"none"
+				})
 			}else{
 				uni.showToast({
 					title:"请先登录",
@@ -140,15 +134,6 @@ const store = new Vuex.Store({
 		setHistoryArray(state,historyArray){
 			state.historyArray = historyArray;
 			
-			// uni.setStorage({
-			// 	key:'keys',
-			// 	data:this.historyArray,
-			// 	success:function(){
-			// 		console.log("成功");
-			// 	}
-				
-			// })
-			// state.historyArray = keys;
 
 		},
 		

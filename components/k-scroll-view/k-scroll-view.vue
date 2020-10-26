@@ -125,7 +125,9 @@ export default {
 
 			isCloseTip: true, // 是否关闭了提示
 
-			hasMove: false
+			hasMove: false,
+			
+			press:0
 		};
 	},
 	computed: {
@@ -194,8 +196,10 @@ export default {
 			// 手指按下
 			// console.log('start');
 			this.touch_start.x = event.changedTouches[0].pageX;
+			
+			
 			this.touch_start.y = event.changedTouches[0].pageY;
-
+			this.press = this.touch_start.y
 			this.hasMove = false;
 		},
 		touchmove: function(event) {
@@ -291,6 +295,7 @@ export default {
 		},
 		touchend: function(event) {
 			// console.log("end")
+			
 			const hk = this;
 
 			hk.doRefreshing = false;
@@ -299,7 +304,9 @@ export default {
 			this.touch_end.x = event.changedTouches[0].pageX;
 			this.touch_end.y = event.changedTouches[0].pageY;
 
-			if (!hk.hasMove) {
+			var temp = this.press - event.changedTouches[0].pageY
+			if (!hk.hasMove && temp > 50) {
+				
 				const moveX = this.touch_start.x - this.touch_end.x;
 				const moveY = this.touch_start.y - this.touch_end.y;
 
@@ -314,7 +321,7 @@ export default {
 			// console.log("hk.pullUpCanDo", hk.pullUpCanDo)
 			// console.log("hk.pullDownCanDo", hk.pullDownCanDo)
 
-			if (hk.pullUpCanDo) {
+			if (hk.pullUpCanDo  && temp > 50) {
 				hk.onPullUpText = hk.loadingTip; // 正在加载
 				// 调用加载更多
 				hk.doLoadmore = true;

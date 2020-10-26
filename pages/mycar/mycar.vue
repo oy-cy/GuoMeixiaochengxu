@@ -70,10 +70,12 @@
 			</view>
 			
 			<view class="like" :style="{'margin-bottom':getCarListData.length != 0?'150rpx;':'0rpx'}">
-				<view class="img">
-					<image src="../../static/images/gongge/weni.jpg" style="width: 300rpx;height: 70rpx;"></image>
-				</view>
-					
+				<!-- <view class="img">
+					<image  src="../../static/images/gongge/weni.jpg" style="width: 300rpx;height: 70rpx;"></image>
+				</view> -->
+				<van-divider contentPosition="center" customStyle="color: rgb(229, 54, 117); border-color: rgb(229, 54, 117); font-weight: bold; font-size: 14px;margin:20rpx 200rpx">
+					<image class="img" src="../../static/images/home/favour.png" mode=""></image>猜你喜欢
+				</van-divider>
 				<van-grid column-num="2" gutter="4">
 				  <van-grid-item use-slot v-for="(item,index) in allgoodList" :key="index" class="goodlist" @click="details(item.id)">
 					<image
@@ -213,7 +215,7 @@
 	import goTop from "@/component/goTop/goTop.vue"
 	import {deleteShopCar,updateShopCar} from "@/api/car.js"
 	
-	import {getSellingList} from "@/api/common.js"
+	import {getSeckill} from "@/api/common.js"
 	export default {
 		data() {
 			return {
@@ -231,12 +233,9 @@
 				specification:{}
 			};
 		},
-		created() {
-			this.getguessLikeData();
-		},
 		methods:{
 			async getguessLikeData(){
-				var {message} = await getSellingList(1);
+				var {message} = await getSeckill(1);
 				this.allgoodList = message
 			},
 			
@@ -292,7 +291,7 @@
 					var info = {id:obj.index,
 								com_id:this.getCarListData[index].com_id,
 								com_count:obj.value,
-								specification:specification.length == 0?"[]":JSON.stringify(specification),
+								specification:JSON.stringify(specification),
 								price:this.getCarListData[index].price}
 					await updateShopCar(info);
 				}
@@ -382,10 +381,8 @@
 			},
 			
 			async affirm(){
-				// this.isSelect = false;
 				var data = this.specification;
 				console.log(data)
-				// // .spec[0].list[this.sureSelect].title
 				
 				var temp = [];
 				data.spec.map(v=>{
@@ -435,7 +432,8 @@
 			}
 		},
 		onShow() {
-			this.examineall()
+			this.examineall();
+			this.getguessLikeData();
 		},
 		components:{
 			site,
@@ -561,9 +559,12 @@
 			.like{
 				
 				.img{
-					display: flex;
-					justify-content: center;
+					// display: flex;
+					// justify-content: center;
 					margin: 10rpx 0;
+					width: 32rpx;
+					height: 32rpx;
+					margin-right: 4rpx;
 				}
 				.goodlist{
 					/deep/ .van-grid-item__content{

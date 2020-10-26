@@ -50,7 +50,7 @@
         },
         "permission" : {
             "scope.userLocation" : {
-                "desc" : ""
+                "desc" : "开发"
             }
         }
     }
