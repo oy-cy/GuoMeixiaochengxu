@@ -218,10 +218,11 @@
 						this.$refs.uToast.show({
 							title: '订单生成成功',
 							type: 'default',
+							back :true,
 						})
-						uni.navigateBack({
-							delta:1
-						})
+						// uni.navigateBack({
+						// 	delta:1
+						// })
 					  });
 				}else{
 					 this.$refs.uToast.show({
@@ -255,10 +256,11 @@
 					this.$refs.uToast.show({
 						title: '订单生成成功',
 						type: 'default',
+						back :true,
 					})
-					uni.navigateBack({
-						delta:1
-					})
+					// uni.navigateBack({
+					// 	delta:1
+					// })
 				 } else {
 					 this.$refs.uToast.show({
 					 	title: '密码错误',
