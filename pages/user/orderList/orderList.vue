@@ -84,7 +84,7 @@ import { getUserOrders,getOrderByStatus,deleteOrder,updateOrderStatus } from '@/
 			var bool = option.bool;
 			if(status){
 				this.active = status;
-				var data = await getOrderByStatus(this.userId,status);
+				var data = await getOrderByStatus(this.userId,status-1);
 				this.orderList = data;
 				return;
 			}
@@ -142,7 +142,7 @@ import { getUserOrders,getOrderByStatus,deleteOrder,updateOrderStatus } from '@/
 				}
 			},
 			// 立刻支付
-			async payOrder(id){
+			async payOrder(id,index){
 				// todo 将订单转为等发货
 				await updateOrderStatus(id,4);
 				if(this.active != 0){
@@ -159,7 +159,7 @@ import { getUserOrders,getOrderByStatus,deleteOrder,updateOrderStatus } from '@/
 				this.orderList.splice(index,1);
 			},
 			// 确认订单
-			async confirm(id){
+			async confirm(id,index){
 				// 将订单修改成已完成
 				await updateOrderStatus(id,2);
 				if(this.active != 0){
