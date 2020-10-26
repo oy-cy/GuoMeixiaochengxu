@@ -53,7 +53,7 @@
 									<text class="specifications" v-for="(item,index) in items.shop_specification" :key="index">{{item.title}}<text v-if="items.shop_specification.length-1!=index">,</text></text> 
 								</view>
 								<view class="price_num">
-									<text class="price">￥{{items.price.toFixed(2)}}</text>
+									<text class="price">￥{{items.price}}</text>
 									<u-number-box 
 									:min="1" :max="100" 
 									 size='18' 
@@ -213,7 +213,7 @@
 	import goTop from "@/component/goTop/goTop.vue"
 	import {deleteShopCar,updateShopCar} from "@/api/car.js"
 	
-	import {getSellingList} from "@/api/common.js"
+	import {getSeckill} from "@/api/common.js"
 	export default {
 		data() {
 			return {
@@ -231,12 +231,9 @@
 				specification:{}
 			};
 		},
-		created() {
-			this.getguessLikeData();
-		},
 		methods:{
 			async getguessLikeData(){
-				var {message} = await getSellingList(1);
+				var {message} = await getSeckill(1);
 				this.allgoodList = message
 			},
 			
@@ -433,7 +430,8 @@
 			}
 		},
 		onShow() {
-			this.examineall()
+			this.examineall();
+			this.getguessLikeData();
 		},
 		components:{
 			site,

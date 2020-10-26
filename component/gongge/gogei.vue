@@ -1,7 +1,7 @@
 <template>
 		<view class="goge">
 			<van-grid :column-num="hang" icon-size="60" :border="false">
-				<van-grid-item v-for="(item,index) in gogeidata" :icon="item.g_img" :text="item.g_title"  @click="select(index)"/>
+				<van-grid-item v-for="(item,index) in gogeidata" :icon="item.g_img" :text="item.g_title"  @click="select(item.g_title)"/>
 			</van-grid>
 		</view>
 </template>
@@ -17,10 +17,10 @@
 				}
 			},
 			methods:{
-				select(index){
-					console.log(index)
+				select(title){
+					console.log(title)
 					uni.navigateTo({
-						url:"/pages/goodsList/goodsList"
+						url:"/pages/goodsList/goodsList?goodsId="+title
 					})
 				},
 				async getGaidData(){
