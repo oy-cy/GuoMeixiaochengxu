@@ -142,7 +142,7 @@
 				// })
 			},
 			goGoodsList(goodsName){
-				// console.log("对象",item)
+		// console.log("对象",item)
 				// var data = JSON.stringify(item);
 				console.log("字符",goodsName)
 				uni.navigateTo({

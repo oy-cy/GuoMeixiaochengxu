@@ -37,3 +37,12 @@ export function getOrderByStatus(userId,status){
 		url:"/getOrderByStatus?userId="+userId+"&status="+status
 	})
 }
+
+// 生成订单
+export function addOrder(order){
+	return request({
+		url:"/addOrder",
+		methods:"post",
+		data:order
+	})
+}
