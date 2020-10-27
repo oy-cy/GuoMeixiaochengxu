@@ -243,7 +243,7 @@
 						phone:this.userSite.phone,
 						buyGoods:this.goodsList,
 						remarks:this.leave|| '无',
-						status:1
+						status:4
 					}
 					console.log('付款')
 					var rows = await addOrder(obj);

@@ -50,7 +50,7 @@
         },
         "permission" : {
             "scope.userLocation" : {
-                "desc" : "开发"
+                "desc" : "将定位你的城市位置"
             }
         }
     }

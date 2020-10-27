@@ -27,18 +27,18 @@
 							<view class="shop-name">国美</view>
 						</view>
 						<view class="order-status">
-							<view class="status">{{getOrderStatus(item.status)}}</view>
-							<view class="cancel" v-if="item.status != 0 && item.status != 1 && item.status != 4" @click="deleteOrder">
+							<view class="status">{{orderStatus(item.status)}}</view>
+							<view class="cancel" v-if="item.status != 0 && item.status != 1 && item.status != 4" @click="deleteOrder(item.id,index)">
 								<image src="/static/images/user/delete.png" mode=""></image>
 							</view>
 						</view>
 					</view>
 					<navigator class="content-box" :url="'/pages/order/orderDetails/orderDetails?orderId='+item.id">
-						<block v-for="(good,indexs) in item.buyGoods" :key="indexs">
+						<block v-for="(good,indexs) in item.orderLlsts" :key="indexs">
 							<view class="good-item">
-								<view class="good-img"><image :src="good.goodImg" mode=""></image></view>
+								<view class="good-img"><image :src="good.skuThumbImgUrl" mode=""></image></view>
 								<view class="info">
-									<view class="good-name">{{good.goodName}}</view>
+									<view class="good-name">{{good.skuName}}</view>
 									<view class="price-box">
 										<view class="price">&yen;{{good.price}}</view>
 										<view class="count">x{{good.count}}</view>
@@ -49,100 +49,155 @@
 					</navigator>
 					<view class="bottom">
 						<view class="total">
-							共<text class="count">{{item.count}}</text>件商品，实付:<text class="total_price">&yen;{{getTotalPrice(item.buyGoods)}}</text>
+							共<text class="count">{{item.count}}</text>件商品，实付:<text class="total_price">&yen;{{getTotalPrice(item.orderLlsts)}}</text>
 						</view>
 					</view>
 				</view>
 				<!-- 订单对应操作 -->
-				<view class="order_no_pay" v-if="getTime(item)">
-					<view class="time">
-						剩余支付时间：
-						<text>{{getHour(item)}}</text>：
-						<text>{{getMinute(item.create_time)}}</text>：
-						<text>{{getSecond(item.create_time)}}</text>
-					</view>
-					<view class="cancel" v-if="item.status == 0" @click="cancelOrder(item.id)">取消订单</view>
+				<view class="order_no_pay">
+					<view class="cancel" v-if="item.status == 0" @click="cancelOrder(item.id,index)">取消订单</view>
 					<view class="cancel" v-if="item.status == 4">等待发货</view>
-					<view class="to_pay" v-if="item.status == 0" @click="payOrder(item.id)">立刻支付</view>
-					<view class="to_pay" v-if="item.status ==1" @click="confirm(item.id)">确认收货</view>
+					<view class="to_pay" v-if="item.status == 0" @click="payOrder(item.id,index)">立刻支付</view>
+					<view class="to_pay" v-if="item.status ==1" @click="confirm(item.id,index)">确认收货</view>
 				</view>
 			</block>
+			<!-- 支付密码框 -->
+			<jpPwd ref="jpPwds"  @completed="completed" contents=" " forgetName=" "></jpPwd>
+			<!-- 密码错误 -->
+			<u-toast ref="uToast" />
 		</view>
 	</view>
 </template>
 
 <script>
+import jpPwd from '@/components/jp-pwd/jp-pwd.vue';
+import { getCommodityDetails } from '@/api/goodsDetail.js';
+import { getUserOrders,getOrderByStatus,deleteOrder,updateOrderStatus } from '@/api/order.js';
 	export default {
 		data() {
 			return {
 				// 当前选中
 				active: 0,
 				// 订单数据
-				orderList:[
-					{
-						id:1,
-						status:2,
-						buyGoods:[
-							{
-								goodName:'七河源大米25kg 长粒粳米 东北大米 长粒香米',
-								price:20,
-								count:4,
-								goodImg:'http://gfs17.gomein.net.cn/T17OD5BKAT1RCvBVdK_80.jpg?v=2?v=2'
-							}
-						],
-					},
-					{
-						id:2,
-						status:3,
-						buyGoods:[
-							{
-								goodName:'七河源大米25kg 长粒粳米 东北大米 长粒香米',
-								price:20,
-								count:4,
-								goodImg:'http://gfs17.gomein.net.cn/T17OD5BKAT1RCvBVdK_80.jpg?v=2?v=2'
-							},
-							{
-								goodName:'七河源大米25kg 长粒粳米 东北大米 长粒香米',
-								price:20,
-								count:4,
-								goodImg:'http://gfs17.gomein.net.cn/T17OD5BKAT1RCvBVdK_80.jpg?v=2?v=2'
-							}
-						],
-					}
-				]
+				orderList:[],
+				userId:'',
+				current:{id:'',index:''}
 			}
 		},
-		methods: {
-			setActive(active){
-				this.active = active;
-			},
-			// 取消订单
-			cancelOrder(id){
-				// todo 将订单转为已取消
-			},
-			// 立刻支付
-			payOrder(id){
-				// todo 将订单转为未收货
-			},
-			// 删除订单
-			deleteOrder(id){
-				// 将订单修改成已删除
-			},
-			// 确认订单
-			confirm(id){
-				// 将订单修改成已完成
-			}
+		components:{
+			jpPwd
 		},
-		onLoad(option) {
+		async onLoad(option) {
+			this.userId = getApp().globalData.userInfo.userId;
 			var status = option.status;
+			var bool = option.bool;
 			if(status){
 				this.active = status;
+				var data = await getOrderByStatus(this.userId,status-1);
+				this.orderList = data;
+				return;
+			}
+			if(bool){
+				if(this.active!=0){
+					var data = await getOrderByStatus(this.userId,this.active-1);
+					this.orderList = data;
+				}else {
+					var data = await getUserOrders(this.userId);
+					this.orderList = data;
+				}
+				return;
 			}
 			// 调用接口返回对应的状态订单(todo)
+			var data = await getUserOrders(this.userId);
+			this.orderList = data;
+		},
+		methods: {
+			// 支付判断
+			async completed(e) {
+				  if (e == '123456') {
+					this.$refs.jpPwds.toCancel()
+					// todo 将订单转为等发货
+					await updateOrderStatus(this.current.id,4);
+					if(this.active != 0){
+						this.orderList.splice(this.current.index,1);
+					}else {
+						var data = await getUserOrders(this.userId);
+						this.orderList = data;
+					}
+					this.current = {};
+				 } else {
+					 this.$refs.uToast.show({
+						title: '密码错误',
+						type: 'default',
+					 })
+				   this.$refs.jpPwds.backs()
+				 }
+			 },
+			async setActive(active){
+				this.active = active;
+				switch (active){
+					case 0:
+						var data = await getUserOrders(this.userId);
+						this.orderList = data;
+						break;
+					case 1:
+						var data = await getOrderByStatus(this.userId,0);
+						this.orderList = data;
+						break;
+					case 2:
+						var data = await getOrderByStatus(this.userId,1);
+						this.orderList = data;
+						break;
+					case 3:
+						var data = await getOrderByStatus(this.userId,2);
+						this.orderList = data;
+						break;
+					case 4:
+						var data = await getOrderByStatus(this.userId,3);
+						this.orderList = data;
+						break;
+					default:
+						break;
+				}
+			},
+			// 取消订单
+			async cancelOrder(id,index){
+				// todo 将订单转为已取消
+				await updateOrderStatus(id,3);
+				if(this.active != 0){
+					this.orderList.splice(index,1);
+				}else {
+					var data = await getUserOrders(this.userId);
+					this.orderList = data;
+				}
+			},
+			// 立刻支付
+			payOrder(id,index){
+				this.$refs.jpPwds.toOpen()
+				this.current.id = id;
+				this.current.index = index;
+			},
+			// 删除订单
+			async deleteOrder(id,index){
+				// 将订单修改成已删除
+				await deleteOrder(id);
+				this.orderList.splice(index,1);
+			},
+			// 确认订单
+			async confirm(id,index){
+				// 将订单修改成已完成
+				await updateOrderStatus(id,2);
+				if(this.active != 0){
+					this.orderList.splice(index,1);
+				}else {
+					var data = await getUserOrders(this.userId);
+					this.orderList = data;
+				}
+			},
 		},
 		computed: {
 			// 根据订单状态返回文字
-			getOrderStatus(){
+			orderStatus(){
 				return function(status) {
 					switch (status){
 						case 0:
@@ -163,6 +218,9 @@
 			// 计算订单总金额
 			getTotalPrice(){
 				return function(buyGoods){
+					if(!buyGoods){
+						return;
+					}
 					var sum = 0;
 					buyGoods.map(v => {
 						var price = (v.price * 1000);
@@ -172,79 +230,21 @@
 					return (sum/1000);
 				}
 			},
-			// 判断未付款订单或未收货或未发货订单是否已到时间(过期：转为已取消并返回false，未过期返回true)
-			getTime(){
-				return function(item){
-					// 将当前时间戳-生成时间戳
-					var timestamp = (new Date()).getTime();
-					timestamp -= item.create_time;
-					if(item.status == 0 && (timestamp > (60*60*24))){
-						// todo 将订单转为已取消状态
-						return false;
-					}else if(item.status == 4 && (timestamp > (60*60*24*7))){
-						// todo 7天未发货自动转为已取消
-						return false;
-					}else if(item.status == 1 && (timestamp > (60*60*24*7))){
-						// todo 发货并过7天自动转为已完成
-						return false;
-					}else if(item.status == 2 || item.status == 3){
-						return false;
-					}else {
-						return true;
+			getTotalPrice(){
+				return function(buyGoods){
+					if(!buyGoods){
+						return ;
 					}
-				}
-			},
-			// 返回剩余小时
-			getHour(){
-				return function(item){
-					var currentTimestamp = (new Date()).getTime();
-					currentTimestamp -= item.create_time;
-					if(item.status == 0){
-						var time = currentTimestamp/60/60%24;
-						if(time == 0){
-							return '00';
-						}else if(time.length == 1 && time != 0){
-							return '0'+time;
-						}
-						return time;
-					}else {
-						var time = currentTimestamp/60/60;
-						if(time == 0){
-							return '00';
-						}else if(time.length == 1 && time != 0){
-							return '0'+time;
-						}
-						return time;
-					}
-				}
-			},
-			// 返回剩余分钟
-			getMinute(){
-				return function(timestamp){
-					var currentTimestamp = (new Date()).getTime();
-					currentTimestamp -= timestamp;
-					var time = currentTimestamp/60%24;
-					if(time == 0){
-						return '00';
-					}else if(time.length == 1 && time != 0){
-						return '0'+time;
-					}
-					return time;
-				}
-			},
-			// 返回剩余秒
-			getSecond(){
-				return function(timestamp){
-					var currentTimestamp = (new Date()).getTime();
-					currentTimestamp -= timestamp;
-					var time = currentTimestamp%60;
-					if(time.length == 1 && time != 0){
-						return '0'+time;
-					}
-					return time;
+					var sum = 0;
+					buyGoods.map(v => {
+						var price = v.price*1000;
+						price *= v.count;
+						sum += price;
+					})
+					return sum / 1000;
 				}
 			}
-		}
+		},
 	}
 </script>
 
@@ -341,6 +341,7 @@
 						}
 					}
 					.info {
+						width: 100%;
 						display: flex;
 						.good-name {
 							flex: 1;
