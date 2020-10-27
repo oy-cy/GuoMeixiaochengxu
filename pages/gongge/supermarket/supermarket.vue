@@ -9,7 +9,7 @@
 		</scroll-view>
 		
 		<van-grid column-num="4" class="gogei" icon-size="70">
-			<van-grid-item v-for="(item,index) in gogeidata" :icon="item.g_img" @click="select(index)"/>
+			<van-grid-item v-for="(item,index) in gogeidata" :icon="item.g_img" @click="select(item.g_title)"/>
 		</van-grid>
 		 
 		<view class="refinedselect">
@@ -85,8 +85,10 @@
 			}
 		},
 		methods:{
-			select(index){
-				console.log(index)
+			select(title){
+				uni.navigateTo({
+					url:"/pages/goodsList/goodsList?goodsName="+title
+				})
 			},
 			change(obj){
 				this.currentTitle = obj.index
