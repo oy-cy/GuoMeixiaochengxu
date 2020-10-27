@@ -18,9 +18,8 @@
 			},
 			methods:{
 				select(title){
-					console.log(title)
 					uni.navigateTo({
-						url:"/pages/goodsList/goodsList?goodsId="+title
+						url:"/pages/goodsList/goodsList?goodsName="+title
 					})
 				},
 				async getGaidData(){
