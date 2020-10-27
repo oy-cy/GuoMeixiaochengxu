@@ -11,7 +11,8 @@
 		class="style"
 		/>
 		
-		<view class="operate" v-if="value == ''">
+		<!-- v-if="value == ''" -->
+		<view class="operate" v-if="!hasData">
 			<!-- 热门搜索 -->
 			<view class="hot-search">
 				<view class="hot-top">
@@ -20,7 +21,7 @@
 				</view>
 				<view class="keyword">
 					<!-- <navigator url="../goodsList/goodsList"> -->
-						<view class="word"  v-for="(item,index) in hotSearchData" :key="index" @tap.stop="hotSearch(item)">{{item}}</view>
+						<view class="word"  v-for="(item,index) in hotSearchData" :key="index" @tap.stop="goGoodsList(item)">{{item}}</view>
 					<!-- </navigator> -->
 				</view>
 			</view>
@@ -31,14 +32,15 @@
 					<text>搜索历史</text>
 				</view>
 				<view class="history-keyword">
-					<view class="word" v-for="item in historyArray" @tap.stop="history(item)">{{item}}</view>
+					<view class="word" v-for="(item,index) in historyArray" :key="index" @tap.stop="history(item)">{{item}}</view>
 				</view>
 				<view class="enpty" @click="onEmpty">清空历史记录</view>
 			</view>
 		</view>
-		<view class="dimQuery" v-else>
+		 <!-- v-else -->
+		<view class="dimQuery" v-if="hasData">
 			<view class="dim">
-				<view class="text" v-for="item in fuzzyQueryData" @tap.stop="goGoodsList(item.sku_name)">{{item.sku_name}}</view>
+				<view class="text" v-for="(item,index) in fuzzyQueryData" :key="index" @tap.stop="goGoodsList(item.sku_name)">{{item.sku_name}}</view>
 			</view>
 		</view>
 		
@@ -50,6 +52,7 @@
 	export default {
 		data() {
 			return {
+				hasData:false,
 				value: '',
 				historyArray:[],
 				isShow:false,
@@ -88,21 +91,36 @@
 				this.value = e.detail;
 				console.log("确认",this.value);
 				var getValue = this.value;
-				this.historyArray.push(getValue);
-				this.isShow = true;
+				var boot = false;
+				this.historyArray.map(v=>{
+					if(v == getValue){
+						boot = true;
+						return;
+					}
+				})
 				
-				uni.navigateTo({
+				if(!boot){
+					this.historyArray.unshift(getValue);
+				}else{
+					this.historyArray = this.first(getValue)
+				}
+				this.$store.commit('setHistoryArray',this.historyArray)
+				this.isShow = true;
+				uni.redirectTo({
 					url:"/pages/goodsList/goodsList?goodsName="+this.value
 				})
-				this.$store.commit('setHistoryArray',this.historyArray)
+				
 				this.value = "";
+				
 			},
 			
 			// onChange输入内容保存到数组中
 			onChange(e){
 				this.value = e.detail;
+				console.log("wewe",e)
 				if(this.value == ""){
 					console.log("aabb")
+					this.hasData = false;
 				}
 				this.fuzzyQueryWay();
 			},
@@ -120,47 +138,47 @@
 				})
 			},
 			async fuzzyQueryWay(){
+			
 				var {message} = await fuzzyQuery(this.value);
 				console.log("模糊",message)
-				message.length = 6;
+				// message.length = 6;
 				this.fuzzyQueryData = message;
-				// message.forEach(function(v){
-				// 		console.log("forEach",v);
-				// 	if(v == 11){
-				// 		return;
-				// 	}
-				// 	this.fuzzyQueryData = message;
-				// })
+				this.hasData = true;
 				
-				// message.map((v,index)=>{
-				// 	console.log("forEach",v)
-				// 	if(index >= 10){
-						
-				// 	}
-				// 	console.log("tempFuzzyQueryDataArray",tempFuzzyQueryDataArray)
-				// 	this.fuzzyQueryData = tempFuzzyQueryDataArray;
-				// })
+				if(this.value == ""){
+					console.log("aabb")
+					this.hasData = false;
+				}
 			},
-			goGoodsList(goodsName){
-		// console.log("对象",item)
-				// var data = JSON.stringify(item);
-				console.log("字符",goodsName)
-				uni.navigateTo({
+			history(goodsName){
+				var list = this.first(goodsName)
+				
+				this.$store.commit('setHistoryArray',list)
+				uni.redirectTo({
 					url:"/pages/goodsList/goodsList?goodsName=" + goodsName
 				})
 			},
-			hotSearch(goodsName){
-				console.log("热门",goodsName);
-				uni.navigateTo({
-					url:"../goodsList/goodsList?goodsName="+goodsName
+			goGoodsList(goodsName){
+				console.log("字符",goodsName)
+				uni.redirectTo({
+					url:"/pages/goodsList/goodsList?goodsName=" + goodsName
 				})
 			},
-			history(goodsName){
-				console.log("历史",goodsName);
-				uni.navigateTo({
-					url:"../goodsList/goodsList?goodsName="+goodsName
+			first(name){
+				var list = [];
+				list[0] = name;
+				this.historyArray.map(v=>{
+					if(v != name){
+						list.push(v)
+					}
 				})
+				return list
 			}
+		},
+		onLoad(e){
+			console.log("搜索",e)
+			this.value = e.goodsName;
+			console.log(this.value)
 		}
 	}
 </script>

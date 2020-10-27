@@ -3,9 +3,9 @@
 	
 			<!-- 首页头部 -->
 			<view class="header-search">
-				<navigator class="search" url="../search/search">
-					<van-search class="van-search" value="" background="background:transparen(0)" shape="round" placeholder="搜索国美商品" />
-				</navigator>
+				<view class="search" @tap="goSearch">
+					<van-search class="van-search" :value="goodsName" background="background:transparen(0)" shape="round" placeholder="搜索国美商品" />
+				</view>
 				<navigator url="../mycar/mycar" open-type="switchTab">
 					<view class="cart">
 						<image src="../../static/images/goodsList/cart-logo.png" mode=""></image>
@@ -176,6 +176,12 @@
 			};
 		},
 		methods: {
+			// 跳转到搜索页面
+			goSearch(){
+				uni.redirectTo({
+					url:"/pages/search/search?goodsName=" + this.goodsName
+				})
+			},
 			//跳转到商品详情页
 			goGoodsDetail(id){
 				uni.navigateTo({
