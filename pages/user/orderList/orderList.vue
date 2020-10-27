@@ -98,7 +98,7 @@ import { getUserOrders,getOrderByStatus,deleteOrder,updateOrderStatus } from '@/
 				return;
 			}
 			if(bool){
-				if(this.active!=""){
+				if(this.active!=0){
 					var data = await getOrderByStatus(this.userId,this.active-1);
 					this.orderList = data;
 				}else {
