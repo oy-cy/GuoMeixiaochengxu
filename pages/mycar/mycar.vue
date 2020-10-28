@@ -1,8 +1,6 @@
 <template>
 	<view class="mycar">
 		
-		
-		
 		<!-- 地址，编辑 -->
 		<view class="top" >
 			<view class="background">
@@ -53,7 +51,7 @@
 									<text class="specifications" v-for="(item,index) in items.shop_specification" :key="index">{{item.title}}<text v-if="items.shop_specification.length-1!=index">,</text></text> 
 								</view>
 								<view class="price_num">
-									<text class="price">￥{{items.price.toFixed(2)}}</text>
+									<text class="price">￥{{items.price}}</text>
 									<u-number-box 
 									:min="1" :max="100" 
 									 size='18' 

@@ -13,9 +13,9 @@ export function getCommodityDetails(comId){
 	})
 }
 //获取当前商品的评论
-export function getcomment(comId,type = ''){
+export function getcomment(comId){
 	return request({
-		url:"/getcomment?comId="+comId +"&type="+type
+		url:"/getcomment?comId="+comId
 	})
 }
 // 修改购物车
