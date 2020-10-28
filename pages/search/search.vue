@@ -78,9 +78,6 @@
 			//如果没有数据 就把清空记录按钮隐藏掉
 			//有数据的话 就把数据与按钮显示出来
 			onEmpty(){
-				console.log("清空")
-				// this.historyArray = [];
-				// var emptyData = this.historyArray;
 				this.isShow = false;
 				// 清空本地数据
 				this.$store.commit('setHistoryArray',this.historyArray = [] );
@@ -88,10 +85,16 @@
 			
 			//确认搜索
 			onSearch(e){
-				this.value = e.detail;
-				console.log("确认",this.value);
+				
+				this.value = e.detail.trim();
+				// 判断输入内容是否空，空的话就return
+				if(!this.value){
+					this.hasData = false;
+					return;
+				}
 				var getValue = this.value;
 				var boot = false;
+				// 判断输入的名字是否相同，相同就return
 				this.historyArray.map(v=>{
 					if(v == getValue){
 						boot = true;
@@ -99,6 +102,7 @@
 					}
 				})
 				
+				// 条件为假才执行
 				if(!boot){
 					this.historyArray.unshift(getValue);
 				}else{
@@ -116,11 +120,11 @@
 			
 			// onChange输入内容保存到数组中
 			onChange(e){
-				this.value = e.detail;
-				console.log("wewe",e)
-				if(this.value == ""){
-					console.log("aabb")
+				this.value = e.detail.trim();
+				// 判断输入内容是否空，空的话就return
+				if(!this.value){
 					this.hasData = false;
+					return;
 				}
 				this.fuzzyQueryWay();
 			},
@@ -132,7 +136,6 @@
 			  
 			// onCancel 点击取消按钮
 			onCancel(){
-				console.log("取消");
 				uni.reLaunch({
 				  	url:'/pages/home/home'
 				})
@@ -141,15 +144,14 @@
 			
 				var {message} = await fuzzyQuery(this.value);
 				console.log("模糊",message)
-				// message.length = 6;
 				this.fuzzyQueryData = message;
 				this.hasData = true;
 				
 				if(this.value == ""){
-					console.log("aabb")
 					this.hasData = false;
 				}
 			},
+			// 历史记录
 			history(goodsName){
 				var list = this.first(goodsName)
 				
@@ -159,24 +161,24 @@
 				})
 			},
 			goGoodsList(goodsName){
-				console.log("字符",goodsName)
 				uni.redirectTo({
 					url:"/pages/goodsList/goodsList?goodsName=" + goodsName
 				})
 			},
+			// 把搜索的名字和点击历史记录的名字放到第一位
 			first(name){
 				var list = [];
 				list[0] = name;
 				this.historyArray.map(v=>{
 					if(v != name){
-						list.push(v)
+						list.push(v);
 					}
 				})
 				return list
 			}
 		},
 		onLoad(e){
-			console.log("搜索",e)
+			// console.log("搜索",e)
 			this.value = e.goodsName;
 			console.log(this.value)
 		}
