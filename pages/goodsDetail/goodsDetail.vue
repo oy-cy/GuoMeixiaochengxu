@@ -461,14 +461,13 @@
 			},
 			// 购买商品
 			promptlyBuy(){
-				this.isLogin();
 				let goodsInfo = [{
 					sku_name:this.recommend.sku_name,
 					sku_thumbImg_url:this.select.img || this.recommend.sku_thumbImg_url,
 					user_id :this.userInfo.userId,
-					com_id : this.goodsId,
+					com_ibbd : this.goodsId,
 					com_count : this.select.number,
-					shop_specification : JSON.stringify(this.select.confirm) || '[]',
+					shop_specification : this.select.confirm,
 					sku_price : (this.select.price == 0 ? this.recommend.sku_price : this.select.price),
 				}]
 				

@@ -7,8 +7,8 @@
 			</u-count-down>
 		</view>
 		<scroll-view scroll-x="true" class="content">
-			<block v-for="(item, index) in goodsData" :key="item.id"  >
-				<view class="item" @tap.stop="goGoodsDetail(item.id)">
+			<block v-for="(item, index) in goodsData" :key="item.id">
+				<view class="item" @tap="goDetail">
 					<view class="img">
 						<image :src="item.sku_thumbImg_url" mode=""></image>
 					</view>
@@ -29,10 +29,8 @@
 			};
 		},
 		methods: {
-			goGoodsDetail(id) {
-				uni.navigateTo({
-					url:"/pages/goodsDetail/goodsDetail?goodsId=" + id
-				})
+			goDetail() {
+
 			}
 		}
 	}

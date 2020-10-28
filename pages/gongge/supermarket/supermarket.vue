@@ -8,10 +8,10 @@
 			</swiper>
 		</scroll-view>
 		
-		<van-grid column-num="4" class="gogei" icon-size="70">
-			<van-grid-item v-for="(item,index) in gogeidata" :icon="item.g_img" @click="select(item.g_title)"/>
+		<van-grid column-num="4" class="gogei" icon-size="50">
+			<van-grid-item v-for="(item,index) in gogeidata" :icon="item.g_img" :text="item.g_title" @click="select(index)"/>
 		</van-grid>
-		 
+		
 		<view class="refinedselect">
 			<view class="top">
 				精选好货
@@ -21,7 +21,7 @@
 					 <van-grid-item use-slot  v-for="(item,index) in goodlist" :key="index" class="gridItem" @click="goodDetail(item.id)">
 						 
 					    <image
-					      style="width: 240rpx; height: 240rpx;"
+					      style="width: 100%; height: 280rpx;"
 					      :src="item.sku_thumbImg_url"
 					    />
 						<view class="describe">
@@ -42,16 +42,13 @@
 			
 			<u-tabs :list="tabsList" :is-scroll="true" active-color="#f20c59" :current="currentTitle" @change="change"></u-tabs>
 		</view>
-		<view class="nogoodList" v-if="goodsList == 0">
-			暂无数据
-		</view>
 	
-		<view class="" v-if="goodsList.length != 0">
-			<view class="goodbox" v-for="(item,index) in goodsList" @click="goodDetail(item.id)">
+			<view class="goodbox" v-for="(item,index) in goodlist" @click="goodDetail(item.id)">
 				<image :src="item.sku_thumbImg_url" style="width: 200rpx;height: 200rpx;"></image>
 				<view class="describe">
 					<view class="title">
-						<text class="title_text"><text class="title_tag">{{item.extProperty}}</text>{{item.sku_name}}</text>
+						
+						<text class="title_text"><text class="title_tag">国美超市</text>{{item.sku_name}}</text>
 					</view>
 					<view class="price">
 						￥{{item.sku_price}}
@@ -62,6 +59,9 @@
 			<view class="finish">
 				看完了( •̀ ω •́ )✧
 			</view>
+		
+		<view class="">
+			
 		</view>
 	</view>
 </template>
@@ -69,30 +69,25 @@
 <script>
 	import {getLunbotu} from "@/api/common.js"
 	import {getGrid} from "@/api/common.js"
-	import {getSeckill,getCategory,getGoodsList} from "@/api/common.js"
+	import {getSeckill,getCategory} from "@/api/common.js"
 	export default {
 		data() {
 			return {
-				page:1,
-				
-				currentTitle:0,
+				currentTitle:1,
 				tabsList: [],
 				lbdata:[],
 				gogeidata:[],
 				goodlist:[],
-				catId:"coles",
-				goodsList:[]
+				catId:"coles"
 			}
 		},
 		methods:{
-			select(title){
-				uni.navigateTo({
-					url:"/pages/goodsList/goodsList?goodsName="+title
-				})
+			select(index){
+				console.log(index)
 			},
 			change(obj){
 				this.currentTitle = obj.index
-				this.getGoodsListData(obj.id)
+				console.log(obj)
 			},
 			async getLunboData(){
 				var {message} = await getLunbotu(this.catId);
@@ -110,10 +105,13 @@
 				var {message} = await getCategory(this.catId);
 				this.tabsList = message;
 			},
-			async getGoodsListData(id){
-				var {message} = await getGoodsList(id,this.page);
-				this.goodsList = message;
+			
+			change(obj){
+				this.currentTitle = obj.index;
+				this.getSeckillData()
 			},
+			
+			
 			goodDetail(id){
 				uni.navigateTo({
 					url:"/pages/goodsDetail/goodsDetail?goods="+id
@@ -172,15 +170,6 @@
 			}
 		}
 		
-		.nogoodList{
-			    display: flex;
-			    justify-content: center;
-			    font-size: 38rpx;
-			    color: #F25D8F;
-			    font-weight: 700;
-				padding: 60rpx 0rpx;
-		}
-		
 		.goodbox{
 			background-color: #fff;
 			display: flex;
@@ -192,7 +181,6 @@
 					
 					.title_text{
 						.title_tag{
-							color: #fff;
 							font-size: 24rpx;
 							margin-right: 10rpx;
 							background: -webkit-gradient(linear,left top,right top,from(#fa1e8c),to(#f20c59));

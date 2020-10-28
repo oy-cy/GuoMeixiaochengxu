@@ -1,121 +1,107 @@
 <template>
 	<view class="goodsList-container">
-	
-			<!-- 首页头部 -->
-			<view class="header-search">
-				<view class="search" @tap="goSearch">
-					<van-search class="van-search" :value="goodsName" background="background:transparen(0)" shape="round" placeholder="搜索国美商品" />
+		<!-- 首页头部 -->
+		<view class="header-search">
+			<navigator class="search" url="../search/search">
+				<van-search class="van-search" value="" background="background:transparen(0)" shape="round" placeholder="搜索国美商品" />
+			</navigator>
+			<navigator url="../mycar/mycar" open-type="switchTab">
+				<view class="cart">
+					<image src="../../static/images/goodsList/cart-logo.png" mode=""></image>
 				</view>
-				<navigator url="../mycar/mycar" open-type="switchTab">
-					<view class="cart">
-						<image src="../../static/images/goodsList/cart-logo.png" mode=""></image>
-					</view>
-				</navigator>
-			</view>
-			<view class="navBar-content">
-				<view class="navbar">
-					<view class="navbar-item" :class="{current:filterIndex === 0}" @tap.stop="tabClick(0)">
-						<text>综合</text>
-					</view>
-					<view class="navbar-item" :class="{current:filterIndex === 1}" @tap.stop="tabClick(1)">
-						<text>价格</text>
-					</view>
-					<view class="navbar-item" :class="{current:filterIndex === 2}" @tap.stop="tabClick(2)">
-						<text>销量</text>
-			
-					</view>
-					<view class="navbar-item" :class="{current:filterIndex === 3}" @tap.stop="tabClick(3)">
-						<text>筛选</text>
-					</view>
-				</view>
-				<view class="p-box">
-					<image :src="price.priceSort" mode=""></image>
-				</view>
-				<view class="s-box">
-					<image src="../../static/images/goodsList/screen.png" mode=""></image>
-				</view>
-			</view>
-			<view class="right-popup">
-				<van-popup :show="isShow" position="right" round custom-style="height: 100%; width: 90%;" @close="onClose">
-					<view class="price_input">
-						<view class="label">价格区间</view>
-						<input type="number" class="min_price" v-model="minPrice" placeholder="最低价" />
-						<view class="straight"></view>
-						<input type="number" class="max_price" v-model="maxPrice" placeholder="最高价" />
-			
-					</view>
-					<view class="brand">
-						<view class="title">品牌</view>
-						<view class="content">
-							<view class="brand-list" v-for="(item,index) in brandList" :key="index" @tap.stop="getBrandName(item.brandName)">
-								<view class="item-list" :class="[item.brandName==brandName ?'selectedItem' :'']">{{ item.brandName }}</view>
-							</view>
-						</view>
-					</view>
-					<view class="btn-content">
-						<view class="reset" @tap="reset">重置</view>
-						<view class="confirm" @tap="confirm">确认</view>
-					</view>
-			
-				</van-popup>
-			</view>
-		<view v-if="hasGoods">
-			<k-scroll-view ref="k-scroll-view" :loadTip="loadTip" :loadingTip="loadingTip" :emptyTip="emptyTip" :touchHeight="touchHeight"
-			 :height="height" :bottom="bottom" :autoPullUp="autoPullUp" :stopPullDown="stopPullDown" @onPullDown="handlePullDown"
-			 @onPullUp="handleLoadMore">
-				<view class="goods-list">
-					<view class="item-list" v-for="item in goodsList" :key="item.id"  @tap.stop="goGoodsDetail(item.id)">
-						<view class="img-container">
-							<image :src="item.sku_thumbImg_url" mode=""></image>
-						</view>
-						<view class="goods-info">
-							<view class="title-content">
-								<text class="tag">{{ item.extProperty }}</text>
-								<text class="title">{{ item.sku_name }}</text>
-							</view>
-							<view class="price-content">
-								<text class="symbol">￥</text>
-								<text class="price">{{ item.sku_price }}</text>
-							</view>
-							<view class="easeCard-tag">{{ item.tagList[0].tagName }}</view>
-							<view class="buy">{{ item.Sales }}人购买</view>
-							<view class="shop">{{ item.shop_name }}</view>
-						</view>
-					</view>
-				</view>
-			</k-scroll-view>
-			<goTop v-if="isShowLogo"></goTop>
+			</navigator>
 		</view>
-		<view v-else>
-			<view class="empty-container">
-				<view class="img-container">
-					<image src="../../static/images/common/empty.png" mode=""></image>
+		<view class="navBar-content">
+			<view class="navbar">
+				<view class="navbar-item" :class="{current:filterIndex === 0}" @tap="tabClick(0)">
+					<text>综合</text>
 				</view>
-				<view class="evaluate">此商品暂无货</view>
+				<view class="navbar-item" :class="{current:filterIndex === 1}" @tap="tabClick(1)">
+					<text>价格</text>
+				</view>
+				<view class="navbar-item" :class="{current:filterIndex === 2}" @tap="tabClick(2)">
+					<text>销量</text>
+
+				</view>
+				<view class="navbar-item" :class="{current:filterIndex === 3}" @tap="tabClick(3)">
+					<text>筛选</text>
+				</view>
+			</view>
+			<view class="p-box">
+				<image :src="price.priceSort" mode=""></image>
+			</view>
+			<view class="s-box">
+				<image src="../../static/images/goodsList/screen.png" mode=""></image>
 			</view>
 		</view>
+		<view class="right-popup">
+			<van-popup :show="isShow" position="right" round custom-style="height: 100%; width: 90%;" @close="onClose">
+				<view class="price_input">
+					<view class="label">价格区间</view>
+					<input type="number" class="min_price" v-model="minimumPrice" placeholder="最低价" />
+					<view class="straight"></view>
+					<input type="number" class="max_price" v-model="topPrice" placeholder="最高价" />
+
+				</view>
+				<view class="brand">
+					<view class="title">品牌</view>
+					<view class="content">
+						<view class="brand-list" v-for="(item,index) in brandList" :key="index" @tap="getBrandName(item.brandName)">
+							<view class="item-list">{{ item.brandName }}</view>
+						</view>
+					</view>
+				</view>
+				<view class="btn-content">
+					<view class="reset" @tap="reset">重置</view>
+					<view class="confirm" @tap="confirm">确认</view>
+				</view>
+
+			</van-popup>
+		</view>
+		<k-scroll-view ref="k-scroll-view" :loadTip="loadTip" :loadingTip="loadingTip" :emptyTip="emptyTip" :touchHeight="touchHeight"
+		 :height="height" :bottom="bottom" :autoPullUp="autoPullUp" :stopPullDown="stopPullDown" @onPullDown="handlePullDown"
+		 @onPullUp="handleLoadMore">
+			<view class="goods-list">
+				<view class="item-list" v-for="item in goodsList" :key="item.id">
+					<view class="img-container">
+						<image :src="item.sku_thumbImg_url" mode=""></image>
+					</view>
+					<view class="goods-info">
+						<view class="title-content">
+							<text class="tag">{{ item.extProperty }}</text>
+							<text class="title">{{ item.sku_name }}</text>
+						</view>
+						<view class="price-content">
+							<text class="symbol">￥</text>
+							<text class="price">{{ item.sku_price }}</text>
+						</view>
+						<view class="easeCard-tag">{{ item.tagList[0].tagName }}</view>
+						<view class="buy">{{ item.Sales }}人购买</view>
+						<view class="shop">{{ item.shop_name }}</view>
+					</view>
+				</view>
+			</view>
+		</k-scroll-view>
+		<goTop v-if="isShowLogo"></goTop>
 	</view>
 </template>
 
 <script>
 	import goTop from '@/component/goTop/goTop.vue';
-	import { getGoodsList,getSearchGoods,getFilterPriceAndBrandName,getFilterPrice,getFilterBrandName } from "@/api/common.js";
+	import { getGoodsList } from "@/api/common.js";
 	export default {
 		data() {
 			return {
 				isShowLogo: false,
 				isLogo: false,
-				minPrice: '', //最低价
-				maxPrice: '', //最高价
+				minimumPrice: '', //最低价
+				topPrice: '', //最高价
 				brandName: '',
-				screenIndex: 0, // 1代表以价格和品牌名上拉加载、2.代表以价格上拉加载、2代表以品牌名上拉加载
-				searchIndex: 0,
 				isShow: false, // 点击的右侧弹出层
 				filterIndex: 0, // navbar点击的下标
 				priceOrder: 0, //1 价格从低到高 2价格从高到低
 				sales: 0,
 				goodsId: '',
-				goodsName: '',
 				page: 1,
 				asc: "asc",
 				desc: "desc",
@@ -176,60 +162,22 @@
 			};
 		},
 		methods: {
-			// 跳转到搜索页面
-			goSearch(){
-				uni.redirectTo({
-					url:"/pages/search/search?goodsName=" + this.goodsName
-				})
-			},
-			//跳转到商品详情页
-			goGoodsDetail(id){
-				uni.navigateTo({
-					url: "/pages/goodsDetail/goodsDetail?goodsId="+ id
-				})
-			},
-			// 获取筛选的品牌名
 			getBrandName(name) {
 				this.brandName = name;
 				console.log(name);
 			},
 			// 确定筛选
 			confirm() {
-				// 把page重新赋值为1
-				this.page = 1;
-				// 确定筛选后关闭右弹窗
-				this.isShow = false;
-				// 把goodsId和goodsName的值清空掉，防止上拉刷新时发送请求
-				// 因为goodsId是从分类页面带过来的，goodsName是从搜索页面带过来的
-				this.searchIndex = 0;
-				
-				if(this.minPrice && this.maxPrice && this.brandName){
-					// console.log("111111")
-					this.screenIndex = 1;
-					this.getFilterPriceAndBrandNameData();
-					return;
-				}
-				if(this.minPrice && this.maxPrice){
-					// console.log("222222")
-					this.screenIndex = 2;
-					this.getFilterPriceData();
-					return;
-				}
-				if(this.brandName){
-					// console.log("333333")
-					this.screenIndex = 3;
-					this.getFilterBrandNameData();
-					return;
-				}
+				console.log(this.minimumPrice);
+				console.log(this.topPrice);
 			},
 			// 重置
 			reset() {
 				// 清空
-				this.minPrice = '';
-				this.maxPrice = '';
+				this.minimumPrice = '';
+				this.topPrice = '';
 				this.brandName = '';
 			},
-			// 关闭右弹窗
 			onClose() {
 				this.isShow = false;
 			},
@@ -247,8 +195,7 @@
 				if (index === 0) {
 					// sales priceOrder赋值为0，用于上拉加载时的判断
 					this.zero();
-					this.getGoodsListData();
-					this.getSearchGoodsData();
+					this.getGoodsListData()
 				} else if (index === 1) {
 					this.sales = 0;
 					this.priceOrder = this.priceOrder === 1 ? 2 : 1;
@@ -277,7 +224,7 @@
 					this.isShow = true;
 				}
 			},
-			// 根据id获取商品数据
+			// 获取商品数据
 			async getGoodsListData() {
 				var { message } = await getGoodsList(this.goodsId, this.page);
 				message.map(v => {
@@ -285,48 +232,6 @@
 				})
 				this.tempArr = message;
 				this.goodsList = message;
-			},
-			// 根据名字获取商品数据
-			async getSearchGoodsData() {
-				var { message } = await getSearchGoods(this.goodsName,this.page);
-				message.map(v => {
-					v.tagList = JSON.parse(v.tagList);	
-				})
-				this.tempArr = message;
-				this.goodsList = message;
-			},
-			 // 根据价格和名字进行筛选商品
-			async getFilterPriceAndBrandNameData(){
-				var { message } = await getFilterPriceAndBrandName(this.maxPrice,this.minPrice,this.brandName,this.page);
-				console.log("筛选",message);
-				message.map(v => {
-					v.tagList = JSON.parse(v.tagList);	
-				})
-				this.tempArr = message;
-				this.goodsList = message;
-				
-			},
-			// 根据价格进行筛选商品
-			async getFilterPriceData(){
-				var { message } = await getFilterPrice(this.maxPrice,this.minPrice,this.page);
-				console.log("筛选价格",message);
-				message.map(v => {
-					v.tagList = JSON.parse(v.tagList);	
-				})
-				this.tempArr = message;
-				this.goodsList = message;
-				
-			},
-			// 根据品牌名进行筛选商品
-			async getFilterBrandNameData(){
-				var { message } = await getFilterBrandName(this.brandName,this.page);
-				console.log("筛选品牌名",message);
-				message.map(v => {
-					v.tagList = JSON.parse(v.tagList);	
-				})
-				this.tempArr = message;
-				this.goodsList = message;
-				
 			},
 			// 上拉刷新
 			async handleLoadMore(stopLoad) {
@@ -339,32 +244,7 @@
 					return;
 				} */
 				this.page++;
-			
-				 // 根据价格和名字进行筛选商品、上拉加载
-				if(this.screenIndex == 1){
-					console.log("根据价格和名字进行筛选商品")
-					var { message } = await getFilterPriceAndBrandName(this.maxPrice,this.minPrice,this.brandName,this.page);
-				}
-				// 根据价格进行筛选商品、上拉加载
-				if(this.screenIndex == 2){
-					console.log("根据价格进行筛选商品")
-					var { message } = await getFilterPrice(this.maxPrice,this.minPrice,this.page);
-				}
-				// 根据品牌名进行筛选商品、上拉加载
-				if(this.screenIndex == 3){
-					console.log("根据品牌名进行筛选商品")
-					var { message } = await getFilterBrandName(this.brandName,this.page);
-				}
-				// 根据分类点过来的id、上拉加载
-				if(this.searchIndex == 4){
-					console.log("根据分类")
-					var { message } = await getGoodsList(this.goodsId, this.page);
-				}
-				// 根据所搜点过来的名字、上拉加载
-				if(this.searchIndex == 5){
-					console.log("根据搜索名字")
-					var { message } = await getSearchGoods(this.goodsName,this.page);
-				}
+				var { message } = await getGoodsList(this.goodsId, this.page);
 				stopLoad ? stopLoad() : '';
 				if (message.length == 0) {
 					// message.length等于0的时候，把hasData设为false；用于后续的判断；
@@ -412,27 +292,9 @@
 			}
 		},
 		onLoad(e) {
-			// 点击分类过来的id
-			if(e.goodsId){
-				this.goodsId = e.goodsId;
-				this.searchIndex = 4;
-				this.getGoodsListData();
-			}else {
-				// 搜索过来的名字
-				this.goodsName = e.goodsName;
-				this.searchIndex = 5;
-				this.getSearchGoodsData();
-			}
-			
-		},
-		computed:{
-			hasGoods:function(){
-				if(this.goodsList.length > 0){
-					return true;
-				}else {
-					return false;
-				}
-			}
+			console.log(e)
+			this.goodsId = e.goodsId;
+			this.getGoodsListData();
 		},
 		components:{
 			goTop
@@ -653,7 +515,7 @@
 							box-sizing: border-box;
 						}
 
-						.selectedItem {
+						.item-list:hover {
 							border: 2rpx solid #F42F71;
 							color: #F42F71;
 							background-color: #FFF3F7;
@@ -687,25 +549,6 @@
 					background: linear-gradient(to right, #FA1E8C 0, #FC1E56 100%);
 					color: #fff;
 				}
-			}
-		}
-	.empty-container {
-			height: 654rpx;
-			border-radius: 30rpx;
-			margin-top: 200rpx;
-			background-color: #FFFFFF;
-			.img-container {
-				width: 320rpx;
-				height: 320rpx;
-				margin: auto;
-				image {
-					width: 100%;
-					height: 100%;
-				}
-			}
-			.evaluate {
-				text-align: center;
-				color: #C1C3C5;
 			}
 		}
 	}
