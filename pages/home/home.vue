@@ -366,6 +366,8 @@
 					background-color: #FFFFFF;
 					width: 350rpx;
 					height: 622rpx;
+					border-radius: 20rpx;
+					overflow: hidden;
 
 					.photo {
 						image {

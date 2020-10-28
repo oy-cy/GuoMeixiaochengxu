@@ -226,9 +226,9 @@
 		}
 	},
 	"globalStyle": {
-		"navigationBarTextStyle": "white",
+		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#007AFF",
+		"navigationBarBackgroundColor": "#FFFFFF",
 		"backgroundColor": "#FFFFFF",
 		"usingComponents": {
 			"van-search": "/wxcomponents/dist/search/index",
