@@ -122,8 +122,8 @@
 			return {
 				isShowLogo: false,
 				isLogo: false,
-				minimumPrice: '', //最低价
-				topPrice: '', //最高价
+				minPrice: '', //最低价
+				maxPrice: '', //最高价
 				brandName: '',
 				isShow: false, // 点击的右侧弹出层
 				filterIndex: 0, // navbar点击的下标
@@ -241,8 +241,8 @@
 			// 重置
 			reset() {
 				// 清空
-				this.minimumPrice = '';
-				this.topPrice = '';
+				this.minPrice = '';
+				this.maxPrice = '';
 				this.brandName = '';
 			},
 			onClose() {
@@ -256,7 +256,7 @@
 			tabClick(index) {
 				// 每次点击都把page赋值为1，用于后续发送请求时都是以第一页开始
 				this.page = 1;
-
+				
 				this.filterIndex = index;
 				this.price.priceSort = this.price.default;
 				if (index === 0) {
@@ -467,7 +467,7 @@
 				})
 				// 把之前的数据拼接到一起
 				this.likeGoodsData = this.likeGoodsData.concat(message);
-			},
+			}
 		},
 		// 监听当前页面的滚动
 		onPageScroll: function(event) {
