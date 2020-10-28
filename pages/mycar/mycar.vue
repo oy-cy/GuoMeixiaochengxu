@@ -53,7 +53,7 @@
 									<text class="specifications" v-for="(item,index) in items.shop_specification" :key="index">{{item.title}}<text v-if="items.shop_specification.length-1!=index">,</text></text> 
 								</view>
 								<view class="price_num">
-									<text class="price">￥{{items.price}}</text>
+									<text class="price">￥{{items.price.toFixed(2)}}</text>
 									<u-number-box 
 									:min="1" :max="100" 
 									 size='18' 
@@ -70,12 +70,10 @@
 			</view>
 			
 			<view class="like" :style="{'margin-bottom':getCarListData.length != 0?'150rpx;':'0rpx'}">
-				<!-- <view class="img">
-					<image  src="../../static/images/gongge/weni.jpg" style="width: 300rpx;height: 70rpx;"></image>
-				</view> -->
-				<van-divider contentPosition="center" customStyle="color: rgb(229, 54, 117); border-color: rgb(229, 54, 117); font-weight: bold; font-size: 14px;margin:20rpx 200rpx">
-					<image class="img" src="../../static/images/home/favour.png" mode=""></image>猜你喜欢
-				</van-divider>
+				<view class="img">
+					<image src="../../static/images/gongge/weni.jpg" style="width: 300rpx;height: 70rpx;"></image>
+				</view>
+					
 				<van-grid column-num="2" gutter="4">
 				  <van-grid-item use-slot v-for="(item,index) in allgoodList" :key="index" class="goodlist" @click="details(item.id)">
 					<image
@@ -199,7 +197,11 @@
 			</view>
 		  </van-popup>
 		  
-		  <site ref="show"></site>	 
+		  <site ref="show"></site>
+		 
+		 
+		 <goTop></goTop>
+		 
 		 <u-toast ref="uToast" />
 	</view>
 
@@ -208,9 +210,10 @@
 
 <script>
 	import site from "@/component/gongge/site.vue"
+	import goTop from "@/component/goTop/goTop.vue"
 	import {deleteShopCar,updateShopCar} from "@/api/car.js"
 	
-	import {getSeckill} from "@/api/common.js"
+	import {getSellingList} from "@/api/common.js"
 	export default {
 		data() {
 			return {
@@ -228,9 +231,12 @@
 				specification:{}
 			};
 		},
+		created() {
+			this.getguessLikeData();
+		},
 		methods:{
 			async getguessLikeData(){
-				var {message} = await getSeckill(1);
+				var {message} = await getSellingList(1);
 				this.allgoodList = message
 			},
 			
@@ -427,11 +433,11 @@
 			}
 		},
 		onShow() {
-			this.examineall();
-			this.getguessLikeData();
+			this.examineall()
 		},
 		components:{
 			site,
+			goTop
 		}
 	}
 </script>
@@ -553,12 +559,9 @@
 			.like{
 				
 				.img{
-					// display: flex;
-					// justify-content: center;
+					display: flex;
+					justify-content: center;
 					margin: 10rpx 0;
-					width: 32rpx;
-					height: 32rpx;
-					margin-right: 4rpx;
 				}
 				.goodlist{
 					/deep/ .van-grid-item__content{

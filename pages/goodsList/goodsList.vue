@@ -1,6 +1,5 @@
 <template>
 	<view class="goodsList-container">
-
 		<!-- 首页头部 -->
 		<view class="header-search">
 			<view class="search" @tap="goSearch">
@@ -84,6 +83,7 @@
 					</view>
 				</view>
 			</k-scroll-view>
+			<goTop v-if="isShowLogo"></goTop>
 		</view>
 		<view v-else>
 			<view class="empty-container">
@@ -122,17 +122,14 @@
 			return {
 				isShowLogo: false,
 				isLogo: false,
-				minPrice: '', //最低价
-				maxPrice: '', //最高价
+				minimumPrice: '', //最低价
+				topPrice: '', //最高价
 				brandName: '',
-				screenIndex: 0, // 1代表以价格和品牌名上拉加载、2.代表以价格上拉加载、2代表以品牌名上拉加载
-				searchIndex: 0,
 				isShow: false, // 点击的右侧弹出层
 				filterIndex: 0, // navbar点击的下标
 				priceOrder: 0, //1 价格从低到高 2价格从高到低
 				sales: 0,
 				goodsId: '',
-				goodsName: '',
 				page: 1,
 				asc: "asc",
 				desc: "desc",
@@ -244,11 +241,10 @@
 			// 重置
 			reset() {
 				// 清空
-				this.minPrice = '';
-				this.maxPrice = '';
+				this.minimumPrice = '';
+				this.topPrice = '';
 				this.brandName = '';
 			},
-			// 关闭右弹窗
 			onClose() {
 				this.isShow = false;
 			},
@@ -266,8 +262,7 @@
 				if (index === 0) {
 					// sales priceOrder赋值为0，用于上拉加载时的判断
 					this.zero();
-					this.getGoodsListData();
-					this.getSearchGoodsData();
+					this.getGoodsListData()
 				} else if (index === 1) {
 					this.sales = 0;
 					this.priceOrder = this.priceOrder === 1 ? 2 : 1;
@@ -296,7 +291,7 @@
 					this.isShow = true;
 				}
 			},
-			// 根据id获取商品数据
+			// 获取商品数据
 			async getGoodsListData() {
 				var {
 					message
@@ -368,7 +363,6 @@
 						return;
 					} */
 				this.page++;
-
 				// 根据价格和名字进行筛选商品、上拉加载
 				if (this.screenIndex == 1) {
 					console.log("根据价格和名字进行筛选商品")
@@ -404,6 +398,9 @@
 						message
 					} = await getSearchGoods(this.goodsName, this.page);
 				}
+				var {
+					message
+				} = await getGoodsList(this.goodsId, this.page);
 				stopLoad ? stopLoad() : '';
 				if (message.length == 0) {
 					// message.length等于0的时候，把hasData设为false；用于后续的判断；
@@ -510,10 +507,11 @@
 				}
 			}
 		},
+
 		components: {
 			goTop,
 			commodityTemplate
-		}
+		},
 	}
 </script>
 
@@ -730,7 +728,7 @@
 							box-sizing: border-box;
 						}
 
-						.selectedItem {
+						.item-list:hover {
 							border: 2rpx solid #F42F71;
 							color: #F42F71;
 							background-color: #FFF3F7;

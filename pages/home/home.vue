@@ -64,7 +64,7 @@
 								<view class="name"><text>{{item.extProperty}}</text>{{item.sku_name}}</view>
 							</view>
 							<view class="good_tab" v-if="item.tagList.length != 0">
-								<text class="tab" :style="{'border': '1rpx solid #'+item.tagList[0].tagColor, 'color': '#'+item.tagList[0].tagColor}" >{{item.tagList[0].tagName}}</text>
+								<text class="tab" >{{item.tagList[0].tagName}}</text>
 							</view>
 							<view class="price">
 								<text>￥</text>
@@ -400,11 +400,10 @@
 						padding-top: 15rpx;
 
 						.name {
-							text-overflow: ellipsis;
+							overflow: hidden;
 							display: -webkit-box;
 							-webkit-line-clamp: 2;
 							-webkit-box-orient: vertical;
-							overflow: hidden;
 							font-size: 26rpx;
 
 							text {
@@ -418,8 +417,8 @@
 					.good_tab{
 						.tab{
 							font-size: 24rpx;
-							// color: rgb(242, 12, 86);
-							// border: 2rpx solid rgb(242, 12, 86);
+							color: rgb(242, 12, 86);
+							border: 2rpx solid rgb(242, 12, 86);
 							margin: 20rpx;
 						}
 					}

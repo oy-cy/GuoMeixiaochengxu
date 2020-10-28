@@ -219,6 +219,10 @@
             }
             
         }
+        ,{
+            "path" : "pages/goodsDetail/comment/comment",
+            "style" : {}
+        }
     ],
 	"permission": {
 		"scope.userLocation": {
