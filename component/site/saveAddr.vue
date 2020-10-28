@@ -3,7 +3,7 @@
 		<view class="list">
 			<view class="item consignee">
 				<view class="text">收货人：</view>
-				<input type="text" v-model="consignee" maxlength="10" />
+				<input type="text" v-model="receiver" maxlength="10" />
 			</view>
 			<view class="item phone">
 				<view class="text">手机号码：</view>
@@ -11,7 +11,7 @@
 			</view>
 			<view class="item addr">
 				<view class="text">选择地址：</view>
-				<view class="site" @click="popup=true">{{getAddr}}</view>
+				<view class="site" @click="popup=true">{{getAddrStr}}</view>
 			</view>
 			<view class="item detailedAddr">
 				<view class="text">详细地址：</view>
@@ -30,14 +30,15 @@
 
 <script>
 import ehPicker from '@/component/site/erha-picker/erha-picker.vue'; 
+import { insertAddr,updateAddr,getAddr } from '@/api/user.js';
 	export default {
-		props:['isEdit','oldChecked','oldConsignee','oldPhone','oldAddr','oldDetailedAddr'],
+		props:['isEdit','addrId',"car"],
 		data() {
 			return {
 				// 地址是否默认
 				checked:false,
 				// 收货人
-				consignee:'',
+				receiver:'',
 				// 手机号
 				phone:'',
 				// 地址
@@ -50,31 +51,46 @@ import ehPicker from '@/component/site/erha-picker/erha-picker.vue';
 				proName:'',
 				cityName:'',
 				areaName:'',
-				strName:''
+				strName:'',
+				
+				userId:'',
+				isReq:false
 			}
 		},
 		created() {
-			if(this.isEdit == true || this.isEdit == 'true'){
-				this.checked = this.oldChecked==1?true:false;
-				this.consignee = this.oldConsignee;
-				this.phone = this.oldPhone;
-				this.addr = this.oldAddr;
-				this.detailedAddr = this.oldDetailedAddr;
-				
-				var tempAddr = this.oldAddr.split('-');
-				this.proName = tempAddr[0];
-				this.cityName = tempAddr[1];
-				this.areaName = tempAddr[2];
-				this.strName = tempAddr[3];
-				console.log(this.isEdit,this.oldChecked,this.oldConsignee,this.oldPhone,this.oldAddr,this.oldDetailedAddr);
-			}
+			this.userId = getApp().globalData.userInfo.userId;
 		},
 		components:{
 			ehPicker
 		},
 		computed: {
-			getAddr(){
+			getAddrStr(){
 				return [...new Set(this.addr.split('-'))].join('')
+			},
+			async getData(){
+				if(this.isReq){
+					return;
+				}
+				if(this.isEdit && this.addrId){
+					var data = await getAddr(this.addrId);
+					var addr = data.message[0];
+					this.receiver = addr.receiver;
+					this.phone = addr.phone;
+					this.addr = addr.addr;
+					this.detailedAddr = addr.addr_details;
+					this.checked = addr.is_default==1?true:false;
+					
+					var tempAddr = this.addr.split('-');
+					this.proName = tempAddr[0];
+					this.cityName = tempAddr[1];
+					this.areaName = tempAddr[2];
+					this.strName = tempAddr[3];
+					this.isReq = true;
+				}
+			},
+			getCar(){
+				console.log(this.car)
+				return this.car;
 			}
 		},
 		methods: {
@@ -94,8 +110,8 @@ import ehPicker from '@/component/site/erha-picker/erha-picker.vue';
 				this.popup = false;
 			},
 			// 保存
-			save(){
-				if(this.consignee.trim() == ''){
+			async save(){
+				if(this.receiver.trim() == ''){
 					this.toast('收货人不能为空');
 					return;
 				}
@@ -115,16 +131,26 @@ import ehPicker from '@/component/site/erha-picker/erha-picker.vue';
 					this.toast('手机号格式有误');
 					return;
 				}
-				var consignee = this.consignee.trim();
-				var phone = this.phone.trim();
-				var addr = this.addr.trim();
-				var detailedAddr = this.detailedAddr.trim();
-				var isDefault = this.isDefault?1:0;
+				var addr = {
+					phone: this.phone.trim(),
+					addr: this.addr.trim(),
+					addrDetails: this.detailedAddr.trim(),
+					receiver: this.receiver.trim(),
+					userId: this.userId,
+					isDefault: (this.checked?1:0)
+				}
 				// 调用api上传数据(编辑则调用编辑的接口，新增则调用新增的接口)
 				if(this.isEdit == true || this.isEdit == 'true'){
-					// todo
+					addr.id = this.addrId;
+					var data = updateAddr(JSON.stringify(addr));
 				}else {
-					
+					var data = await insertAddr(JSON.stringify(addr));
+				}
+				if(this.car == true || this.car == 'true'){
+					uni.navigateBack({
+						delta:2
+					})
+					return;
 				}
 				uni.switchTab({
 				    url: '/pages/home/home'

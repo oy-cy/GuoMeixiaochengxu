@@ -18,3 +18,18 @@ export function getcomment(comId){
 		url:"/getcomment?comId="+comId
 	})
 }
+// 修改购物车
+export function updateShopCar(info) {
+	return request({
+		url:"/updateShopCar",
+		methods:"post",
+		data:info
+	})
+}
+// 获取所以购物车
+export function queryShopCar(userId){
+	return request({
+		url:"/queryShopCar?userId="+userId
+	})
+}
+

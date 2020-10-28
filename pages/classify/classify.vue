@@ -2,7 +2,7 @@
 	<view class="classify">
 		<scroll-view :scroll-y="true" class="left">
 			<view class="title" v-for="(item,index) in titleData" :key="index" :class="item.id == titleSelectId?'titleSelect':''" @click="change(item.id)">
-				{{item.cat_name}}
+				{{item.name}}
 				<view class="buttom"></view>
 			</view>
 		</scroll-view>
@@ -11,7 +11,7 @@
 			<view v-if="goodlist.ad != undefined" class="imgbox">
 				<image :src="goodlist.ad.imageUrl" style="width: 100%;height: 100%;"></image>
 			</view>
-			<view class="goodbox" v-for="(item,index) in goodlist.secondLevelCategories" :key="index">
+			<view class="goodbox" v-for="(item,index) in goodlist.secondLevelCategories" :key="index" >
 				<view class="title">
 					{{item.goodsTypeName}}
 				</view>
@@ -21,7 +21,7 @@
 					:key="indexs" 
 					 use-slot
 					 :border="true"
-					gutter="3" >
+					gutter="3" @tap="goGoodsList(items.goodsTypeId)">
 						<view class="good">
 							<image :src="items.goodsTypeImgUrl" style="width: 150rpx; height: 140rpx;"></image>
 							<view class="text">
@@ -49,21 +49,29 @@
 		
 		methods:{
 			change(selectid){
+				console.log(selectid)
 				this.titleSelectId = selectid;
 				this.getClassifyGood();
 			},
 			async getClassifyTitle(){
 				var {message} =  await getClassifyTitleData();
+				// console.log("adsfasdfsdafsdafsdfdsafsd",message)
 				this.titleData = message;
+				
 				this.titleSelectId = message[0].id;
 			},
 			async getClassifyGood(){
 				var {message} = await getClassifyGoodData(this.titleSelectId);
 				
 				var data = JSON.parse(message[0].name)
-				
+				console.log("asdfasdfsdfsd",data)
 				this.goodlist = data;
-				console.log(this.goodlist)
+			},
+			// 跳转到商品列表页
+			goGoodsList(id){
+				uni.navigateTo({
+					url:"/pages/goodsList/goodsList?goodsId=" + id
+				})
 			}
 		},
 		created() {

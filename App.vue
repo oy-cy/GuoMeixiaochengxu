@@ -1,5 +1,6 @@
 <script>
 import amap from '@/static/js/amap-wx.js';
+import {getCarList} from "@/api/car.js"
 export default {
 	globalData: {  
 		// 用户是否授权(用户是否登录)
@@ -7,6 +8,7 @@ export default {
 		// 用户信息
 		userInfo:{}
 	},
+	
 	onLaunch: function() {
 		console.log('App Launch');
 		// 通过本地存储获取用户是否登录
@@ -14,6 +16,8 @@ export default {
 		this.$scope.globalData.isLogin = isLogin;
 		if(isLogin){
 			this.$scope.globalData.userInfo = uni.getStorageSync('userInfo');
+			this.getCarListData(this.$scope.globalData.userInfo.userId)
+			// console.log(123)
 		}
 		// 定位城市
 		this.amapPlugin = new amap.AMapWX({
@@ -30,6 +34,8 @@ export default {
 				console.log("当前城市请求失败");
 			}
 		}); 
+		
+		
 	},
 	onShow: function() {
 		console.log('App Show');
@@ -37,6 +43,17 @@ export default {
 	onHide: function() {
 		console.log('App Hide');
 		
+	},
+	methods:{
+		async getCarListData(userId){
+			var {message} = await getCarList(userId);
+			
+			message.forEach(v=>{
+				v.shop_specification = JSON.parse( v.shop_specification);
+			})
+			// 购物车初始化数据
+			this.$store.commit('setCarList',message);
+		},
 	}
 };
 </script>

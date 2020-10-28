@@ -26,22 +26,22 @@
 			<view class="receiving-site">
 				<view class="my-receiving-site">
 					<text class="text">我的收货地址</text>
-					<navigator class="manage" :url="receivingAddr.length == 0?'/pages/site/addAddr/addAddr':'/pages/site/selectAddr/selectAddr'">
+					<navigator class="manage" :url="getUrl">
 						<image src="../../../static/images/user/addr-manage.png" mode=""></image>
 						<text>管理地址</text>
 					</navigator>
 				</view>
 				<!-- 收货地址列表 -->
 				<view class="list" v-for="(item,index) in receivingAddr" :key="index">
-					<view class="item" @click="setSelectAddr">
+					<view class="item" @click="setSelectAddr(item.id)">
 						<view class="addr">
 							<view class="addr">{{item.addr}}</view>
 							<view class="user-info">
-								<view class="name">{{item.name}}</view>
-								<view class="phone">{{item.phone}}</view>
+								<view class="name">{{item.receiver}}</view>
+								<view class="phone">{{item.phone.substr(0,3)+"****"+item.phone.substr(7)}}</view>
 							</view>
 						</view>
-						<view class="select" v-if="index == 0">
+						<view class="select" v-if="item.is_select==1">
 							<image src="../../../static/images/user/yes.png" mode=""></image>
 						</view>
 					</view>
@@ -73,6 +73,7 @@
 </template>
 <script>
 import amap from '@/static/js/amap-wx.js';
+import {getAddrs,setSelectAddr} from '@/api/user.js';
 	export default {
 		data() {
 			return {
@@ -92,10 +93,12 @@ import amap from '@/static/js/amap-wx.js';
 				keywords:''
 			}
 		},
-		onLoad() {
+		async onLoad() {
 			this.getSite();
 			this.getNearbySiteData();
-			// todo 获取当前用户的地址列表
+			// 获取当前用户的地址列表
+			var data = await getAddrs(getApp().globalData.userInfo.userId);
+			this.receivingAddr = data.message;
 		},
 		methods:{
 			getSite(){
@@ -152,8 +155,9 @@ import amap from '@/static/js/amap-wx.js';
 			    })
 			},
 			// 切换选中地址
-			setSelectAddr(item){
-				// todo 调用修改选中地址接口
+			setSelectAddr(id){
+				// 调用修改选中地址接口
+				setSelectAddr(getApp().globalData.userInfo.userId,id);
 				uni.switchTab({
 					url:"/pages/home/home"
 				})
@@ -162,6 +166,9 @@ import amap from '@/static/js/amap-wx.js';
 		computed:{
 			getCurrentCity(){
 				return this.$store.getters.getCurrentCity;
+			},
+			getUrl(){
+				return this.receivingAddr.length==0?'/pages/site/addAddr/addAddr':'/pages/site/selectAddr/selectAddr'
 			}
 		}
 	}

@@ -2,34 +2,35 @@
 	<view class="select-addr-container">
 		<view class="list" v-for="(item,index) in receivingAddr">
 			<view class="item">
-				<view class="info" @click="setSelectCity">
+				<view class="info" @click="setSelectCity(item.id)">
 					<view class="raduis-view">
 						<view class="raduis">
-							<view v-if="item.select" class="color"></view>
+							<view v-if="item.is_select==1" class="color"></view>
 						</view>
 					</view>
 					<view class="consignee-info">
 						<view class="basic-info">
-							<view class="name">{{item.name}}</view>
-							<view class="phone">{{item.phone}}</view>
+							<view class="name">{{item.receiver}}</view>
+							<view class="phone">{{item.phone.substr(0,3)+"****"+item.phone.substr(7)}}</view>
 						</view>
 						<view class="addr-info">
-							<view class="default" v-if="item.isDeafault">默认</view>
+							<view class="default" v-if="item.is_default">默认</view>
 							{{item.addr}}
 						</view>
 					</view>
 				</view>
-				<navigator :url="'/pages/site/editAddr/editAddr?id='" class="edit">
+				<navigator :url="getEditPage(item)" class="edit">
 					<view class="image"><image src="../../../static/images/site/edit.png" mode=""></image></view>
 					<view class="text">编辑</view>
 				</navigator>
 			</view>
 		</view>
-		<navigator url="/pages/site/addAddr/addAddr" class="button">新增地址</navigator>
+		<navigator :url="getUrl" class="button">新增地址</navigator>
 	</view>
 </template>
 
 <script>
+import { getAddrs,setSelectAddr } from '@/api/user.js';
 	export default {
 		data() {
 			return {
@@ -38,17 +39,47 @@
 					// {addr:'深圳市龙华区观澜街道淑女路',name:'花花的贝贝',phone:'157****1010',isDeafault:1,select:0},
 					// {addr:'深圳市龙华区观澜街道淑女路',name:'花花的贝贝',phone:'157****1010',isDeafault:1,select:1}
 				],
+				// 是否购物车过来的页面
+				car:false
 			}
 		},
-		onLoad() {
-			// todo 获取当前用户的地址列表
+		async onLoad(option) {
+			if(option && option.car){
+				this.car = true;
+			}
+			// 获取当前用户的地址列表
+			var data = await getAddrs(getApp().globalData.userInfo.userId);
+			this.receivingAddr = data.message;
 		},
 		methods: {
-			setSelectCity(){
-				// todo 调用修改默认地址
+			setSelectCity(id){
+				// 调用修改默认地址
+				setSelectAddr(getApp().globalData.userInfo.userId,id);
+				if(this.car == true){
+					uni.navigateBack();
+					return;
+				}
 				uni.switchTab({
 					url:"/pages/home/home"
 				})
+			}
+		},
+		computed:{
+			getUrl(){
+				if(this.car == true){
+					return '/pages/site/addAddr/addAddr?car=true';
+				}else {
+					return '/pages/site/addAddr/addAddr';
+				}
+			},
+			getEditPage(){
+				return function(item){
+					if(this.car == true){
+						return `/pages/site/editAddr/editAddr?id=${item.id}&car=true`
+					}else {
+						return `/pages/site/editAddr/editAddr?id=${item.id}`
+					}
+				}
 			}
 		}
 	}
@@ -59,6 +90,7 @@
 	position: relative;
 	height: 100vh;
 	background-color: rgb(243,245,247);
+	margin-bottom: 100rpx;
 	.list {
 		display: flex;
 		flex-direction: column;
@@ -148,7 +180,7 @@
 		}
 	}
 	.button {
-		position: absolute;
+		position: fixed;
 		width: 100%;
 		height: 100rpx;
 		display: flex;

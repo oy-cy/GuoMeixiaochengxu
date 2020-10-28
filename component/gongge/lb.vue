@@ -11,7 +11,7 @@
 </template>
 
 <script>
-	import {getLunbotu} from "../../api/common.js"
+	import {getLunbotu} from "@/api/common.js"
 		export default {
 			props:["pageid"],
 			data(){
