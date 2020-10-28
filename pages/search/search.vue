@@ -121,17 +121,6 @@
 				this.value = "";
 			},
 
-			// onChange输入内容保存到数组中
-			onChange(e) {
-				this.value = e.detail.trim();
-				// 判断输入内容是否空，空的话就return
-				if(!this.value){
-					this.hasData = false;
-					return;
-				}
-				this.fuzzyQueryWay();
-			},
-
 			// 清空输入内容
 			onClick(e) {
 				this.value = ""
