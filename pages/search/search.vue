@@ -2,25 +2,23 @@
 	<view class="search">
 		<van-search v-model="value" 
 		placeholder="iPhone 12新品发布" 
-		shape="circle"
+		shape="circle" 
 		show-action 
-		@change="onChange"
+		@change="onChange" 
 		@search="onSearch" 
-		@cancel="onCancel"
-		@click="onClick" 
-		class="style"
-		/>
-		
+		@cancel="onCancel" 
+		@click="onClick" class="style" />
+
 		<view class="operate" v-if="value == ''">
 			<!-- 热门搜索 -->
 			<view class="hot-search">
 				<view class="hot-top">
 					<image src="../../static/images/search/hot-search.png" mode=""></image>
-					<text>热门搜索</text>	
+					<text>热门搜索</text>
 				</view>
 				<view class="keyword">
 					<!-- <navigator url="../goodsList/goodsList"> -->
-						<view class="word"  v-for="(item,index) in hotSearchData" :key="index" @tap.stop="hotSearch(item)">{{item}}</view>
+					<view class="word" v-for="(item,index) in hotSearchData" :key="index" @tap.stop="hotSearch(item)">{{item}}</view>
 					<!-- </navigator> -->
 				</view>
 			</view>
@@ -37,98 +35,110 @@
 			</view>
 		</view>
 		<view class="dimQuery" v-else>
-			<view class="emptyDim" v-if="value == ' '">
-				<text>暂无商品</text>
-			</view>
-			<view class="dim" v-else>
+			<view class="dim">
 				<view class="text" v-for="item in fuzzyQueryData" @tap.stop="goGoodsList(item.sku_name)">{{item.sku_name}}</view>
-				
 			</view>
 		</view>
-		
+
 	</view>
 </template>
 
 <script>
-	import {fuzzyQuery} from "../../api/common.js";
+	import {
+		fuzzyQuery
+	} from "../../api/common.js";
 	export default {
 		data() {
 			return {
 				value: '',
-				historyArray:[],
-				isShow:false,
-				allShow:false,
-				fuzzyQueryData:[],
-				hotSearchData:[
-					'iphone 12','冰箱自营','美的洗衣机','冷暖空调','休闲零食','超薄电视','电热水器','微波炉'
+				historyArray: [],
+				isShow: false,
+				allShow: false,
+				fuzzyQueryData: [],
+				hotSearchData: [
+					'iphone 12', '冰箱自营', '美的洗衣机', '冷暖空调', '休闲零食', '超薄电视', '电热水器', '微波炉'
 				]
 			};
 		},
 		created() {
 			this.historyArray = this.$store.getters.getHistoryArray;
-			if(this.historyArray.length > 0){
+			if (this.historyArray.length > 0) {
 				this.isShow = true
 			}
 		},
-		methods:{
-			hotClick(item){
+		methods: {
+			hotClick(item) {
 				console.log(item)
 			},
-			
+
 			// 清空历史记录
 			//如果没有数据 就把清空记录按钮隐藏掉
 			//有数据的话 就把数据与按钮显示出来
-			onEmpty(){
+			onEmpty() {
 				console.log("清空")
 				// this.historyArray = [];
 				// var emptyData = this.historyArray;
 				this.isShow = false;
 				// 清空本地数据
-				this.$store.commit('setHistoryArray',this.historyArray = [] );
+				this.$store.commit('setHistoryArray', this.historyArray = []);
 			},
-			
+
 			//确认搜索
-			onSearch(e){
+			onSearch(e) {
 				this.value = e.detail;
-				console.log("确认",this.value);
+				console.log("确认", this.value);
 				var getValue = this.value;
 				this.historyArray.push(getValue);
 				this.isShow = true;
-				
+
 				uni.navigateTo({
-					url:"/pages/goodsList/goodsList?goodsName="+this.value
+					url: "/pages/goodsList/goodsList?goodsName=" + this.value
 				})
-				this.$store.commit('setHistoryArray',this.historyArray)
+				this.$store.commit('setHistoryArray', this.historyArray)
 				this.value = "";
 			},
-			
+
 			// onChange输入内容保存到数组中
-			onChange(e){
+			onChange(e) {
 				this.value = e.detail;
-				if(this.value == " "){
+				if (this.value == "") {
 					console.log("aabb")
-					return;
 				}
 				this.fuzzyQueryWay();
 			},
-			
+
 			// 清空输入内容
 			onClick(e) {
 				this.value = ""
-			  },
-			  
+			},
+
 			// onCancel 点击取消按钮
-			onCancel(){
+			onCancel() {
 				console.log("取消");
 				uni.reLaunch({
-				  	url:'/pages/home/home'
+					url: '/pages/home/home'
 				})
 			},
-			async fuzzyQueryWay(){
-				var {message} = await fuzzyQuery(this.value);
-				console.log("模糊",message)
-				message.length = 6;
-				this.fuzzyQueryData = message;
+			async fuzzyQueryWay() {
+				var {message} = await fuzzyQuery(this.value)
+				// console.log(message)
+				// if(message.length > 6){
+				// 	 // message.length = 6
+				// }
+				// message.length = 6   [{},{},3,4]
+					this.fuzzyQueryData = [];
+					message.map((item,i)=>{
+						// console.log(v,i)
+						if(i<6){
+							this.fuzzyQueryData.push(item);
+						}
+					})
+					console.log('fuzzyQueryData:',this.fuzzyQueryData)
+					// this.fuzzyQueryData = message;
+					// console.log("长度",message.length)
+					// console.log("模糊", message)
+						
+				
 				// message.forEach(function(v){
 				// 		console.log("forEach",v);
 				// 	if(v == 11){
@@ -136,34 +146,34 @@
 				// 	}
 				// 	this.fuzzyQueryData = message;
 				// })
-				
+
 				// message.map((v,index)=>{
 				// 	console.log("forEach",v)
 				// 	if(index >= 10){
-						
+
 				// 	}
 				// 	console.log("tempFuzzyQueryDataArray",tempFuzzyQueryDataArray)
 				// 	this.fuzzyQueryData = tempFuzzyQueryDataArray;
 				// })
 			},
-			goGoodsList(goodsName){
+			goGoodsList(goodsName) {
 				// console.log("对象",item)
 				// var data = JSON.stringify(item);
-				console.log("字符",goodsName)
+				console.log("字符", goodsName)
 				uni.navigateTo({
-					url:"/pages/goodsList/goodsList?goodsName=" + goodsName
+					url: "/pages/goodsList/goodsList?goodsName=" + goodsName
 				})
 			},
-			hotSearch(goodsName){
-				console.log("热门",goodsName);
+			hotSearch(goodsName) {
+				console.log("热门", goodsName);
 				uni.navigateTo({
-					url:"../goodsList/goodsList?goodsName="+goodsName
+					url: "../goodsList/goodsList?goodsName=" + goodsName
 				})
 			},
-			history(goodsName){
-				console.log("历史",goodsName);
+			history(goodsName) {
+				console.log("历史", goodsName);
 				uni.navigateTo({
-					url:"../goodsList/goodsList?goodsName="+goodsName
+					url: "../goodsList/goodsList?goodsName=" + goodsName
 				})
 			}
 		}
@@ -171,33 +181,37 @@
 </script>
 
 <style lang="scss">
-	
-	.search{
+	.search {
 		/deep/.van-search__content {
 			bocrder-radius: 100px;
 		}
+
 		// .style{
 		// 	border-bottom: 2rpx solid rgb(230, 230, 230);
 		// 	padding-bottom: 10rpx;
 		// }
-		.operate{
-			.hot-search{
+		.operate {
+			.hot-search {
 				border-bottom: 2rpx solid rgb(230, 230, 230);
 				padding-bottom: 10rpx;
-				.hot-top{
+
+				.hot-top {
 					margin: 20rpx;
-					image{
+
+					image {
 						width: 32rpx;
 						height: 32rpx;
 						margin-right: 8rpx;
 					}
 				}
-				.keyword{
+
+				.keyword {
 					display: flex;
 					flex-wrap: wrap;
-					.word{
+
+					.word {
 						display: inline;
-						margin: 10rpx ;
+						margin: 10rpx;
 						padding: 10rpx 20rpx;
 						border: 2rpx solid rgb(230, 230, 230);
 						border-radius: 50px;
@@ -205,30 +219,36 @@
 					}
 				}
 			}
-			.keyword-box{
+
+			.keyword-box {
 				border-bottom: 2rpx solid rgb(230, 230, 230);
 				padding-bottom: 10rpx;
-				.history{
+
+				.history {
 					margin: 20rpx;
-					image{
+
+					image {
 						width: 32rpx;
 						height: 32rpx;
 						margin-right: 8rpx;
 					}
 				}
-				.history-keyword{
+
+				.history-keyword {
 					display: flex;
 					flex-wrap: wrap;
-					.word{
+
+					.word {
 						display: inline;
-						margin: 10rpx ;
+						margin: 10rpx;
 						padding: 10rpx 20rpx;
 						border: 2rpx solid rgb(230, 230, 230);
 						border-radius: 50px;
 						font-size: 24rpx;
 					}
 				}
-				.enpty{
+
+				.enpty {
 					margin: 40rpx auto;
 					width: 220rpx;
 					padding: 10rpx 100rpx;
@@ -237,9 +257,10 @@
 				}
 			}
 		}
-		.dimQuery{
-			.dim{
-				.text{
+
+		.dimQuery {
+			.dim {
+				.text {
 					border-bottom: 2rpx solid #e6e6e6;
 					padding: 20rpx 40rpx;
 					font-size: 26rpx;
