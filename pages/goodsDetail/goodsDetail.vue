@@ -177,8 +177,8 @@
 				<view class="comment">
 					评论
 				</view>
-				<view class="reputation">
-					好评度  <text>99%</text>  <van-icon name="arrow" color="#999A9C"/>
+				<view class="reputation" >
+					好评度  <text>100%</text>  <van-icon name="arrow" color="#999A9C"/>
 				</view>
 			</view>
 			<view class="comment-info"  v-if="comment.remark" >
@@ -300,6 +300,7 @@
 				let {message} = await getcomment(this.goodsId);
 				if(message.length != 0){
 					this.comment = message[0]
+					this.comment.nickname = this.comment.nickname.substr(0,1) + "****" + this.comment.nickname.substr(-1);
 				}
 			},
 			//获取商品详情
@@ -354,11 +355,21 @@
 				});
 			},
 			onComment(){
-				Dialog.alert({
-				  message: '请下载国美APP，查看更多商品评论',
-				}).then(() => {
-				  // on close
-				});
+				// Dialog.alert({
+				//   message: '请下载国美APP，查看更多商品评论',
+				// }).then(() => {
+				//   // on close
+				// });
+				if(this.comment.remark){
+					uni.navigateTo({
+						url:"./comment/comment?goodsId="+this.goodsId
+					})
+				}else{
+					this.$refs.uToast.show({
+						title: '此商品目前还没有评论',
+						type: 'default',
+					})
+				}
 			},
 			// 关闭商品规格(弹出层)
 			closeSelected(){
