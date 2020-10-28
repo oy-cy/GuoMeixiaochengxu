@@ -88,7 +88,30 @@
 				this.value = e.detail;
 				console.log("确认", this.value);
 				var getValue = this.value;
-				this.historyArray.push(getValue);
+				// this.historyArray.push(getValue);
+				this.value = e.detail.trim();
+				// 判断输入内容是否空，空的话就return
+				if(!this.value){
+					this.hasData = false;
+					return;
+				}
+				var getValue = this.value;
+				var boot = false;
+				// 判断输入的名字是否相同，相同就return
+				this.historyArray.map(v=>{
+					if(v == getValue){
+						boot = true;
+						return;
+					}
+				})
+				
+				// 条件为假才执行
+				if(!boot){
+					this.historyArray.unshift(getValue);
+				}else{
+					this.historyArray = this.first(getValue)
+				}
+				this.$store.commit('setHistoryArray',this.historyArray)
 				this.isShow = true;
 
 				uni.navigateTo({
@@ -100,9 +123,11 @@
 
 			// onChange输入内容保存到数组中
 			onChange(e) {
-				this.value = e.detail;
-				if (this.value == "") {
-					console.log("aabb")
+				this.value = e.detail.trim();
+				// 判断输入内容是否空，空的话就return
+				if(!this.value){
+					this.hasData = false;
+					return;
 				}
 				this.fuzzyQueryWay();
 			},
@@ -120,12 +145,10 @@
 				})
 			},
 			async fuzzyQueryWay() {
-				var {message} = await fuzzyQuery(this.value)
-				// console.log(message)
+				var {message} = await fuzzyQuery(this.value);
 				// if(message.length > 6){
 				// 	 // message.length = 6
 				// }
-				// message.length = 6   [{},{},3,4]
 					this.fuzzyQueryData = [];
 					message.map((item,i)=>{
 						// console.log(v,i)
@@ -133,28 +156,7 @@
 							this.fuzzyQueryData.push(item);
 						}
 					})
-					console.log('fuzzyQueryData:',this.fuzzyQueryData)
-					// this.fuzzyQueryData = message;
-					// console.log("长度",message.length)
-					// console.log("模糊", message)
-						
-				
-				// message.forEach(function(v){
-				// 		console.log("forEach",v);
-				// 	if(v == 11){
-				// 		return;
-				// 	}
-				// 	this.fuzzyQueryData = message;
-				// })
-
-				// message.map((v,index)=>{
-				// 	console.log("forEach",v)
-				// 	if(index >= 10){
-
-				// 	}
-				// 	console.log("tempFuzzyQueryDataArray",tempFuzzyQueryDataArray)
-				// 	this.fuzzyQueryData = tempFuzzyQueryDataArray;
-				// })
+				console.log('fuzzyQueryData:',this.fuzzyQueryData);
 			},
 			goGoodsList(goodsName) {
 				// console.log("对象",item)
@@ -170,12 +172,46 @@
 					url: "../goodsList/goodsList?goodsName=" + goodsName
 				})
 			},
-			history(goodsName) {
-				console.log("历史", goodsName);
-				uni.navigateTo({
-					url: "../goodsList/goodsList?goodsName=" + goodsName
+			// async fuzzyQueryWay(){
+			
+			// 	var {message} = await fuzzyQuery(this.value);
+			// 	console.log("模糊",message)
+			// 	this.fuzzyQueryData = message;
+			// 	this.hasData = true;
+				
+			// 	if(this.value == ""){
+			// 		this.hasData = false;
+			// 	}
+			// },
+			// 历史记录
+			history(goodsName){
+				var list = this.first(goodsName)
+				
+				this.$store.commit('setHistoryArray',list)
+				uni.redirectTo({
+					url:"/pages/goodsList/goodsList?goodsName=" + goodsName
+				})
+			},
+			goGoodsList(goodsName){
+				uni.redirectTo({
+					url:"/pages/goodsList/goodsList?goodsName=" + goodsName
+				})
+			},
+			// 把搜索的名字和点击历史记录的名字放到第一位
+			first(name){
+				var list = [];
+				list[0] = name;
+				this.historyArray.map(v=>{
+					if(v != name){
+						list.push(v);
+					}
 				})
 			}
+		},
+		onLoad(e){
+			// console.log("搜索",e)
+			this.value = e.goodsName;
+			console.log(this.value)
 		}
 	}
 </script>
