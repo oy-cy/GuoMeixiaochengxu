@@ -37,8 +37,12 @@
 			</view>
 		</view>
 		<view class="dimQuery" v-else>
-			<view class="dim">
+			<view class="emptyDim" v-if="value == ' '">
+				<text>暂无商品</text>
+			</view>
+			<view class="dim" v-else>
 				<view class="text" v-for="item in fuzzyQueryData" @tap.stop="goGoodsList(item.sku_name)">{{item.sku_name}}</view>
+				
 			</view>
 		</view>
 		
@@ -101,8 +105,9 @@
 			// onChange输入内容保存到数组中
 			onChange(e){
 				this.value = e.detail;
-				if(this.value == ""){
+				if(this.value == " "){
 					console.log("aabb")
+					return;
 				}
 				this.fuzzyQueryWay();
 			},
