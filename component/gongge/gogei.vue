@@ -25,7 +25,7 @@
 				async getGaidData(){
 					var {message} = await getGrid(this.pageid);
 					this.gogeidata = message;
-				}
+				} 
 			},
 			created() {
 				this.getGaidData();

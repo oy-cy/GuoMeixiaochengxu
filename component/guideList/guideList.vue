@@ -30,7 +30,7 @@
 							<text class="text">预约</text>
 						</view>
 					</view>
-				</view>
+				</view> 
 				<view class="bottom">
 					<!-- <view class="" v-for="brand in item.good_at_brand"> -->
 						<view class="good-brand">所属品牌：{{ item.good_at_brand }}</view>

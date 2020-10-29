@@ -1,6 +1,6 @@
 <template>
 	<view class="shop-container">
-		<!-- 头部 -->
+		<!-- 头部 --> 
 		<view class="header" :class="{selectedBgc:isShowLogo}">
 			<view class="guomei" v-if="isShowLogo" @click="chooseLocation">
 				<image src="../../static/images/shop/guomei-logo.png" mode=""></image>
@@ -203,9 +203,10 @@
 					}
 				})
 			},
-			changeTab(index) {
-				// console.log('当前选中的项：' + index)
-				this.current = index;
+			changeTab(obj) {
+				console.log('当前选中的项：' + obj)	
+				this.current = obj.index;
+				this.goodsId = obj.id;
 				if(index == 0){
 					this.getCategoryData();
 				}else {

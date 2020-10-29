@@ -19,7 +19,7 @@ export function insertAddr(addr){
 	return request({
 		url:"/insertAddr?addr="+addr
 	})
-}
+} 
 
 // 删除地址
 export function deleteAddr(addrId){

@@ -1,5 +1,5 @@
 <template>
-	<view class="classify">
+	<view class="classify"> 
 		<scroll-view :scroll-y="true" class="left">
 			<view class="title" v-for="(item,index) in titleData" :key="index" :class="item.id == titleSelectId?'titleSelect':''" @click="change(item.id)">
 				{{item.name}}

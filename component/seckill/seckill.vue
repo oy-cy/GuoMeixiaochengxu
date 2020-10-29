@@ -28,7 +28,7 @@
 				timestamp: 86400,
 			};
 		},
-		methods: {
+		methods: { 
 			goGoodsDetail(id) {
 				uni.navigateTo({
 					url:"/pages/goodsDetail/goodsDetail?goodsId=" + id

@@ -10,7 +10,7 @@
 	import guideList from "@/component/guideList/guideList.vue";
 	import { getShoppingGuide } from "../../api/common.js";
 	export default {
-		data() {
+		data() { 
 			return {
 				guideData: [],
 			};

@@ -23,7 +23,7 @@ var provinceData = [{
     "label": "辽宁省",
     "value": "21"
   },
-  {
+  { 
     "label": "吉林省",
     "value": "22"
   },

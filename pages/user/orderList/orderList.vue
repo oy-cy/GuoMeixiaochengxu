@@ -1,6 +1,6 @@
 <template>
 	<view class="order-list-container">
-		<!-- 顶部导航栏 -->
+		<!-- 顶部导航栏 --> 
 		<van-sticky>
 			<view class="tabs">
 				<view :class="['item',active==0?'select':'']" @click="setActive(0)">全部</view>

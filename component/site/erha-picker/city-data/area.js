@@ -25,7 +25,7 @@ var areaData = [
         "label": "海淀区",
         "value": "110108"
       },
-      {
+      { 
         "label": "门头沟区",
         "value": "110109"
       },

@@ -10,5 +10,5 @@ export function getClassifyTitleData(classify){
 export function getClassifyGoodData(classifyId){
 	return request({
 		url:"/getCategoryDetails?id="+classifyId
-	})
+	}) 
 }

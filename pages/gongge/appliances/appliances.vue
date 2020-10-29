@@ -1,6 +1,6 @@
 <template>
 	<view class="home">
-		
+		 
 		<!-- 轮播图 -->
 		
 		<lb :pageid="pageid"></lb>

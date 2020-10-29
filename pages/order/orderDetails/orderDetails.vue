@@ -7,7 +7,7 @@
 					<view class="text">
 						{{getOrderStatus}}
 					</view>
-				</view>
+				</view> 
 				<view class="image">
 					<image :src="getImgUrl()" mode=""></image>
 				</view>

@@ -8,7 +8,7 @@
 				<view class="tag">{{ introduceInfo.grade }}</view>
 			</view>
 		</view>
-		<view class="main">
+		<view class="main"> 
 			<view class="info">
 				<view class="name">{{ introduceInfo.sales_assistant_name }}</view>
 				<view class="serve">服务单数</view>

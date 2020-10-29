@@ -24,7 +24,7 @@ var cityData = [
       "label": "邯郸市",
       "value": "1304"
     },
-    {
+    { 
       "label": "邢台市",
       "value": "1305"
     },

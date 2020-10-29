@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/oy-cy/GuoMeixiaochengxu#readme",
   "dependencies": {
+    "moment": "^2.29.1",
     "uview-ui": "^1.7.6"
   }
 }

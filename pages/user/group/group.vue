@@ -1,5 +1,5 @@
 <template>
-	<view class="group-container">
+	<view class="group-container"> 
 		<u-tabs :list="list" active-color="rgb(255,87,87)" :is-scroll="false" :current="current" @change="change"></u-tabs>
 		<view class="list">
 			<view class="all" v-if="current == 0">

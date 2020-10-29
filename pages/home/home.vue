@@ -7,7 +7,7 @@
 					<image src="../../static/images/home/location.png" mode=""></image>
 					<text class="text">{{getCurrentCity}}</text>
 				</view>
-			</navigator>
+			</navigator> 
 			<navigator class="search" hover-class="none" url="../search/search">
 				<van-search class="van-search" value="" background="background:transparen(0)" disabled="true" shape="round"
 				 placeholder="请输入搜索关键词" />

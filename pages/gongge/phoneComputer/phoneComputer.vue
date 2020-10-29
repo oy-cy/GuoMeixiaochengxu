@@ -5,7 +5,7 @@
 		<scrollList title="exchange" :pageid="pageid"></scrollList>
 		<scrollList title="hot" :pageid="pageid"></scrollList>
 		<everyone  :pageid="pageid"></everyone>
-	</view>
+	</view> 
 </template>
 
 <script>

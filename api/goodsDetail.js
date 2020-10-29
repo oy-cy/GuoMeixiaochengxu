@@ -13,10 +13,10 @@ export function getCommodityDetails(comId){
 	})
 }
 //获取当前商品的评论
-export function getcomment(comId){
+export function getcomment(comId,type = ''){
 	return request({
-		url:"/getcomment?comId="+comId
-	})
+		url:"/getcomment?comId="+comId +"&type="+type
+	}) 
 }
 // 修改购物车
 export function updateShopCar(info) {

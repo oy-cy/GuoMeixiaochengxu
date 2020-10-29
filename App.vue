@@ -6,10 +6,12 @@ export default {
 		// 用户是否授权(用户是否登录)
 		isLogin:false,
 		// 用户信息
-		userInfo:{}
+		userInfo:{},
+		// 详情页没登录跳转授权
+		detail:{},
 	},
 	
-	onLaunch: function() {
+	onLaunch: function() { 
 		console.log('App Launch');
 		// 通过本地存储获取用户是否登录
 		var isLogin = uni.getStorageSync('isLogin');

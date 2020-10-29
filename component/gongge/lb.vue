@@ -26,7 +26,7 @@
 					this.lbdata = message
 				}
 			},
-			created() {
+			created() { 
 				this.getLunboData();
 				
 			}

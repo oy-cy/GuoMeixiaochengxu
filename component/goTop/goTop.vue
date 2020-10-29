@@ -21,7 +21,7 @@
 					scrollTop: 0,
 					duration:300
 				})
-			},
+			}, 
 		},
 		
 		// onPageScroll(e) {

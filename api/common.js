@@ -11,7 +11,7 @@ export function getGrid(type){
 	return request({
 		url:"/getGrid?type="+type
 	})
-}
+} 
 
 // 秒杀专场
 export function getSeckill(){

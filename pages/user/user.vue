@@ -1,7 +1,7 @@
 <template>
 	<view class="user_container">
 		<view class="yet-login" v-if="isLogin">
-			<!-- 顶部用户信息 -->
+			<!-- 顶部用户信息 --> 
 			<view class="user">
 				<view class="user-photo" @click="outLogin">
 					<image :src="userInfo.avatarUrl" mode=""></image>
@@ -106,12 +106,15 @@ import {getCarList} from "@/api/car.js"
 						info:'已入账返利',
 						balance:0
 					}
-				]
+				],
+				detail:{},
 			};
 		},
-		onLoad() {
+		onLoad(options) {
 			this.isLogin = getApp().globalData.isLogin;
 			this.userInfo = getApp().globalData.userInfo;
+			this.detail = getApp().globalData.detail;
+			console.log(this.detail)
 		},
 		methods:{
 			async getCarListData(userId){
@@ -185,6 +188,11 @@ import {getCarList} from "@/api/car.js"
 									data:true
 								})
 								_this.getCarListData(getApp().globalData.userInfo.userId);
+								if(_this.detail.isDetail){
+									uni.navigateTo({
+										url:"/pages/goodsDetail/goodsDetail?goodsId="+_this.detail.goodsId
+									})
+								}
 							},
 							fail() {
 								console.log("用户信息获取失败");
@@ -197,6 +205,13 @@ import {getCarList} from "@/api/car.js"
 							title:"登录失败，请稍后再试",
 							icon:'none'
 						})
+					},
+					complete() {
+						// if(_this.detail.isDetail){
+						// 	uni.navigateBack({
+						// 		delta:1
+						// 	})
+						// }
 					}
 				})
 			}

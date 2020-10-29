@@ -7,7 +7,7 @@
 				 <van-icon name="add-o" color="#F30C59"  size="50rpx"/>
 			    <view class="site">{{site}}</view>
 			  </view>
-			</van-cell>
+			</van-cell> 
 			<view class="SiteMessage" v-else>
 				<view class="info">
 					<text class="isDefault" v-if="userSite.is_default == 1">

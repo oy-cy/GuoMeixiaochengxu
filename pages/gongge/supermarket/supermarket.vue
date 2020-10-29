@@ -5,7 +5,7 @@
 				<swiper-item class="imgbox" v-for="(item,index) in lbdata" :key="index">
 						<image :src="item.s_img" style="width: 100%;height: 100%;"></image>
 				</swiper-item>
-			</swiper>
+			</swiper> 
 		</scroll-view>
 		
 		<van-grid column-num="4" class="gogei" icon-size="70">
