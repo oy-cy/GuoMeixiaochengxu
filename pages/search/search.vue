@@ -9,7 +9,7 @@
 		@cancel="onCancel" 
 		@click="onClick" class="style" />
 
-		<view class="operate" v-if="value == ''">
+		<view class="operate" v-if="!hasData">
 			<!-- 热门搜索 -->
 			<view class="hot-search">
 				<view class="hot-top">
@@ -34,7 +34,7 @@
 				<view class="enpty" @click="onEmpty">清空历史记录</view>
 			</view>
 		</view>
-		<view class="dimQuery" v-else>
+		<view class="dimQuery" v-if="hasData">
 			<view class="dim">
 				<view class="text" v-for="(item,index) in fuzzyQueryData" :key="index" @tap.stop="goGoodsList(item.sku_name)">{{item.sku_name}}</view>
 			</view>
@@ -50,6 +50,7 @@
 	export default {
 		data() {
 			return {
+				hasData: false,
 				value: '',
 				historyArray: [],
 				isShow: false,
@@ -75,9 +76,6 @@
 			//如果没有数据 就把清空记录按钮隐藏掉
 			//有数据的话 就把数据与按钮显示出来
 			onEmpty() {
-				console.log("清空")
-				// this.historyArray = [];
-				// var emptyData = this.historyArray;
 				this.isShow = false;	
 				// 清空本地数据
 				this.$store.commit('setHistoryArray', this.historyArray = []);
@@ -88,7 +86,6 @@
 				this.value = e.detail.trim();
 				console.log("确认", this.value);
 				var getValue = this.value;
-				// this.historyArray.push(getValue);
 				
 				// 判断输入内容是否空，空的话就return
 				if(!this.value){
@@ -115,12 +112,15 @@
 				uni.navigateTo({
 					url: "/pages/goodsList/goodsList?goodsName=" + this.value
 				})
-				this.$store.commit('setHistoryArray', this.historyArray)
+				this.$store.commit('setHistoryArray', this.historyArray);
+				// 按确认的时候,清空数据
 				this.value = "";
+				this.fuzzyQueryData = [];
 			},
 
 			// onChange输入内容保存到数组中
 			onChange(e) {
+				console.log("输入",e)
 				this.value = e.detail.trim();
 				// 判断输入内容是否空，空的话就return
 				if(!this.value){
@@ -144,39 +144,27 @@
 			},
 			async fuzzyQueryWay() {
 				var {message} = await fuzzyQuery(this.value);
-				// if(message.length > 6){
-				// 	 // message.length = 6
-				// }
 					this.fuzzyQueryData = [];
 					message.map((item,i)=>{
-						// console.log(v,i)
 						if(i<6){
 							this.fuzzyQueryData.push(item);
 						}
 					})
+					// 输入有数据的话就显示设为true
+					this.hasData = true;
 				console.log('fuzzyQueryData:',this.fuzzyQueryData);
 			},
+			// 热搜
 			hotSearch(goodsName) {
-				console.log("热门", goodsName);
+				var list = this.first(goodsName)
+				this.$store.commit('setHistoryArray',list)
 				uni.navigateTo({
 					url: "../goodsList/goodsList?goodsName=" + goodsName
 				})
 			},
-			// async fuzzyQueryWay(){
-			
-			// 	var {message} = await fuzzyQuery(this.value);
-			// 	console.log("模糊",message)
-			// 	this.fuzzyQueryData = message;
-			// 	this.hasData = true;
-				
-			// 	if(this.value == ""){
-			// 		this.hasData = false;
-			// 	}
-			// },
 			// 历史记录
 			history(goodsName){
 				var list = this.first(goodsName)
-				
 				this.$store.commit('setHistoryArray',list)
 				uni.redirectTo({
 					url:"/pages/goodsList/goodsList?goodsName=" + goodsName
@@ -201,6 +189,9 @@
 				})
 				return list;
 			}
+		},
+		onLoad(e) {
+			this.value = e.goodsName;
 		}
 	}
 </script>
