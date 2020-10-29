@@ -398,9 +398,9 @@
 						message
 					} = await getSearchGoods(this.goodsName, this.page);
 				}
-				var {
-					message
-				} = await getGoodsList(this.goodsId, this.page);
+				// var {
+				// 	message
+				// } = await getGoodsList(this.goodsId, this.page);
 				stopLoad ? stopLoad() : '';
 				if (message.length == 0) {
 					// message.length等于0的时候，把hasData设为false；用于后续的判断；

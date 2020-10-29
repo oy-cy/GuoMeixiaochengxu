@@ -203,9 +203,10 @@
 					}
 				})
 			},
-			changeTab(index) {
-				// console.log('当前选中的项：' + index)
-				this.current = index;
+			changeTab(obj) {
+				console.log('当前选中的项：' + obj)	
+				this.current = obj.index;
+				this.goodsId = obj.id;
 				if(index == 0){
 					this.getCategoryData();
 				}else {
