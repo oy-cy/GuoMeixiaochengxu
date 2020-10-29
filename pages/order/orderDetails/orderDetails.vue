@@ -82,7 +82,7 @@
 			<!-- 下单时间 -->
 			<view class="orders_time">
 				<text>下单时间：</text>
-				<text>{{order.create_time}}</text>
+				<text>{{$moment(item.update_time).format('YYYY-MM-DD hh:mm')}}</text>
 			</view>
 		</view>
 		<!-- 订单操作 -->

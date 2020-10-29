@@ -178,7 +178,7 @@
 					评论
 				</view>
 				<view class="reputation" >
-					好评度  <text>100%</text>  <van-icon name="arrow" color="#999A9C"/>
+					查看更多评论  <van-icon name="arrow" color="#999A9C"/>
 				</view>
 			</view>
 			<view class="comment-info"  v-if="comment.remark" >
@@ -422,60 +422,86 @@
 			},
 			// 加入购物车
 			async joinShopCart(){
-				
-				this.isLogin();
-				let arr = this.$store.getters.getCarList;
-				let index = -1;
-				arr.map((v,indexs) =>{
-					if(v.user_id == this.userInfo.userId && v.com_id == this.goodsId){
-						v.com_count += this.select.number
-						index = indexs;
+				if(!this.userInfo.userId){
+					var obj ={
+						goodsId:this.goodsId,
+						isDetail:true,
 					}
-				})
-				if(index == -1){
-					let car = {
-						userId :this.userInfo.userId,
-						comId : this.goodsId,
-						comCount : this.select.number,
-						specification : this.select.confirm,
-						price : (this.select.price == 0 ? this.recommend.sku_price : this.select.price),
-					}
-					await addShopCar(car);
-					var {message} = await queryShopCar(this.userInfo.userId)
-					message.forEach(v=>{
-						v.shop_specification = JSON.parse( v.shop_specification);
+					getApp().globalData.detail = obj
+					this.$refs.uToast.show({
+						title: '请先进行登录',
+						type: 'default',
+						url:"/pages/user/user",
+						isTab:true,
 					})
-					this.$store.commit('setCarList',message)
 				}else{
-					// var tempCar = arr[index];
-					// tempCar.shop_specification = JSON.parse(tempCar.shop_specification)
-					await updateShopCar(arr[index]);
-					this.$store.commit('setCarList',arr)
+					let arr = this.$store.getters.getCarList;
+					let index = -1;
+					arr.map((v,indexs) =>{
+						if(v.user_id == this.userInfo.userId && v.com_id == this.goodsId){
+							v.com_count += this.select.number
+							index = indexs;
+						}
+					})
+					if(index == -1){
+						let car = {
+							userId :this.userInfo.userId,
+							comId : this.goodsId,
+							comCount : this.select.number,
+							specification : this.select.confirm,
+							price : (this.select.price == 0 ? this.recommend.sku_price : this.select.price),
+						}
+						await addShopCar(car);
+						var {message} = await queryShopCar(this.userInfo.userId)
+						message.forEach(v=>{
+							v.shop_specification = JSON.parse( v.shop_specification);
+						})
+						this.$store.commit('setCarList',message)
+					}else{
+						// var tempCar = arr[index];
+						// tempCar.shop_specification = JSON.parse(tempCar.shop_specification)
+						await updateShopCar(arr[index]);
+						this.$store.commit('setCarList',arr)
+					}
+					
+					this.$refs.uToast.show({
+						title: '加入购物车成功',
+						type: 'default',
+					})
 				}
 				
-				this.$refs.uToast.show({
-					title: '加入购物车成功',
-					type: 'default',
-				})
 				
 			},
 			// 购买商品
 			promptlyBuy(){
-				this.isLogin();
-				let goodsInfo = [{
-					sku_name:this.recommend.sku_name,
-					sku_thumbImg_url:this.select.img || this.recommend.sku_thumbImg_url,
-					user_id :this.userInfo.userId,
-					com_id : this.goodsId,
-					com_count : this.select.number,
-					shop_specification : JSON.stringify(this.select.confirm) || '[]',
-					sku_price : (this.select.price == 0 ? this.recommend.sku_price : this.select.price),
-				}]
-				
-				// console.log('立即购买')
-				uni.navigateTo({
-					url:"/pages/order/order?goodsInfo="+JSON.stringify(goodsInfo)+"&detail=true"
-				})
+				if(!this.userInfo.userId){
+					var obj ={
+						goodsId:this.goodsId,
+						isDetail:true,
+					}
+					getApp().globalData.detail = obj
+					this.$refs.uToast.show({
+						title: '请先进行登录',
+						type: 'default',
+						url:"/pages/user/user",
+						isTab:true,
+					})
+				}else{
+					let goodsInfo = [{
+						sku_name:this.recommend.sku_name,
+						sku_thumbImg_url:this.select.img || this.recommend.sku_thumbImg_url,
+						user_id :this.userInfo.userId,
+						com_id : this.goodsId,
+						com_count : this.select.number,
+						shop_specification : JSON.stringify(this.select.confirm) || '[]',
+						sku_price : (this.select.price == 0 ? this.recommend.sku_price : this.select.price),
+					}]
+					
+					// console.log('立即购买')
+					uni.navigateTo({
+						url:"/pages/order/order?goodsInfo="+JSON.stringify(goodsInfo)+"&detail=true"
+					})
+				}
 			},
 			// 地址组件方法
 			siteCompile(){
@@ -491,14 +517,7 @@
 			},
 			// 判断是否登录
 			isLogin(){
-				if(!this.userInfo.userId){
-					this.$refs.uToast.show({
-						title: '请先进行登录',
-						type: 'default',
-						url:"/pages/user/user",
-						isTab:true,
-					})
-				}
+				
 			}
 		},
 		components:{
@@ -828,6 +847,7 @@
 			.nav{
 				display: flex;
 				justify-content: space-between;
+				align-items: center;
 				.comment{
 					color: #333;
 					font-size: 34rpx;
@@ -836,11 +856,11 @@
 					display: flex;
 					align-items: center;
 					color: #333;
-					font-size: 30rpx;
-					text{
-						margin: 0 10rpx;
-						color: #F20C59;
-					}
+					font-size: 28rpx;
+					// text{
+					// 	margin: 0 10rpx;
+					// 	color: #F20C59;
+					// }
 				}
 			}
 			.comment-info{
