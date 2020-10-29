@@ -4,4 +4,4 @@ export function getCommentTypeAndCount(comId){
 	return request({
 		url:"/getcommentTypeAndCount?comId="+comId
 	})
-}
+} 

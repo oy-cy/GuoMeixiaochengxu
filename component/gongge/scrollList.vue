@@ -26,7 +26,7 @@
 						</view>
 					</view>
 					
-				</view>
+				</view> 
 				
 		</scroll-view>
 	</view>

@@ -9,7 +9,7 @@ export default {
 		userInfo:{}
 	},
 	
-	onLaunch: function() {
+	onLaunch: function() { 
 		console.log('App Launch');
 		// 通过本地存储获取用户是否登录
 		var isLogin = uni.getStorageSync('isLogin');

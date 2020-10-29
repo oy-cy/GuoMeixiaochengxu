@@ -100,9 +100,6 @@
 				"navigationBarTitleText": "填写订单"
 			}
 		}, {
-			"path": "pages/comment/comment",
-			"style": {}
-		}, {
 			"path": "component/seckill/seckill",
 			"style": {}
 		}, {

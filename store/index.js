@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 import {addShopCar,updateShopCar,getCarList} from "@/api/car.js"
 
 Vue.use(Vuex)
-
+ 
 
 // 1 获取数据 2.设置到state
 // var historyArray = uni.loca

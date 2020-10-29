@@ -1,6 +1,6 @@
 <template>
 	<view class="receiving-container">
-		<!-- 城市 -->
+		<!-- 城市 --> 
 		<view class="current-city">
 			<van-search class="van-search" v-model="e" placeholder="请输入收货人地址" @change="bindInput" shape="round">
 				<view slot="label" class="label">

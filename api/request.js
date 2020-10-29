@@ -18,7 +18,7 @@ function requset(options){
 			},
 			complete() {
 				
-			}
+			} 
 			
 		})
 	})

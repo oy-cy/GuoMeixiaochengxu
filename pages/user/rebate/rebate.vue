@@ -1,6 +1,6 @@
 <template>
 	<view class="rebate-container">
-		<view class="money">
+		<view class="money"> 
 			<view class="recorded">
 				<view class="count">
 					<view class="symbol">&yen;</view>

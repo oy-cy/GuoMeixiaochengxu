@@ -1,6 +1,6 @@
 <template>
 	<view class="shop-container">
-		<!-- 头部 -->
+		<!-- 头部 --> 
 		<view class="header" :class="{selectedBgc:isShowLogo}">
 			<view class="guomei" v-if="isShowLogo" @click="chooseLocation">
 				<image src="../../static/images/shop/guomei-logo.png" mode=""></image>

@@ -27,7 +27,7 @@
 							<text class="goods-tag-list" v-for="(color,indexs) in item.tagList" :key="indexs" 
 							:style="{'border': '1rpx solid #'+color.tagColor, 'color': '#'+color.tagColor}">{{color.tagName}}</text>
 						</view>
-						
+						 
 						<view class="price">
 							<view class="content">
 								<text class="symbol">￥</text>

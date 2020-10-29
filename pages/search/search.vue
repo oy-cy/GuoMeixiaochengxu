@@ -10,7 +10,7 @@
 		@click="onClick" 
 		class="style"
 		/>
-		
+		 
 		<!-- v-if="value == ''" -->
 		<view class="operate" v-if="!hasData">
 			<!-- 热门搜索 -->

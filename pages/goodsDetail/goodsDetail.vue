@@ -7,7 +7,7 @@
 				name="url"
 				height="690" 
 				mode="number" 
-				:autoplay="false"
+				:autoplay="false" 
 				indicator-pos="bottomRight" 
 				:list="lunbotu"></u-swiper>
 		</view>

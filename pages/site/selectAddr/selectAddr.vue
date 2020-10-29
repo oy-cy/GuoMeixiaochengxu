@@ -1,7 +1,7 @@
 <template>
 	<view class="select-addr-container">
 		<view class="list" v-for="(item,index) in receivingAddr">
-			<view class="item">
+			<view class="item"> 
 				<view class="info" @click="setSelectCity(item.id)">
 					<view class="raduis-view">
 						<view class="raduis">

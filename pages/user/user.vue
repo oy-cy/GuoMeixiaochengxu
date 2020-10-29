@@ -1,7 +1,7 @@
 <template>
 	<view class="user_container">
 		<view class="yet-login" v-if="isLogin">
-			<!-- 顶部用户信息 -->
+			<!-- 顶部用户信息 --> 
 			<view class="user">
 				<view class="user-photo" @click="outLogin">
 					<image :src="userInfo.avatarUrl" mode=""></image>

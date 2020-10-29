@@ -1,6 +1,6 @@
 <template>
 	<view class="sacon-container">
-		<view class="img-box">
+		<view class="img-box"> 
 			<!-- <image src="../../static/images/shop/sacon.webp" mode=""></image> -->
 			<image src="https://gfs6.gomein.net.cn/wireless/T1m._KB7ZT1RCvBVdK_750_360.jpg" mode=""></image>
 		</view>

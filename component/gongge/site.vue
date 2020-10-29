@@ -17,7 +17,7 @@
 						</view>
 					</view>
 						
-						
+						 
 					<view class="content" :class="leftRight==true?'towardsLeft':'towardsRight'">
 						<view class="y">
 							<scroll-view scroll-y="true" class="consigneeSite">

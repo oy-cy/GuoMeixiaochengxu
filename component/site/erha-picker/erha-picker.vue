@@ -15,7 +15,7 @@
 				</view>
 			</li>
 		</ul>
-
+ 
 		<ul v-if="showIndex==1" class="content" :style="'height:'+ heightCot + 'upx'">
 			<li @click="selectCity(index,item.label)" v-for="(item,index) in cityData" :key="index">
 				<view>{{item.label}}</view>

@@ -24,7 +24,7 @@
 					// good把购物车需要的提交到数组
 					carList.push()
 				}
-			}
+			} 
 		}
 	}
 </script>

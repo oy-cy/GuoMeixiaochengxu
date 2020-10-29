@@ -16,7 +16,7 @@ export function getCommodityDetails(comId){
 export function getcomment(comId,type = ''){
 	return request({
 		url:"/getcomment?comId="+comId +"&type="+type
-	})
+	}) 
 }
 // 修改购物车
 export function updateShopCar(info) {

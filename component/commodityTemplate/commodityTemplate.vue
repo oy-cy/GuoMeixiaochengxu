@@ -20,7 +20,7 @@
 							<image class="img" src="../../static/images/shop/car-tag.png" mode=""></image>
 						</view>
 					</view>
-				</view>
+				</view> 
 			</view>
 		</view>
 	</view>

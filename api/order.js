@@ -19,7 +19,7 @@ export function deleteOrder(orderId){
 		url:"/deleteOrder?orderId="+orderId
 	})
 }
-// 查询单个订单
+// 查询单个订单 
 export function getOrder(orderId){
 	return request({
 		url:"/getOrder?orderId="+orderId

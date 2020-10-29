@@ -8,7 +8,7 @@
 				<view class="tag-item" @click="onSelect(item.type,index)" :class="[isSelect == index ? 'select':'' ]" v-for="(item,index) in tagList" :key="index">
 					{{item.type}}({{item.count}})
 				</view>
-			</view>
+			</view> 
 			<view class="good">
 				好评度
 				<view class="goods-comment">{{goodComment}}%</view>
