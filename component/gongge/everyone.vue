@@ -82,6 +82,7 @@
 			},
 			
 			async change(obj){
+				console.log(obj)
 				this.currentTitle = obj.index;
 				this.page = 1;
 				this.catId = obj.id;

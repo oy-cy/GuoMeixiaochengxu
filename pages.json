@@ -218,11 +218,16 @@
                 "enablePullDownRefresh": false
             }
             
-        }
-        ,{
-            "path" : "pages/goodsDetail/comment/comment",
-            "style" : {}
-        }
+        },
+		{
+		    "path" : "pages/goodsDetail/comment/comment",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "评论",
+		        "enablePullDownRefresh": false
+		    }
+		    
+		}
     ],
 	"permission": {
 		"scope.userLocation": {
@@ -230,9 +235,9 @@
 		}
 	},
 	"globalStyle": {
-		"navigationBarTextStyle": "white",
+		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#007AFF",
+		"navigationBarBackgroundColor": "#FFFFFF",
 		"backgroundColor": "#FFFFFF",
 		"usingComponents": {
 			"van-search": "/wxcomponents/dist/search/index",

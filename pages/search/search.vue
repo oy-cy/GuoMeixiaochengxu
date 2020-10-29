@@ -20,9 +20,7 @@
 					<text>热门搜索</text>	
 				</view>
 				<view class="keyword">
-					<!-- <navigator url="../goodsList/goodsList"> -->
 						<view class="word"  v-for="(item,index) in hotSearchData" :key="index" @tap.stop="goGoodsList(item)">{{item}}</view>
-					<!-- </navigator> -->
 				</view>
 			</view>
 			<!-- 搜索历史 -->
@@ -159,7 +157,8 @@
 				})
 			},
 			goGoodsList(goodsName){
-				console.log("字符",goodsName)
+				this.historyArray.unshift(goodsName);
+				this.$store.commit('setHistoryArray',this.historyArray)
 				uni.redirectTo({
 					url:"/pages/goodsList/goodsList?goodsName=" + goodsName
 				})
