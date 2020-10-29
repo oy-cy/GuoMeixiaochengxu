@@ -66,7 +66,7 @@
 						<view class="text">商品总价</view>
 						<view class="info">
 							<text>{{getTotalCount}}件</text>
-							<text>{{getTotalPrice}}</text>
+							<text>&yen;{{getTotalPrice}}</text>
 						</view>
 					</view>
 					<view class="freight">
@@ -82,7 +82,7 @@
 			<!-- 下单时间 -->
 			<view class="orders_time">
 				<text>下单时间：</text>
-				<text>{{$moment(item.update_time).format('YYYY-MM-DD hh:mm')}}</text>
+				<text>{{$moment(order.create_time).format('YYYY-MM-DD hh:mm')}}</text>
 			</view>
 		</view>
 		<!-- 订单操作 -->
