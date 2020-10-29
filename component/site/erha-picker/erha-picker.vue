@@ -78,7 +78,7 @@
 			}
 		},
 		created() {
-			this.initializePro();
+			this.initializePro(this.proName,this.cityName,this.areaName,this.strName);
 			
 			uni.getSystemInfo({
 				success: res => {
@@ -94,11 +94,11 @@
 			this.getStreetsAll = getStreets
 		},
 		methods: {
-			initializePro(){
-				if(this.proName){
+			initializePro(proName,cityName,areaName,strName){
+				if(proName){
 					for(let i = 0; i < provinceData.length; i++){
 						var province = provinceData[i];
-						if(province.label == this.proName){
+						if(province.label == proName){
 							this.proIndex = i;
 							this.province = province.label;
 							this.cityData = getCity[i];
@@ -106,58 +106,72 @@
 							this.currentSelect = 1;
 							this.topIndex = 1;
 							
-							this.initializeCity(i);
+							this.initializeCity(i,cityName,areaName,strName);
 							break;
 						}
 					}
 				}
 			},
-			initializeCity(tempProIndex){
-				if(this.cityName){
+			initializeCity(tempProIndex,cityName,areaName,strName){
+				if(cityName){
 					for(let i = 0; i < getCity[tempProIndex].length; i++){
 						var city = getCity[tempProIndex][i];
-						if(city.label == this.cityName){
+						if(city.label == cityName){
 							this.cityIndex = i; // 当前市的下标
 							this.city = city.label;
 							this.areaData = getArea[tempProIndex][i];
 							this.showIndex = 2;
 							this.currentSelect = 2;
 							this.topIndex = 2;
-							this.initializeArea(tempProIndex,i);
+							this.initializeArea(tempProIndex,i,areaName,strName);
 							break;
 						}
 					}
 				}
 			},
-			initializeArea(tempProIndex,tempCityIndex){
-				if(this.proName){
+			initializeArea(tempProIndex,tempCityIndex,areaName,strName){
+				if(areaName){
 					for(let i = 0; i < getArea[tempProIndex][tempCityIndex].length; i++){
 						var area = getArea[tempProIndex][tempCityIndex][i];
-						if(area.label == this.areaName){
-							this.area = area.label;
-							this.streetsData = getStreets[tempProIndex][tempCityIndex][i];
-							this.showIndex = 3;
-							this.currentSelect = 3;
-							this.topIndex = 3;
-							this.areaIndex = i;
-							
-							this.initializeStr(tempProIndex,tempCityIndex,i);
+						if(area.label == areaName){
+							// this.area = area.label;
+							// this.streetsData = getStreets[tempProIndex][tempCityIndex][i];
+							// this.showIndex = 3;
+							// this.currentSelect = 3;
+							// this.topIndex = 3;
+							// this.areaIndex = i;
+							this.selectaArea(i,area.label);
+							this.initializeStr(tempProIndex,tempCityIndex,i,strName);
 							break;
 						}
 					}
 				}
 			},
-			initializeStr(tempProIndex,tempCityIndex,tempArea){
-				if(this.proName){
+			initializeStr(tempProIndex,tempCityIndex,tempArea,strName){
+				if(strName){
 					for(let i = 0; i < getStreets[tempProIndex][tempCityIndex][tempArea].length; i++){
 						var str = getStreets[tempProIndex][tempCityIndex][tempArea][i];
-						if(str == this.strName){
-							this.strIndex = i;
-							
+						console.log(str,strName)
+						if(str == strName){
+							this.selectStreet(i,str);
 							break;
 						}
 					}
 				}
+			},
+			setAddr(proName,cityName,areaName,strName){
+				this.province = '请选择';
+				this.city = '请选择';
+				this.area = '请选择';
+				this.street = '请选择';
+				this.cityData = [];
+				this.areaData = [];
+				this.streetsData = [];
+				this.proIndex = -1;
+				this.cityIndex= -1;
+				this.areaIndex= -1;
+				this.strIndex = -1;
+				this.initializePro(proName,cityName,areaName,strName);
 			},
 			anewSelect(num) {
 				switch (num) {
@@ -249,6 +263,7 @@
 						area,
 						street:''
 					})
+					return;
 				}
 				this.showIndex = 3;
 				this.currentSelect = 3;
@@ -260,6 +275,7 @@
 			},
 			selectStreet(index, label) {
 				this.street = label;
+				this.strIndex = index;
 				const {
 					province,
 					city,
