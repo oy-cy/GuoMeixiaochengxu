@@ -130,6 +130,7 @@
 				priceOrder: 0, //1 价格从低到高 2价格从高到低
 				sales: 0,
 				goodsId: '',
+				goodsName: '',
 				page: 1,
 				asc: "asc",
 				desc: "desc",
@@ -485,6 +486,7 @@
 		},
 		onLoad(e) {
 			// 点击分类过来的id
+			console.log("search",e)
 			if (e.goodsId) {
 				this.goodsId = e.goodsId;
 				this.searchIndex = 4;
