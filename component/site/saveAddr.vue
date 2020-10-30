@@ -187,9 +187,10 @@ import { insertAddr,updateAddr,getAddr } from '@/api/user.js';
 						arr.splice(i,1);
 					}
 				}
+				console.log(arr);
 				
 				arr.map(v=> {
-					if(((v.indexOf('区') != -1) || v.indexOf('县')!=-1) && (v.length > 10)){
+					if(((v.indexOf('区') != -1) || v.indexOf('县')!=-1 || v.indexOf('市') != -1 || v.indexOf('省')!=-1) && (v.length >= 5)){
 						this.addr = '';
 						var index = v.lastIndexOf('市');
 						var index2 = v.lastIndexOf('区');
