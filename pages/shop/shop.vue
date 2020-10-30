@@ -115,7 +115,10 @@
 				 :emptyTip="emptyTip" :touchHeight="touchHeight" :height="height" :bottom="bottom" :autoPullUp="autoPullUp"
 				 :stopPullDown="stopPullDown" @onPullDown="handlePullDown" @onPullUp="handleLoadMore">
 					<!-- 数据列表 -->
-					<commodityTemplate :goodsList="goodsList"></commodityTemplate>
+					<view v-if="isShowGoods">
+						<commodityTemplate :goodsList="goodsList" ></commodityTemplate>
+					</view>
+					<view class="nogoodList" v-else>暂无商品数据</view>
 				</k-scroll-view>
 			</view>
 			<view class="" v-else-if="current === 1">
@@ -336,9 +339,7 @@
 		},
 		// 监听当前页面的滚动
 		onPageScroll: function(event) {
-			var {
-				scrollTop
-			} = event;
+			var { scrollTop } = event;
 			var position = 50; // 设定高度50
 			// console.log("滚动距离",scrollTop);
 			if (scrollTop > position && this.isLogo == false) {
@@ -353,6 +354,15 @@
 				// 改变头部搜索的图片
 				this.imgData.isScan = this.imgData.scanImgOne;
 				this.imgData.classify = this.imgData.classifyOne;
+			}
+		},
+		computed:{
+			isShowGoods:function(){
+				if(this.goodsList.length > 0){
+					return true;
+				}else {
+					return false;
+				}
 			}
 		},
 		onLoad(options){
@@ -643,96 +653,12 @@
 				}
 			}
 			.goodsList {
-				.classifyGoods {
-					display: flex;
-					flex-wrap: wrap;
-					justify-content: space-between;
-					padding: 20rpx;
-					background-color: #EFEFEF;
-				
-					.goods-item {
-						display: flex;
-						position: relative;
-						flex-direction: column;
-						justify-content: space-between;
-						width: 49%;
-						padding-bottom: 10rpx;
-						background-color: #fff;
-						border-radius: 20rpx;
-						overflow: hidden;
-						display: block;
-						margin-bottom: 14rpx;
-				
-						.img-container {
-							
-							.img {
-								width: 100%;
-								height: 366rpx;
-								
-							}
-						}
-				
-						.info {
-							padding: 0 10rpx;
-				
-							.text {
-								display: flex;
-								font-size: 24rpx;
-								align-items: center;
-								text-overflow: ellipsis;
-								display: -webkit-box;
-								-webkit-line-clamp: 2;
-								-webkit-box-orient: vertical;
-								overflow: hidden;
-				
-								.title_tag {
-									display: inline-block;
-									color: #FFFFFF;
-									font-size: 24rpx;
-									margin-right: 10rpx;
-									background: -webkit-gradient(linear,left top,right top,from(#fa1e8c),to(#f20c59));
-									background: linear-gradient(90deg,#fa1e8c,#f20c59);
-									border-radius: 5rpx;
-								}
-							}
-				
-							.price {
-								display: flex;
-								justify-content: space-between;
-								align-items: center;
-								.content {
-									// display: flex;
-									.money {
-										font-size: 36rpx;
-										color: #f20c59;
-										font-weight: 700;
-									}
-									.symbol {
-										font-size: 20rpx;
-										color: #f20c59;
-										font-weight: 700;
-									}
-								}
-								
-								.car-logo {
-									.img {
-										width: 55rpx;
-										height: 55rpx;
-									}
-								}
-							}
-							.goods-tag-list {
-								width: 100rpx;
-								font-size: 24rpx;
-								text-align: center;
-								color: rgb(242, 12, 86);
-								border-color: rgb(242, 12, 86);
-								border: 1rpx solid rgb(242, 12, 86);
-								margin: 10rpx 0;
-								border-radius: 5rpx;
-							}
-						}
-					}
+				.nogoodList {
+					margin: 200rpx 0;
+					text-align: center;
+					font-size: 38rpx;
+					color: #F25D8F;
+					font-weight: 700;
 				}
 			}
 		}

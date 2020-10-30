@@ -109,7 +109,7 @@
 				}
 				this.isShow = true;
 
-				uni.navigateTo({
+				uni.redirectTo({
 					url: "/pages/goodsList/goodsList?goodsName=" + this.value
 				})
 				this.$store.commit('setHistoryArray', this.historyArray);
@@ -158,7 +158,7 @@
 			hotSearch(goodsName) {
 				var list = this.first(goodsName)
 				this.$store.commit('setHistoryArray',list)
-				uni.navigateTo({
+				uni.redirectTo({
 					url: "../goodsList/goodsList?goodsName=" + goodsName
 				})
 			},
