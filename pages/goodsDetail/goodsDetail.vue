@@ -41,7 +41,7 @@
 				>
 				<view slot="title">
 				    <text class="van-cell-text">已选</text>
-					<text class="checked" v-for="(item,index) in select.confirm" :key='index'>{{item}}</text>
+					<text class="checked" v-for="(item,index) in select.confirm" :key='index'>{{item.title}}</text>
 				    <text class="checked">{{select.number}}个</text>
 				  </view>
 				</van-cell>
@@ -387,7 +387,10 @@
 				if(this.detailData.select.length != 0){
 					let confirm = [];
 					this.detailData.select.forEach((v,index) =>{
-						confirm.push(v.list[this.sureSelect[index]].title)
+						var obj = {
+							title:v.list[this.sureSelect[index]].title,
+						}
+						confirm.push(obj)
 					})
 					this.select.confirm = confirm
 				}
@@ -400,7 +403,6 @@
 			},
 			// 点击切换规格
 			goodsSelect(index,value){
-				console.log("this.recommend",index,value)
 				this.select.img = this.detailData.select[index].list[value].img  || this.recommend.sku_thumbImg_url ;
 				this.select.price = this.detailData.select[index].list[value].price ||  this.recommend.sku_price;
 				this.sureSelect.splice(index,1,value);
@@ -444,6 +446,7 @@
 						isTab:true,
 					})
 				}else{
+					
 					let arr = this.$store.getters.getCarList;
 					let index = -1;
 					arr.map((v,indexs) =>{
@@ -458,7 +461,7 @@
 							comId : this.goodsId,
 							comCount : this.select.number,
 							specification : this.select.confirm,
-							price : (this.select.price == 0 ? this.recommend.sku_price : this.select.price),
+							price : this.recommend.sku_price,
 						}
 						await addShopCar(car);
 						var {message} = await queryShopCar(this.userInfo.userId)
@@ -477,6 +480,7 @@
 						title: '加入购物车成功',
 						type: 'default',
 					})
+					this.isSelect = false;
 				}
 				
 				

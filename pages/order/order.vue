@@ -45,7 +45,7 @@
 					<image :src="item.sku_thumbImg_url"></image>
 					<view class="msgs">
 						<view class="goods-title">
-							{{item.sku_name}}{{JSON.stringify(item.shop_specification)}}
+							{{item.sku_name}}
 						</view>
 						<view class="price-count">
 							<view class="price">
