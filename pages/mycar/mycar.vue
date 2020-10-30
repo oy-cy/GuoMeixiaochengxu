@@ -377,8 +377,7 @@
 			
 			async affirm(){
 				var data = this.specification;
-				console.log(data)
-				
+				this.isSelect = false;
 				var temp = [];
 				data.spec.map(v=>{
 					v.list.map((j,indexs)=>{
@@ -394,6 +393,15 @@
 							com_count:data.count,
 							specification:JSON.stringify(temp),
 							price:data.price}
+				this.getCarListData.forEach(v=>{
+					if(v.id == info.id){
+						v.shop_specification = JSON.parse(info.specification) ;
+						v.com_count = info.com_count
+						return
+					}
+				})
+				
+				this.$store.commit('setCarList',this.getCarListData);
 				await updateShopCar(info);
 			},
 			
