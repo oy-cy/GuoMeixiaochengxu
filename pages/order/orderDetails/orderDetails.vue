@@ -243,7 +243,7 @@ import jpPwd from '@/components/jp-pwd/jp-pwd.vue';
 
 <style lang="scss" scoped>
 .order_details_container {
-	height: 100vh;
+	// height: 100vh;
 	background-color: rgb(243,245,247);
 	font-size: 28rpx;
 	.order_details {

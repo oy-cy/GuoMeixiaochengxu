@@ -57,7 +57,7 @@
 				allShow: false,
 				fuzzyQueryData: [],
 				hotSearchData: [
-					'iphone 12', '冰箱自营', '美的洗衣机', '冷暖空调', '休闲零食', '超薄电视', '电热水器', '微波炉'
+					'华为', '花花公子', '戴尔DELL', '美的', '休闲零食', '海尔(Haier)', '三只松鼠', '联想ThinkBook'
 				]
 			};
 		},

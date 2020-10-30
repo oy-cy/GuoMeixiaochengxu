@@ -145,13 +145,13 @@
 					priceDesc: "/static/images/goodsList/price-desc.png",
 				},
 				brandList: [{
-						brandName: "海信(Hisense)"
+						brandName: "花花公子"
 					},
 					{
-						brandName: "创维(Skyworth)"
+						brandName: "阿玛尼"
 					},
 					{
-						brandName: "小米(MI)"
+						brandName: "美的(Midea)"
 					},
 					{
 						brandName: "TCL"
@@ -160,7 +160,7 @@
 						brandName: "索尼(SONY)"
 					},
 					{
-						brandName: "长虹(CHANGHONG)"
+						brandName: "戴尔"
 					},
 					{
 						brandName: "海尔(Haier)"
@@ -175,7 +175,7 @@
 						brandName: "夏普(SHARP)"
 					},
 					{
-						brandName: "三洋(SANYO)"
+						brandName: "华为"
 					},
 					{
 						brandName: "国美(GOME)"
@@ -212,6 +212,8 @@
 			},
 			// 确定筛选
 			confirm() {
+				// 点击确定的时候把筛选的品牌名赋值给搜索框
+				this.goodsName = this.brandName;
 				// 把page重新赋值为1
 				this.page = 1;
 				// 确定筛选后关闭右弹窗
@@ -257,13 +259,39 @@
 			tabClick(index) {
 				// 每次点击都把page赋值为1，用于后续发送请求时都是以第一页开始
 				this.page = 1;
-				
+				// navbar点击的下标
 				this.filterIndex = index;
+				// 点击tabs切换的时候，把价格图片改为默认
 				this.price.priceSort = this.price.default;
 				if (index === 0) {
 					// sales priceOrder赋值为0，用于上拉加载时的判断
 					this.zero();
-					this.getGoodsListData()
+					// 点击综合，根据筛选的字段进行发送请求
+					if (this.screenIndex == 1) {
+						this.getFilterPriceAndBrandNameData();
+						return;
+					}
+					if (this.screenIndex == 2) {
+						this.getFilterPriceData();
+						return;
+					}
+					if (this.screenIndex == 3) {
+						this.getFilterBrandNameData();
+						return;
+					}
+					
+					// 点击综合 根据搜索过来的字段来发送请求
+					if (this.searchIndex == 4) {
+						this.getGoodsListData();
+						return;
+					} 
+					if(this.searchIndex == 5){		
+						this.getSearchGoodsNameData();
+						return;
+					}
+						
+					// 页面加载时触发，初始化的综合
+					this.getGoodsListData();
 				} else if (index === 1) {
 					this.sales = 0;
 					this.priceOrder = this.priceOrder === 1 ? 2 : 1;
@@ -304,7 +332,7 @@
 				this.goodsList = message;
 			},
 			// 根据名字获取商品数据
-			async getSearchGoodsData() {
+			async getSearchGoodsNameData() {
 				var {
 					message
 				} = await getSearchGoods(this.goodsName, this.page);
@@ -495,7 +523,7 @@
 				// 搜索过来的名字
 				this.goodsName = e.goodsName;
 				this.searchIndex = 5;
-				this.getSearchGoodsData();
+				this.getSearchGoodsNameData();
 			}
 			// 初始化猜你喜欢数据
 			this.getLikeGoodsData();
@@ -715,21 +743,21 @@
 				.content {
 					display: flex;
 					flex-wrap: wrap;
-
+					justify-content: space-around;
 					.brand-list {
 						.item-list {
 							width: 200rpx;
 							height: 60rpx;
 							line-height: 60rpx;
+							font-size: 22rpx;
+							margin-top: 20rpx;
 							text-align: center;
-							font-size: 20rpx;
+							color: #000000;
 							border-radius: 50rpx;
 							background-color: #e7e7e7;
-							margin-left: 12rpx;
-							margin-top: 20rpx;
 							box-sizing: border-box;
+							
 						}
-
 						.item-list:hover {
 							border: 2rpx solid #F42F71;
 							color: #F42F71;
@@ -743,12 +771,15 @@
 			.btn-content {
 				position: absolute;
 				bottom: 0;
+				width: 100%;
 				border-top: 1px solid #e6e6e6;
 				text-align: center;
-
+				box-sizing: border-box;
+				
 				.reset {
 					display: inline-block;
-					width: 338.6rpx;
+					// width: 338.6rpx;
+					width: 50%;
 					height: 100rpx;
 					line-height: 100rpx;
 					background: #f9f9f9;
@@ -757,7 +788,8 @@
 
 				.confirm {
 					display: inline-block;
-					width: 338.5rpx;
+					// width: 338.5rpx;
+					width: 50%;
 					height: 100rpx;
 					line-height: 100rpx;
 					background: -webkit-linear-gradient(left, #FA1E8C 0, #FC1E56 100%);
