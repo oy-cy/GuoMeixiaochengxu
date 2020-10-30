@@ -91,7 +91,7 @@
 </template>
 
 <script>
-	import easyLoadimage from '@/components/easy-loadimage/easy-loadimage.vue'
+	// import easyLoadimage from '@/components/easy-loadimage/easy-loadimage.vue'
 	// import gogei from '../../component/gongge/gogei.vue';
 	import goTop from '../../component/goTop/goTop.vue';
 	import seckill from "@/component/seckill/seckill.vue";
@@ -257,7 +257,7 @@
 		components: {
 			goTop,
 			seckill,
-			"easy-loadimage":easyLoadimage
+			// "easy-loadimage":easyLoadimage
 		},
 		created() {
 			this.init();
