@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<!-- 搜索框 -->
+		<!-- 搜索框 --> 
 		<uni-search-bar @input="input" placeholder="请输入搜索名称或拼音查询" cancelButton="auto" :radius='20' v-model="search"></uni-search-bar>
 		<!-- 当前定位城市 -->
 		<view class="current-city" v-if="!search.value.length" @click="setCity(currentCity)">

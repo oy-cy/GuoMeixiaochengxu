@@ -37,7 +37,9 @@
 			}
 		}, {
 			"path": "pages/search/search",
-			"style": {}
+			"style": {
+				"navigationBarTitleText": "搜索"
+			}
 		}, {
 			"path": "pages/classify/classify",
 			"style": {
@@ -82,7 +84,9 @@
 			}
 		}, {
 			"path": "pages/goodsList/goodsList",
-			"style": {}
+			"style": {
+				"navigationBarTitleText": "商品列表"
+			}
 		}, {
 			"path": "pages/goodsDetail/goodsDetail",
 			"style": {
@@ -94,10 +98,9 @@
 			}
 		}, {
 			"path": "pages/order/order",
-			"style": {}
-		}, {
-			"path": "pages/comment/comment",
-			"style": {}
+			"style": {
+				"navigationBarTitleText": "填写订单"
+			}
 		}, {
 			"path": "component/seckill/seckill",
 			"style": {}
@@ -162,18 +165,67 @@
                 "navigationBarTitleText": "编辑地址",
                 "enablePullDownRefresh": false
             }
-        },
-		{
-			"path":"pages/user/orderList/orderList",
-			"style":{
-				"navigationBarTitleText":"我的订单"
+            
+        }
+        ,{
+            "path" : "pages/guideIntroduce/guideIntroduce",
+            "style" : {
+				"navigationBarTitleText": "导购员介绍"
 			}
-		},
+        }
+        ,{
+            "path" : "pages/brand/sacon/sacon",
+            "style" : {
+				"navigationBarTitleText": "帅康品牌专场"
+			}
+        }
+        ,{
+            "path" : "pages/brand/guangdongMacro/guangdongMacro",
+            "style" : {
+				"navigationBarTitleText": "万家乐品牌专场"
+			}
+        }
+        ,{
+            "path" : "pages/brand/lake/lake",
+            "style" : {
+				"navigationBarTitleText": "莱克品牌专场"
+			}
+        }
+        ,{
+            "path" : "component/commodityTemplate/commodityTemplate",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/user/orderList/orderList",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我的订单",
+                "enablePullDownRefresh": false
+            }
+        },
 		{
 			"path":"pages/user/group/group",
 			"style":{
 				"navigationBarTitleText":"我的拼团"
 			}
+		}
+        ,{
+            "path" : "pages/order/orderDetails/orderDetails",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "订单详情",
+                "enablePullDownRefresh": false
+            }
+            
+        },
+		{
+		    "path" : "pages/goodsDetail/comment/comment",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "评论",
+		        "enablePullDownRefresh": false
+		    }
+		    
 		}
     ],
 	"permission": {
@@ -182,9 +234,9 @@
 		}
 	},
 	"globalStyle": {
-		"navigationBarTextStyle": "white",
+		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#007AFF",
+		"navigationBarBackgroundColor": "#FFFFFF",
 		"backgroundColor": "#FFFFFF",
 		"usingComponents": {
 			"van-search": "/wxcomponents/dist/search/index",
@@ -209,9 +261,8 @@
 			"van-checkbox-group": "/wxcomponents/dist/checkbox-group/index",
 			"van-goods-action": "/wxcomponents/dist/goods-action/index",
 			"van-goods-action-icon": "/wxcomponents/dist/goods-action-icon/index",
-			"van-goods-action-button": "/wxcomponents/dist/goods-action-button/index"
-			
-
+			"van-goods-action-button": "/wxcomponents/dist/goods-action-button/index",
+			"van-field": "/wxcomponents/dist/field/index"
 		}
 	},
 	"tabBar": {
@@ -260,6 +311,8 @@
 		"^u-back-top": "uview-ui/components/u-back-top/u-back-top.vue",
 		"^u-icon": "uview-ui/components/u-icon/u-icon.vue",
 		"^u-loadmore": "uview-ui/components/u-loadmore/u-loadmore.vue",
-		"^u-number-box": "uview-ui/components/u-number-box/u-number-box.vue"
+		"^u-number-box": "uview-ui/components/u-number-box/u-number-box.vue",
+		"^u-toast": "uview-ui/components/u-toast/u-toast.vue"
+		
 	}
 }

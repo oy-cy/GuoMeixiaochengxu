@@ -7,16 +7,13 @@
 			</u-count-down>
 		</view>
 		<scroll-view scroll-x="true" class="content">
-			<block v-for="(item, index) in goodsData" :key="index">
-				<view class="item" @tap="goDetail">
+			<block v-for="(item, index) in goodsData" :key="item.id"  >
+				<view class="item" @tap.stop="goGoodsDetail(item.id)">
 					<view class="img">
-						<image :src="item.img" mode=""></image>
+						<image :src="item.sku_thumbImg_url" mode=""></image>
 					</view>
-					<!-- <view class="content"> -->
-					<!-- <text class="goods-price">￥</text> -->
-					<text class="goods-price">￥{{ item.goodsPrice }}</text>
-					<!-- </view> -->
-					<text class="item-title text-over-1">{{ item.goodsName }}</text>
+					<text class="goods-price">￥{{ item.sku_price }}</text>
+					<text class="item-title">{{ item.sku_name }}</text>
 				</view>
 			</block>
 		</scroll-view>
@@ -31,9 +28,11 @@
 				timestamp: 86400,
 			};
 		},
-		methods: {
-			goDetail() {
-
+		methods: { 
+			goGoodsDetail(id) {
+				uni.navigateTo({
+					url:"/pages/goodsDetail/goodsDetail?goodsId=" + id
+				})
 			}
 		}
 	}
@@ -89,7 +88,7 @@
 					font-size: 20upx;
 					line-height: 40upx;
 					text-overflow: ellipsis;
-					display: -webkit-box;
+					// display: -webkit-box;
 					-webkit-line-clamp: 1;
 					-webkit-box-orient: vertical;
 					overflow: hidden;

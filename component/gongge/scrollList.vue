@@ -5,7 +5,7 @@
 		</view>
 		
 		<scroll-view scroll-x class="strip">
-				<view class="goodbox" v-for="(item,index) in goodlist" :key="index" @click="skipGood(index)">
+				<view class="goodbox" v-for="(item,index) in goodlist" :key="index" @click="skipGood(item.id)">
 					<view class="img">
 						<view class="ranking" v-if="headline == '热卖榜单'">
 							<image :src="'../../static/images/gongge/LeaderboardNO'+(index+1)+'.png'" style="width: 100%;height: 100%;"></image>
@@ -20,20 +20,20 @@
 							<text class="money">
 								￥{{item.sku_price}}
 							</text>
-							<view class="car" @click.stop="addCar(index)">
+							<view class="car" @click.stop="addCar(item)">
 								<image src="../../static/images/gongge/car.png" style="width: 100%;height: 100%;"></image>
 							</view>
 						</view>
 					</view>
 					
-				</view>
+				</view> 
 				
 		</scroll-view>
 	</view>
 </template>
 
 <script>
-	import {getRecommend,getSellingList,getSeckill} from "../../api/common.js"
+	import {getRecommend,getSellingList,getSeckill} from "@/api/common.js"
 	export default {
 		props:["title",'catId'],
 		data(){
@@ -46,6 +46,7 @@
 			if(this.title == "rob"){
 				this.headline = "抢购"
 				this.getSeckillData();
+				
 			}else if(this.title == "exchange"){
 				this.headline = "换新推荐"
 				this.getRecommendData()
@@ -55,19 +56,22 @@
 			}else{
 				this.getSellingListData()
 			}
+			
+			
 		},
 		methods:{
-			skipGood(index){
+			skipGood(id){
 				uni.navigateTo({
-					url:'/pages/goodsDetail/goodsDetail'
+					url:'/pages/goodsDetail/goodsDetail?goodsId='+id
 				})
 			},
-			addCar(index){
-				console.log(index)
+			addCar(data){
+				this.$store.commit('setaddcar',data);
 			},
 			async getSeckillData(){
 				var {message} = await getSeckill();
-				this.goodlist = message
+				this.goodlist = message;
+				console.log("zz",this.goodlist)
 			},
 			async getRecommendData(){
 				var {message} = await getRecommend(1);

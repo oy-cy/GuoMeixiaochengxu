@@ -1,13 +1,13 @@
 <template>
 		<view class="goge">
 			<van-grid :column-num="hang" icon-size="60" :border="false">
-				<van-grid-item v-for="(item,index) in gogeidata" :icon="item.g_img" :text="item.g_title"  @click="select(index)"/>
+				<van-grid-item v-for="(item,index) in gogeidata" :icon="item.g_img" :text="item.g_title"  @click="select(item.g_title)"/>
 			</van-grid>
 		</view>
 </template>
 
 <script>
-	import {getGrid} from "../../api/common.js"
+	import {getGrid} from "@/api/common.js"
 		export default {
 			
 			props:['hang',"pageid"],
@@ -17,16 +17,15 @@
 				}
 			},
 			methods:{
-				select(index){
-					console.log(index)
+				select(title){
 					uni.navigateTo({
-						url:"/pages/goodsList/goodsList"
+						url:"/pages/goodsList/goodsList?goodsName="+title
 					})
 				},
 				async getGaidData(){
 					var {message} = await getGrid(this.pageid);
 					this.gogeidata = message;
-				}
+				} 
 			},
 			created() {
 				this.getGaidData();

@@ -1,5 +1,5 @@
 <template>
-	<view class="balance-container">
+	<view class="balance-container"> 
 		<uni-notice-bar single="true" text="为保障资金安全，建议您进行实名认证，点击去认证" showIcon="true" showClose="true"></uni-notice-bar>
 		<view class="main">
 			<view class="price">

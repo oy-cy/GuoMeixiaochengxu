@@ -1,7 +1,7 @@
 <template>
 	<view class="user_container">
 		<view class="yet-login" v-if="isLogin">
-			<!-- 顶部用户信息 -->
+			<!-- 顶部用户信息 --> 
 			<view class="user">
 				<view class="user-photo" @click="outLogin">
 					<image :src="userInfo.avatarUrl" mode=""></image>
@@ -83,6 +83,8 @@
 </template>
 
 <script>
+import { login } from '@/api/user.js';
+import {getCarList} from "@/api/car.js"
 	export default {
 		data() {
 			return {
@@ -104,14 +106,27 @@
 						info:'已入账返利',
 						balance:0
 					}
-				]
+				],
+				detail:{},
 			};
 		},
-		onLoad() {
+		onLoad(options) {
 			this.isLogin = getApp().globalData.isLogin;
 			this.userInfo = getApp().globalData.userInfo;
+			this.detail = getApp().globalData.detail;
+			console.log(this.detail)
 		},
 		methods:{
+			async getCarListData(userId){
+				var {message} = await getCarList(userId)
+				// console.log(1231231231231312312)
+				message.forEach(v=>{
+					v.shop_specification = JSON.parse( v.shop_specification);
+				})
+				// 购物车初始化数据
+				this.$store.commit('setCarList',message);
+			},
+			
 			// 退出登录
 			outLogin(){
 				getApp().globalData.isLogin = false;
@@ -120,6 +135,8 @@
 					key:'isLogin',
 					data:false
 				})
+				console.log("adfafsdfsdaf")
+				this.$store.commit('setCarList',[]);
 			},
 			// 登录
 			login(){
@@ -127,27 +144,37 @@
 				uni.login({
 					provider:'wexin',
 					// 登录成功
-					success(info){
-						// 获取openid start
-						var appid = 'wxdc3ba8b14831e4db'; //填写微信小程序appid  
-						var secret = '1dea52b5f60ada9dfe7dd87cc50b440b'; //填写微信小程序secret  
-						//调用request请求api转换登录凭证  
-						uni.request({
-							url: 'https://api.weixin.qq.com/sns/jscode2session?appid='+appid+'&secret='+secret+'&grant_type=authorization_code&js_code=' + loginCode.code,
-							header: {
-								'content-type': 'application/json'
-							},
-							success: function (res) {
-								console.info(res.data.openid) //获取openid
-							}
-						})
-						// 获取openid end
+					async success(info){
+						
+						var data = await login(info.code);
+						
+						// // 获取openid start
+						// var appid = 'wxdc3ba8b14831e4db'; //填写微信小程序appid  
+						// var secret = '74de67986515ccb5c8b8c9e1bf4b9c88'; //填写微信小程序secret  
+						// var openId ;
+
+						// //调用request请求api转换登录凭证  
+						// uni.request({
+						// 	url: 'https://api.weixin.qq.com/sns/jscode2session?appid='+appid+'&secret='+secret+'&grant_type=authorization_code&js_code=' + info.code,
+						// 	header: {
+						// 		'content-type': 'application/json'
+						// 	},
+						// 	success: function (res) {
+						// 		openId = res.data.openid;
+						// 		console.info(res.data.openid) //获取openid
+						// 	}
+						// })
+						// // 获取openid end
+						
 						
 						// 获取用户信息
 						uni.getUserInfo({
 							provider: 'weixin',
 							success: function (infoRes) {
 								var userInfo = infoRes.userInfo;
+								userInfo.userId = data.message;
+								_this.userInfo = userInfo;
+								console.log(userInfo)
 								// 登录成功，保存当前登陆用户信息
 								getApp().globalData.userInfo = userInfo;
 								getApp().globalData.isLogin = true;
@@ -160,17 +187,31 @@
 									key:'isLogin',
 									data:true
 								})
+								_this.getCarListData(getApp().globalData.userInfo.userId);
+								if(_this.detail.isDetail){
+									uni.navigateTo({
+										url:"/pages/goodsDetail/goodsDetail?goodsId="+_this.detail.goodsId
+									})
+								}
 							},
 							fail() {
 								console.log("用户信息获取失败");
 							}
 						})
+						
 					},
 					fail(res) {
 						uni.showToast({
 							title:"登录失败，请稍后再试",
 							icon:'none'
 						})
+					},
+					complete() {
+						// if(_this.detail.isDetail){
+						// 	uni.navigateBack({
+						// 		delta:1
+						// 	})
+						// }
 					}
 				})
 			}

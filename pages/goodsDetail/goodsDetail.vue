@@ -7,17 +7,17 @@
 				name="url"
 				height="690" 
 				mode="number" 
-				:autoplay="false"
+				:autoplay="false" 
 				indicator-pos="bottomRight" 
 				:list="lunbotu"></u-swiper>
 		</view>
 		<!-- 商品基本信息 -->
 		<view class="goods-title">
 			<view class="title">
-				<view class="goods-tag">{{goods.tag}}</view>
-				{{goods.title}}
+				<view class="goods-tag">{{recommend.extProperty}}</view>
+				{{recommend.sku_name}}
 			</view>
-			<view class="goods-price">¥{{goods.price}}</view>
+			<view class="goods-price">¥{{recommend.sku_price}}</view>
 			<view class="stages">
 				<van-cell-group>
 				  <van-cell 
@@ -56,34 +56,37 @@
 			  @click-overlay="closeSelected">
 				<view class="popup-select">
 					<view class="info">
-						<image :src="select.img"></image>
+						 
+						<image :src="select.img || recommend.sku_thumbImg_url"></image>
 						<view class="infos">
 							<view class="price">
-								¥{{select.price || goods.price}}
+								¥{{select.price || recommend.sku_price}}
 							</view>
 							<view>
-								{{goods.count > 0 ? "有货":"无货"}}
+								{{recommend.stock > 0 ? "有货":"无货"}}
 							</view>
 						</view>
 					</view>
-					<view class="select" v-for="(item,index) in detailData.select" :key='index'>
-						<view class="select-item">
-							{{item.name}}
+					<scroll-view scroll-y='true' style="height: 550rpx;">
+						<view class="select" v-for="(item,index) in detailData.select" :key='index'>
+							<view class="select-item">
+								{{item.name}}
+							</view>
+							<view class="item-content">
+								<block v-for="(items,indexs) in item.list" :key="indexs">
+									<view class="default" @click="goodsSelect(index,indexs)" :class="[sureSelect[index] == indexs ? 'choose':'']" >
+										{{items.title}}
+									</view>
+								</block>
+							</view>
 						</view>
-						<view class="item-content">
-							<block v-for="(items,indexs) in item.list" :key="indexs">
-								<view class="default" @click="goodsSelect(index,indexs)" :class="[sureSelect[index] == indexs ? 'choose':'']" >
-									{{items.title}}
-								</view>
-							</block>
+					
+						<view class="number">
+							数量 <van-stepper :value="select.number" min="1" max="10"  @change='numberChange'/>
 						</view>
-					</view>
-					<view class="number">
-						
-						数量 <van-stepper :value="select.number" min="1" max="10"  @change='numberChange'/>
-					</view>
+					</scroll-view>
 					<view class="goods-button">
-						<van-button  size="large" color="linear-gradient(to right, #FFC71D, #FF8917)" @click="joinShopCart">
+						<van-button  size="large" color="linear-gradient(to right, #FFC71D, #FF8917)" @click="joinShopCart" >
 						  加入购物车
 						</van-button>
 						<van-button  size="large" color="linear-gradient(to right, #FA1E8B, #FC1E58)" @click="promptlyBuy">
@@ -96,33 +99,19 @@
 		<!-- 送至 -->
 		<view class="goods-site">
 			<van-cell-group>
-				<!-- @click="isSite = true" -->
 			  <van-cell
 				is-link
-				@click="isSite = true"
+				@click="siteCompile"
 				>
 				<view slot="title" class="site-title">
 					<text class="van-cell-text">送至</text>
 					<view class="site">
 						<van-icon name="location-o" size="50rpx" color="#999A9C"/>
-						{{site}}, 免运费
+						{{getDefaultSite}}, 免运费
 					</view>
 				</view>
 			  </van-cell>
 			</van-cell-group>
-			<!-- 弹出框 -->
-			<van-popup
-			 :show="isSite"
-			  position="bottom"
-			  custom-style="height: 72%;"
-			  closeable
-			  @close="closeSite"
-			  @click-overlay="closeSite">
-				<view class="">
-					联动选择地址//todo
-				</view>
-			</van-popup>
-			  
 			<!-- 保证 -->
 			<view class="pledge">
 				<view class="pledge-item" v-for="(item,index) in pledge" :key="index">
@@ -134,11 +123,11 @@
 		
 		<!-- 门店 -->
 		<view class="good-shop" @click="goShop">
-			<image src="//gfs10.gomein.net.cn/T1kXb4BCZg1RCvBVdK.png"></image>
+			<image :src="recommend.shop_photo"></image>
 			<view class="info">
 				<view class="shop-name">
 					<view class="name">
-						国美体验店 (深圳观澜店)
+						{{recommend.shop_name}}
 					</view>
 					<view class="site">
 						<van-icon name="location-o" size="36rpx" color="#999A9C"/>
@@ -156,18 +145,18 @@
 			 <view class="course">
 			 	全程导购
 			 </view>
-			 <view class="item" v-for="(item,index) in guide" :key="index">
+			 <view class="item" v-for="(item,index) in guide" :key="index" @click="goGuide(item)">
 				<view class="left">
 					<view class="img-container">
-						<image :src="item.img"></image>
+						<image :src="item.imgUrl"></image>
 					</view>
 					<view class="info">
 						<view class="content">
 							<text class="tip"></text>
-							<text class="nickname">{{item.name}}</text>
+							<text class="nickname">{{item.sales_assistant_name}}</text>
 						</view>
 						<view class="flag">{{item.flag}}</view>
-						<view class="serve">已服务 {{item.serve}} 单</view>
+						<view class="serve">已服务 {{item.number_of_people_served}} 单</view>
 					</view>
 				</view>
 				<view class="right">
@@ -183,13 +172,13 @@
 			 </view>
 		</view>
 		<!-- 评论 -->
-		<view class="goods-comment">
+		<view class="goods-comment" @click="onComment">
 			<view class="nav">
 				<view class="comment">
 					评论
 				</view>
-				<view class="reputation">
-					好评度  <text>99%</text>  <van-icon name="arrow" color="#999A9C"/>
+				<view class="reputation" >
+					查看更多评论  <van-icon name="arrow" color="#999A9C"/>
 				</view>
 			</view>
 			<view class="comment-info"  v-if="comment.remark" >
@@ -216,7 +205,7 @@
 			 </view>
 			<swiper class="fond-swiper" :indicator-dots="true" :circular="true" indicator-active-color='#F20C59'>
 				 <swiper-item class="fond-swiper-item" v-for="(item,index) in fondGoods" :key='index'>
-				    <view class="fond-item" v-for="(items,indexs) in item" :key="indexs">
+				    <view class="fond-item" v-for="(items,indexs) in item" :key="indexs"  @click="onfond(items.id)">
 						<image :src="items.sku_thumbImg_url" ></image>
 						<view class="fond-titles">
 							{{items.sku_name}}
@@ -232,7 +221,6 @@
 		<view class="wrap">
 				<u-back-top :scroll-top="scrollTop" ><u-icon name="arrow-upward"></u-icon></u-back-top>
 		</view>
-		<!-- <u-parse :html="recommend.img" ></u-parse> -->
 		<!-- 商品介绍 -->
 		<view class="goods-recommend">
 			<view class="recommend-title">
@@ -247,41 +235,36 @@
 		<view class="goods-action">
 			<van-goods-action>
 			  <van-goods-action-icon icon="shop-o" text="门店" @click="goShop"/>
-			  <van-goods-action-icon icon="cart-o" text="购物车" info="5" @click="goShopCart"/>
+			  <van-goods-action-icon icon="cart-o" text="购物车" :info="getCarListCount" @click="goShopCart"/>
 			  <van-goods-action-button size="large" text="加入购物车" color="linear-gradient(to right, #FFC71D, #FF8917)" @click="joinShopCart" />
 			  <van-goods-action-button size="large" text="立即购买" color="linear-gradient(to right, #FA1E8C, #FC1E58)" @click="promptlyBuy"/>
 			</van-goods-action>
 		</view>
-		
+		<site ref="show"></site>
+		<u-toast ref="uToast" />
 	</view>
 </template>
 
 <script>
 	import Dialog from '@/wxcomponents/dist/dialog/dialog';
 	// import {obj} from '@/common/detailRichText.js';
-	import {getGoodsLunbotu,getCommodityDetails,getcomment} from "@/api/goodsDetail.js";
-	import {getguessLike} from "@/api/common.js";
+	import {getGoodsLunbotu,getCommodityDetails,getcomment,updateShopCar,queryShopCar} from "@/api/goodsDetail.js";
+	import {getguessLike,addShopCar,getShoppingGuide} from "@/api/common.js";
+	import site from "@/component/gongge/site.vue";
 	export default {
 		data() {
 			return {
 				cut:"product_desciption",
 				scrollTop:0,
-				goods:{
-					id:1,
-					title:"华硕(ASUS) Y5200FB 15.6英寸商务办公轻薄笔记本电脑(I5-8265 4G 512SSD MX110 2G独显)银",
-					price:2199,
-					tag:"自营",
-					count:1
-				},
+				goodsId: '',
 				isSelect:false,
 				select:{
 					number:1,
-					img:"//gfs17.gomein.net.cn/T1R0JKBjxT1RCvBVdK_160.jpg?v=20170727",
+					img:"",
 					price:0,
 					confirm:[],
 				},
 				isSite:false,
-				site:"深圳市龙华区观澜街道",
 				lunbotu:[
 					{url:"https://img.yzcdn.cn/vant/custom-empty-image.png"}
 				],
@@ -290,58 +273,45 @@
 				},
 				sureSelect:[],
 				pledge:['7天无理由退换','正品保障','包邮'],
-				guide:[{
-						name:"周田武",
-						flag:"资深顾问",
-						serve:23,
-						img:"//gfs11.gomein.net.cn/T1o2xmBbAT1RCvBVdK_60_60.jpg"
-					},
-					{
-						name:"卢路",
-						flag:"资深顾问",
-						serve:131,
-						img:"//gfs12.gomein.net.cn/T19FxmB4Dv1RCvBVdK_60_60.jpg"
-					},
-					{
-						name:"李莉",
-						flag:"专业顾问",
-						serve:60,
-						img:"//gfs12.gomein.net.cn/T1p5LmBKdv1RCvBVdK_60_60.jpg"
-					}
-				],
+				guide:[],
 				comment:{},
 				fondGoods:[],
-				recommend:[]
+				recommend:[],
+				userInfo:{}
 			};
 		},
 		methods:{
+			// 初始化数据
 			init(){
 				this.getGoodsLunbotu();
 				this.getCommodityDetails();
 				this.getcomment();
-				this.goodsConfirm();
-				
+				this.getShoppingGuide()
 			},
 			// 获取轮播图
 			async getGoodsLunbotu(){
-				let {message} = await getGoodsLunbotu(this.goods.id);
+				let {message} = await getGoodsLunbotu(this.goodsId);
 				if(message.length != 0){
 					this.lunbotu = message
 				}
 			},
 			// 获取评论
 			async getcomment(){
-				let {message} = await getcomment(this.goods.id);
+				let {message} = await getcomment(this.goodsId);
 				if(message.length != 0){
 					this.comment = message[0]
+					this.comment.nickname = this.comment.nickname.substr(0,1) + "****" + this.comment.nickname.substr(-1);
 				}
 			},
 			//获取商品详情
 			async getCommodityDetails(){
-				let {message} = await getCommodityDetails(this.goods.id);
+				let {message} = await getCommodityDetails(this.goodsId);
 				if(message.length != 0){
 					this.recommend = message[0]
+					console.log(this.recommend)
 					this.detailData.select = JSON.parse(message[0].specification);
+					this.sureSelect = Array.apply(null, Array(this.detailData.select.length)).map(() => 0)
+					this.goodsConfirm();
 					this.getguessLike();
 				}
 			},
@@ -360,9 +330,22 @@
 							arr = []
 						}
 					})
-					console.log("message",this.fondGoods);
 				}
 			},
+			// 获取导师信息
+			async getShoppingGuide(){
+				
+				let {message} = await getShoppingGuide();
+				if(message.length != 0){
+					message.length = 3;
+					this.guide = message;
+					this.guide.forEach((v,index) =>{
+						v.good_at_brand = JSON.parse(message[index].good_at_brand);
+						v.g_category = JSON.parse(message[index].goods_category);
+					})
+				}
+			}
+			,
 			// 分期
 			onStages(){
 				Dialog.alert({
@@ -370,6 +353,24 @@
 				}).then(() => {
 				  // on close
 				});
+			},
+			// 评论
+			onComment(){
+				// Dialog.alert({
+				//   message: '请下载国美APP，查看更多商品评论',
+				// }).then(() => {
+				//   // on close
+				// });
+				if(this.comment.remark){
+					uni.navigateTo({
+						url:"./comment/comment?goodsId="+this.goodsId
+					})
+				}else{
+					this.$refs.uToast.show({
+						title: '此商品目前还没有评论',
+						type: 'default',
+					})
+				}
 			},
 			// 关闭商品规格(弹出层)
 			closeSelected(){
@@ -383,13 +384,18 @@
 			// 选择购买的规格
 			goodsConfirm(){
 				if(this.detailData.select.length != 0){
-					
 					let confirm = [];
 					this.detailData.select.forEach((v,index) =>{
 						confirm.push(v.list[this.sureSelect[index]].title)
 					})
 					this.select.confirm = confirm
 				}
+			},
+			onfond(id){
+				console.log(id);
+				uni.navigateTo({
+					url:"/pages/goodsDetail/goodsDetail?goodsId="+id
+				})
 			},
 			// 点击切换规格
 			goodsSelect(index,value){
@@ -417,28 +423,139 @@
 			},
 			// 跳转到购物车页面
 			goShopCart(){
-				console.log('跳转购物车')
+				uni.switchTab({
+					url:"/pages/mycar/mycar",
+				})
 			},
-			joinShopCart(){
-				console.log('加入购物车')
+			// 加入购物车
+			async joinShopCart(){
+				if(!this.userInfo.userId){
+					var obj ={
+						goodsId:this.goodsId,
+						isDetail:true,
+					}
+					getApp().globalData.detail = obj
+					this.$refs.uToast.show({
+						title: '请先进行登录',
+						type: 'default',
+						url:"/pages/user/user",
+						isTab:true,
+					})
+				}else{
+					let arr = this.$store.getters.getCarList;
+					let index = -1;
+					arr.map((v,indexs) =>{
+						if(v.user_id == this.userInfo.userId && v.com_id == this.goodsId){
+							v.com_count += this.select.number
+							index = indexs;
+						}
+					})
+					if(index == -1){
+						let car = {
+							userId :this.userInfo.userId,
+							comId : this.goodsId,
+							comCount : this.select.number,
+							specification : this.select.confirm,
+							price : (this.select.price == 0 ? this.recommend.sku_price : this.select.price),
+						}
+						await addShopCar(car);
+						var {message} = await queryShopCar(this.userInfo.userId)
+						message.forEach(v=>{
+							v.shop_specification = JSON.parse( v.shop_specification);
+						})
+						this.$store.commit('setCarList',message)
+					}else{
+						// var tempCar = arr[index];
+						// tempCar.shop_specification = JSON.parse(tempCar.shop_specification)
+						await updateShopCar(arr[index]);
+						this.$store.commit('setCarList',arr)
+					}
+					
+					this.$refs.uToast.show({
+						title: '加入购物车成功',
+						type: 'default',
+					})
+				}
+				
+				
 			},
+			// 购买商品
 			promptlyBuy(){
-				console.log('立即购买')
-			}
-			
-			
+				if(!this.userInfo.userId){
+					var obj ={
+						goodsId:this.goodsId,
+						isDetail:true,
+					}
+					getApp().globalData.detail = obj
+					this.$refs.uToast.show({
+						title: '请先进行登录',
+						type: 'default',
+						url:"/pages/user/user",
+						isTab:true,
+					})
+				}else{
+					let goodsInfo = [{
+						sku_name:this.recommend.sku_name,
+						sku_thumbImg_url:this.select.img || this.recommend.sku_thumbImg_url,
+						user_id :this.userInfo.userId,
+						com_id : this.goodsId,
+						com_count : this.select.number,
+						shop_specification : JSON.stringify(this.select.confirm) || '[]',
+						sku_price : (this.select.price == 0 ? this.recommend.sku_price : this.select.price),
+					}]
+					
+					// console.log('立即购买')
+					uni.navigateTo({
+						url:"/pages/order/order?goodsInfo="+JSON.stringify(goodsInfo)+"&detail=true"
+					})
+				}
+			},
+			// 地址组件方法
+			siteCompile(){
+				this.$refs.show.show();
+				this.$refs.show.getAddrsData();
+			},
+			// 查看导师信息
+			goGuide(item){
+				var data = JSON.stringify(item)
+				uni.navigateTo({
+					url: "/pages/guideIntroduce/guideIntroduce?Introduce="+ data
+				})
+			},
 		},
-		onLoad() {
-			this.sureSelect = Array.apply(null, Array(this.detailData.select.length)).map(() => 0)
+		components:{
+			site
+		},
+		onLoad(e) {
+			this.goodsId = e.goodsId;
 			this.init();
-		}
+			this.userInfo= getApp().globalData.userInfo;
+		},
+		computed: {
+			// 获取地址
+			getDefaultSite(){
+				return this.$store.getters.getDefaultSite;
+			},
+			// 获取购物车的数量
+			getCarListCount(){
+				return this.$store.getters.getCarListCount;
+			},
+			// // 获取购物车
+			// getCarList(){
+			// 	return ;
+			// }
+		},
 	}
 </script>
 
 <style lang="scss">
+	
+	.interlayer {
+		display: flex !important;
+		flex-direction: column !important;
+	}
 	.detail-container{
 		background-color: #F3F5F7;
-		height: 5000rpx;
 		// 轮播图
 		.swiper{
 			width: 100%;
@@ -527,7 +644,7 @@
 				}
 				.number{
 					display: flex;
-					margin: 30rpx 0 120rpx 30rpx;
+					margin: 30rpx 0 ;
 					align-items: center;
 					.van-stepper{
 						margin-left: 20rpx;
@@ -549,14 +666,27 @@
 			.site-title{
 				display: flex;
 				font-size:34rpx;
+				// color: #FF0000;
 				align-items: flex-end;
 				.van-cell-text{
 					color:#999A9C;
 					margin-right: 20rpx;
 				}
 				.site{
-					display: flex;
-					align-items: flex-end;
+					position: relative;
+					padding-left:40rpx;
+					flex: 1;
+					.van-icon{
+						position: absolute;
+						top: 0;
+						left: -8rpx;
+					}
+					// display: flex;
+					// align-items: flex-end;
+					display: -webkit-box;
+					-webkit-box-orient: vertical;
+					-webkit-line-clamp: 1;
+					overflow: hidden;
 				}
 			}
 			.pledge{
@@ -604,6 +734,7 @@
 						align-items: center;
 						font-size: 30rpx;
 						color: #757A7F;
+						
 					}
 				}
 			}
@@ -719,6 +850,7 @@
 			.nav{
 				display: flex;
 				justify-content: space-between;
+				align-items: center;
 				.comment{
 					color: #333;
 					font-size: 34rpx;
@@ -727,11 +859,11 @@
 					display: flex;
 					align-items: center;
 					color: #333;
-					font-size: 30rpx;
-					text{
-						margin: 0 10rpx;
-						color: #F20C59;
-					}
+					font-size: 28rpx;
+					// text{
+					// 	margin: 0 10rpx;
+					// 	color: #F20C59;
+					// }
 				}
 			}
 			.comment-info{

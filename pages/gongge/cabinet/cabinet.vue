@@ -4,7 +4,7 @@
 		<gogei hang="3" :pageid="pageid"></gogei>
 		<scrollList :pageid="pageid"></scrollList>
 		<everyone :pageid="pageid"></everyone>
-	</view>
+	</view> 
 </template>
 
 <script>

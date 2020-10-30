@@ -12,7 +12,7 @@ export function getGaid(type){
 		url:"/getGrid?type="+type
 	})
 }
-
+ 
 export function getSeckill(){
 	return request({
 		url:"/getSeckill"

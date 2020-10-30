@@ -5,24 +5,23 @@
 				<swiper-item class="imgbox" v-for="(item,index) in lbdata" :key="index">
 						<image :src="item.s_img" style="width: 100%;height: 100%;"></image>
 				</swiper-item>
-			</swiper>
+			</swiper> 
 		</scroll-view>
 		
-		<van-grid column-num="4" class="gogei" icon-size="50">
-			<van-grid-item v-for="(item,index) in gogeidata" :icon="item.g_img" :text="item.g_title" @click="select(index)"/>
+		<van-grid column-num="4" class="gogei" icon-size="70">
+			<van-grid-item v-for="(item,index) in gogeidata" :icon="item.g_img" @click="select(item.g_title)"/>
 		</van-grid>
-		
+		 
 		<view class="refinedselect">
 			<view class="top">
 				精选好货
 			</view>
 			<view class="goodbox">
 				<van-grid column-num="3" class="gogei" gutter="3">
-					<!-- <van-grid-item v-for="(item,index) in gogeidata" :icon="item.img_url" :text="item.name" @click="select(index)"/> -->
-					 <van-grid-item use-slot  v-for="(item,index) in goodlist" :key="index" class="gridItem">
+					 <van-grid-item use-slot  v-for="(item,index) in goodlist" :key="index" class="gridItem" @click="goodDetail(item.id)">
 						 
 					    <image
-					      style="width: 100%; height: 280rpx;"
+					      style="width: 240rpx; height: 240rpx;"
 					      :src="item.sku_thumbImg_url"
 					    />
 						<view class="describe">
@@ -43,13 +42,16 @@
 			
 			<u-tabs :list="tabsList" :is-scroll="true" active-color="#f20c59" :current="currentTitle" @change="change"></u-tabs>
 		</view>
+		<view class="nogoodList" v-if="goodsList == 0">
+			暂无数据
+		</view>
 	
-			<view class="goodbox" v-for="(item,index) in goodlist">
+		<view class="" v-if="goodsList.length != 0">
+			<view class="goodbox" v-for="(item,index) in goodsList" @click="goodDetail(item.id)">
 				<image :src="item.sku_thumbImg_url" style="width: 200rpx;height: 200rpx;"></image>
 				<view class="describe">
 					<view class="title">
-						
-						<text class="title_text"><text class="title_tag">国美超市</text>{{item.sku_name}}</text>
+						<text class="title_text"><text class="title_tag">{{item.extProperty}}</text>{{item.sku_name}}</text>
 					</view>
 					<view class="price">
 						￥{{item.sku_price}}
@@ -60,139 +62,69 @@
 			<view class="finish">
 				看完了( •̀ ω •́ )✧
 			</view>
-		
-		<view class="">
-			
 		</view>
 	</view>
 </template>
 
 <script>
-	import {getLunbotu} from "../../../api/common.js"
-	import {getGrid} from "../../../api/common.js"
-	import {getSeckill} from "../../../api/common.js"
+	import {getLunbotu} from "@/api/common.js"
+	import {getGrid} from "@/api/common.js"
+	import {getSeckill,getCategory,getGoodsList} from "@/api/common.js"
 	export default {
 		data() {
 			return {
-				currentTitle:1,
-				tabsList: [
-					{
-						name: '全部',
-						id: 10,
-					}, {
-						name: '国美超市',
-						id: 11
-					}, {
-						name: '空调',
-						id: 12
-					},
-					{
-						name: '彩电',
-						id: 13
-					},{
-						name: '冰箱',
-						id: 14
-					},{
-						name: '洗衣机',
-						id: 15
-					},{
-						name: '手机',
-						id: 16
-					}
-				],
-				lbdata:[{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360'}],
-				gogeidata:[{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-					{img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',name:'123'},
-				],
-				goodlist:[
-					{listid:1,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"599"},
-					{listid:1,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"599"},	
-					{listid:1,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"599"},
-					{listid:1,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"599"},
-					{listid:2,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"699"},
-					{listid:2,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"699"},
-					{listid:2,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"699"},
-					{listid:2,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"699"},
-					{listid:2,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"699"},
-					{listid:2,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"699"},
-					{listid:3,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"799"},
-					{listid:3,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"799"},
-					{listid:3,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"799"},
-					{listid:3,
-					img_url:'//cdn.cnbj1.fds.api.mi-img.com/mi-mall/c1b2062c91c60cd5d8b3819626ada481.jpg?thumb=1&w=720&h=360',
-					text:'mi8用户成功换机，入手一周了，各方面都十分满意，屏幕，震动，拍照，声音都...',
-					price:"799"}
-				]
+				page:1,
+				
+				currentTitle:0,
+				tabsList: [],
+				lbdata:[],
+				gogeidata:[],
+				goodlist:[],
+				catId:"coles",
+				goodsList:[]
 			}
 		},
 		methods:{
-			select(index){
-				console.log(index)
+			select(title){
+				uni.navigateTo({
+					url:"/pages/goodsList/goodsList?goodsName="+title
+				})
 			},
 			change(obj){
 				this.currentTitle = obj.index
-				console.log(obj)
+				this.getGoodsListData(obj.id)
 			},
 			async getLunboData(){
-				var {message} = await getLunbotu("coles");
+				var {message} = await getLunbotu(this.catId);
 				this.lbdata = message
 			},
 			async getGridData(){
-				var {message} = await getGrid("coles");
+				var {message} = await getGrid(this.catId);
 				this.gogeidata = message
 			},
 			async getSeckillData(){
 				var {message} = await getSeckill(1);
 				this.goodlist = message
+			},
+			async getCategoryData(){
+				var {message} = await getCategory(this.catId);
+				this.tabsList = message;
+			},
+			async getGoodsListData(id){
+				var {message} = await getGoodsList(id,this.page);
+				this.goodsList = message;
+			},
+			goodDetail(id){
+				uni.navigateTo({
+					url:"/pages/goodsDetail/goodsDetail?goods="+id
+				})
 			}
 		},
 		created() {
 			this.getLunboData();
 			this.getGridData();
 			this.getSeckillData();
+			this.getCategoryData()
 		}
 	}
 </script>
@@ -240,6 +172,15 @@
 			}
 		}
 		
+		.nogoodList{
+			    display: flex;
+			    justify-content: center;
+			    font-size: 38rpx;
+			    color: #F25D8F;
+			    font-weight: 700;
+				padding: 60rpx 0rpx;
+		}
+		
 		.goodbox{
 			background-color: #fff;
 			display: flex;
@@ -251,6 +192,7 @@
 					
 					.title_text{
 						.title_tag{
+							color: #fff;
 							font-size: 24rpx;
 							margin-right: 10rpx;
 							background: -webkit-gradient(linear,left top,right top,from(#fa1e8c),to(#f20c59));
