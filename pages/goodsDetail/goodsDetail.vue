@@ -205,7 +205,7 @@
 			 </view>
 			<swiper class="fond-swiper" :indicator-dots="true" :circular="true" indicator-active-color='#F20C59'>
 				 <swiper-item class="fond-swiper-item" v-for="(item,index) in fondGoods" :key='index'>
-				    <view class="fond-item" v-for="(items,indexs) in item" :key="indexs">
+				    <view class="fond-item" v-for="(items,indexs) in item" :key="indexs"  @click="onfond(items.id)">
 						<image :src="items.sku_thumbImg_url" ></image>
 						<view class="fond-titles">
 							{{items.sku_name}}
@@ -313,6 +313,7 @@
 					this.sureSelect = Array.apply(null, Array(this.detailData.select.length)).map(() => 0)
 					this.goodsConfirm();
 					this.getguessLike();
+					this.goodsSelect(0,0)
 				}
 			},
 			// 获取猜你喜欢
@@ -354,6 +355,7 @@
 				  // on close
 				});
 			},
+			// 评论
 			onComment(){
 				// Dialog.alert({
 				//   message: '请下载国美APP，查看更多商品评论',
@@ -390,10 +392,17 @@
 					this.select.confirm = confirm
 				}
 			},
+			onfond(id){
+				console.log(id);
+				uni.navigateTo({
+					url:"/pages/goodsDetail/goodsDetail?goodsId="+id
+				})
+			},
 			// 点击切换规格
 			goodsSelect(index,value){
-				this.select.img = this.detailData.select[index].list[value].img || this.select.img;
-				this.select.price = this.detailData.select[index].list[value].price || this.select.price;
+				console.log("this.recommend",index,value)
+				this.select.img = this.detailData.select[index].list[value].img  || this.recommend.sku_thumbImg_url ;
+				this.select.price = this.detailData.select[index].list[value].price ||  this.recommend.sku_price;
 				this.sureSelect.splice(index,1,value);
 			},
 			// 修改数量
@@ -515,10 +524,6 @@
 					url: "/pages/guideIntroduce/guideIntroduce?Introduce="+ data
 				})
 			},
-			// 判断是否登录
-			isLogin(){
-				
-			}
 		},
 		components:{
 			site

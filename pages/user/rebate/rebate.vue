@@ -55,7 +55,7 @@
 		},
 		methods: {
 			change(index) {
-				this.current = index;
+				this.current = index.index;
 			}
 		}
 	}
