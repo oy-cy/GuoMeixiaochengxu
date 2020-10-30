@@ -4,6 +4,7 @@
 			<view class="goods-item" v-for="item in goodsList" :key="item.id" @tap.stop="goGoodsDetail(item.id)">
 				<view class="img-container">
 					<image class="img" :src="item.sku_thumbImg_url"></image>
+					<!-- <u-lazy-load :image="item.sku_thumbImg_url"></u-lazy-load> -->
 				</view>
 				<view class="info">
 					<view class="text">
@@ -44,7 +45,8 @@
 			addcar(data){
 				this.$store.commit('setaddcar',data);
 			}
-		}
+		},
+	
 	}
 </script>
 

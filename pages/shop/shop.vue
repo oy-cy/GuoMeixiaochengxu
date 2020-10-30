@@ -135,6 +135,7 @@
 	export default {
 		data() {
 			return {
+				scrollTop:0, // 滚动事件
 				isShowLogo: false,
 				isLogo: false,
 				current: 0,
@@ -336,9 +337,7 @@
 		},
 		// 监听当前页面的滚动
 		onPageScroll: function(event) {
-			var {
-				scrollTop
-			} = event;
+			var { scrollTop } = event;
 			var position = 50; // 设定高度50
 			// console.log("滚动距离",scrollTop);
 			if (scrollTop > position && this.isLogo == false) {

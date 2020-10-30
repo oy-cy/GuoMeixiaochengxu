@@ -55,6 +55,12 @@
 						<view class="goodslist" v-for="item in getguessLikeData" :key="item.id" @click="onId(item.id)">
 							<view class="photo">
 								<image :src="item.sku_thumbImg_url" mode=""></image>
+							<!-- 	 <easy-loadimage mode="widthFix"
+								:scroll-top="scrollTop"
+								:image-src="item.sku_thumbImg_url"
+								:open-transition="true"
+								> -->
+								</easy-loadimage>
 							</view>
 							<view class="title">
 								<image src="../../static/images/home/guomei-logo.png" mode=""></image>
@@ -85,6 +91,7 @@
 </template>
 
 <script>
+	import easyLoadimage from '@/components/easy-loadimage/easy-loadimage.vue'
 	// import gogei from '../../component/gongge/gogei.vue';
 	import goTop from '../../component/goTop/goTop.vue';
 	import seckill from "@/component/seckill/seckill.vue";
@@ -99,6 +106,7 @@
 	export default {
 		data() {
 			return {
+				scrollTop:0,
 				getSeckillData: [],
 				isShow: false,
 				show: false,
@@ -229,11 +237,11 @@
 				})
 				// 把之前的数据拼接到一起
 				this.getguessLikeData = this.getguessLikeData.concat(message);
-				console.log("猜你",this.getguessLikeData);
+				// console.log("猜你",this.getguessLikeData);
 			}
 		},
-
 		onPageScroll(e) {
+			// this.scrollTop = e.scrollTop;
 			var {
 				scrollTop
 			} = e;
@@ -248,7 +256,8 @@
 		},
 		components: {
 			goTop,
-			seckill
+			seckill,
+			"easy-loadimage":easyLoadimage
 		},
 		created() {
 			this.init();
