@@ -257,8 +257,6 @@
 				this.priceOrder = 0;
 			},
 			tabClick(index) {
-				// 每次点击都把page赋值为1，用于后续发送请求时都是以第一页开始
-				this.page = 1;
 				// navbar点击的下标
 				this.filterIndex = index;
 				// 点击tabs切换的时候，把价格图片改为默认
@@ -268,24 +266,29 @@
 					this.zero();
 					// 点击综合，根据筛选的字段进行发送请求
 					if (this.screenIndex == 1) {
+						console.log("111111")
 						this.getFilterPriceAndBrandNameData();
 						return;
 					}
 					if (this.screenIndex == 2) {
+						console.log("2222222")
 						this.getFilterPriceData();
 						return;
 					}
 					if (this.screenIndex == 3) {
+						console.log("3333333")
 						this.getFilterBrandNameData();
 						return;
 					}
 					
 					// 点击综合 根据搜索过来的字段来发送请求
 					if (this.searchIndex == 4) {
+						console.log("444444")
 						this.getGoodsListData();
 						return;
 					} 
-					if(this.searchIndex == 5){		
+					if(this.searchIndex == 5){	
+						console.log("5555555")
 						this.getSearchGoodsNameData();
 						return;
 					}
@@ -392,6 +395,7 @@
 						return;
 					} */
 				this.page++;
+				console.log("page",this.page)
 				// 根据价格和名字进行筛选商品、上拉加载
 				if (this.screenIndex == 1) {
 					console.log("根据价格和名字进行筛选商品")
