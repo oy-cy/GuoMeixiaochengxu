@@ -403,9 +403,11 @@
 			},
 			// 点击切换规格
 			goodsSelect(index,value){
-				this.select.img = this.detailData.select[index].list[value].img  || this.recommend.sku_thumbImg_url ;
-				this.select.price = this.detailData.select[index].list[value].price ||  this.recommend.sku_price;
-				this.sureSelect.splice(index,1,value);
+				if(this.detailData.select[index]){
+					this.select.img = this.detailData.select[index].list[value].img  || this.recommend.sku_thumbImg_url ;
+					this.select.price = this.detailData.select[index].list[value].price ||  this.recommend.sku_price;
+					this.sureSelect.splice(index,1,value);
+				}
 			},
 			// 修改数量
 			numberChange(e){
