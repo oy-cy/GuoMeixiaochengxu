@@ -15,7 +15,7 @@
 			</view>
 		</view>
 		<!-- 评论 -->
-		<view class="comment-item" v-for="(item,index) in commentList" :key="index" v-if="commentList.length != 0">
+		<view class="comment-item" v-for="(item,index) in list" :key="index" v-if="list.length != 0">
 			 <view class="comment-hread">
 				<view class="hread-info">
 					<image :src="item.photo"></image>
@@ -35,7 +35,7 @@
 				{{item.remark}}
 			</view>
 		</view>
-		<view class="comment-title" v-if="commentList.length == 0">
+		<view class="comment-title" v-if="list.length == 0">
 			暂无评论
 		</view>
 		
@@ -69,47 +69,58 @@
 				isSelect:-1,
 				goodsId:0,
 				scrollTop:0,
+				list:[]
 			}
 		},
 		methods: {
 			// 初始化
 			init(id){
 				this.getcomment(id);
-				this.getCommenCTypeAndCount(id)
+				
 			},
 			// 获取评论得类型和数量，好评度
-			async getCommenCTypeAndCount(id){
-				let {message} = await getCommentTypeAndCount(id);
+			async getCommenCTypeAndCount(){
 				// 总数
-				let comCount = 0;
-				this.tagList.map(v =>{
-					let index = message.findIndex(t => t.type == v.type);
-					if(index != -1){
-						v.count = message[index].count;
+				this.commentList.map(v =>{
+					for(let i = 0;i < this.tagList.length;i++){
+						if(this.tagList[i].type == v.types){
+							this.tagList[i].count += 1
+							return;
+						}
 					}
-					comCount += v.count;
 				})
 				// 好评度
-				this.goodComment = Math.floor((this.tagList[0].count/comCount) * 100)
-				console.log("tag",this.tagList)
+				this.goodComment = Math.floor((this.tagList[0].count/this.commentList.length) * 100)
+				this.onSelect()
 			},
 			// 获取评论
-			async getcomment(id,type){
+			async getcomment(id){
 				// this.commentList.length = 0
-				let {message} = await getcomment(id,type);
+				let {message} = await getcomment(id);
 				message.map(v => {
 					v.nickname = v.nickname.substr(0,1) + "***" + v.nickname.substr(-1);
-					// console.log("1231312",v.nickname,this.)
+					switch(v.Star_rating){
+						case 1 :
+						case 2 :
+							v.types = '差评'
+							break;
+						case 3 :
+							v.types = '中评'
+							break;
+						default : v.types = '好评' 
+					}
 				})
 				this.commentList = message;
+				this.getCommenCTypeAndCount()
 			},
 			// 切换评论的类型
-			onSelect(type,index){
+			onSelect(type='全部',index = -1){
 				this.isSelect = index;
 				if(type == '全部'){
-					type = ''
+					this.list = this.commentList;
+				}else{
+					this.list = this.commentList.filter( v=> v.types == type)
 				}
-				this.getcomment(this.goodsId,type);
 			},
 			// 回到顶部
 			onPageScroll(e) {
