@@ -190,7 +190,7 @@ import { insertAddr,updateAddr,getAddr } from '@/api/user.js';
 				console.log(arr);
 				
 				arr.map(v=> {
-					if(((v.indexOf('区') != -1) || v.indexOf('县')!=-1 || v.indexOf('市') != -1 || v.indexOf('省')!=-1) && (v.length >= 5)){
+					if(((v.indexOf('区') != -1) || v.indexOf('县')!=-1 || v.indexOf('市') != -1 || v.indexOf('省')!=-1) && (v.length >= 3)){
 						this.addr = '';
 						var index = v.lastIndexOf('市');
 						var index2 = v.lastIndexOf('区');
@@ -222,8 +222,6 @@ import { insertAddr,updateAddr,getAddr } from '@/api/user.js';
 											tempCity = allCity[i][j].label;
 											tempArea = allArea[i][j][k].label;
 											tempAddr = v.substring(index2+1);
-											if(allStreets[i][j][k]){
-											}
 											break c;
 										}
 									}else {

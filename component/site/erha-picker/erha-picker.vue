@@ -160,6 +160,7 @@
 				}
 			},
 			setAddr(proName,cityName,areaName,strName){
+				console.log('asdfadsfasfd');
 				this.province = '请选择';
 				this.city = '请选择';
 				this.area = '请选择';
